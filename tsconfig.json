@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",               // or ESNext
+    "module": "ESNext",               // allows top-level await
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*"]
+}

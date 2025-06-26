@@ -18,8 +18,7 @@
       "activitybar": [
         {
           "id": "aiChat",
-          "title": "AI Chat",
-          "icon": "media/chat-icon.svg"
+          "title": "AI Chat"
         }
       ]
     },

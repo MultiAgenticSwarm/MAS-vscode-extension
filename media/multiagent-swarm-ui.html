@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiAgenticSwarm - VSCode Extension</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #252526;
+            --bg-tertiary: #2d2d30;
+            --bg-hover: #3e3e42;
+            --text-primary: #cccccc;
+            --text-secondary: #9d9d9d;
+            --accent-blue: #007acc;
+            --accent-green: #4ec9b0;
+            --accent-purple: #c586c0;
+            --accent-orange: #ce9178;
+            --accent-red: #f48771;
+            --border-color: #464647;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --activity-bar-bg: #333333;
+            --activity-bar-inactive: #858585;
+            --activity-bar-active: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .vscode-container {
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 22px;
+            background-color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 12px;
+            color: white;
+            justify-content: space-between;
+        }
+
+        .status-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .status-right {
+            display: flex;
+            gap: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Activity Bar */
+        .activity-bar {
+            width: 48px;
+            background-color: var(--activity-bar-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .activity-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            color: var(--activity-bar-inactive);
+            transition: color 0.2s;
+        }
+
+        .activity-icon:hover {
+            color: var(--activity-bar-active);
+        }
+
+        .activity-icon.active {
+            color: var(--activity-bar-active);
+        }
+
+        .activity-icon.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background-color: var(--activity-bar-active);
+        }
+
+        .activity-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Editor Space (Mock) */
+        .editor-space {
+            flex: 1;
+            background-color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid var(--border-color);
+            min-width: 0; /* Allow shrinking */
+        }
+
+        .editor-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .editor-placeholder h3 {
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 16px;
+        }
+
+        .editor-placeholder p {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* Extension Panel */
+        .extension-panel {
+            width: 800px;
+            display: flex;
+            background-color: var(--bg-primary);
+            transition: width 0.3s ease;
+        }
+
+        .extension-panel.hidden {
+            width: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--bg-tertiary);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-blue);
+        }
+
+        .swarm-selector {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dropdown {
+            flex: 1;
+            position: relative;
+        }
+
+        .dropdown-button {
+            width: 100%;
+            padding: 8px 12px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .dropdown-button:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--accent-blue);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-top: 4px;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .dropdown-item.add-new {
+            color: var(--accent-green);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Agents List */
+        .agents-section {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .add-button {
+            width: 24px;
+            height: 24px;
+            background-color: var(--accent-green);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .add-button:hover {
+            background-color: #3db394;
+            transform: scale(1.1);
+        }
+
+        .agent-card {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .agent-card:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .agent-card.active {
+            border-color: var(--accent-blue);
+            background-color: var(--bg-tertiary);
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .agent-name {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .agent-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .agent-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-green);
+        }
+
+        .agent-tools {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .main-header {
+            padding: 16px 24px;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-button {
+            width: 32px;
+            height: 32px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-button:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--accent-blue);
+        }
+
+        /* Agent Configuration */
+        .agent-config {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .config-section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .config-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent-blue);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 8px 12px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Tools Section */
+        .tools-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tool-item {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .tool-item:hover {
+            border-color: var(--accent-purple);
+        }
+
+        .tool-info {
+            flex: 1;
+        }
+
+        .tool-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .tool-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-hover);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent-green);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Chat Interface */
+        .chat-section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            padding-right: 8px;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            background-color: var(--bg-primary);
+            border-left: 3px solid;
+        }
+
+        .message.agent-1 {
+            border-left-color: var(--accent-blue);
+        }
+
+        .message.agent-2 {
+            border-left-color: var(--accent-green);
+        }
+
+        .message.agent-3 {
+            border-left-color: var(--accent-purple);
+        }
+
+        .message-header {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+        }
+
+        .send-button {
+            padding: 8px 16px;
+            background-color: var(--accent-blue);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-button:hover {
+            background-color: #0098ff;
+        }
+
+        /* Collaboration Config */
+        .collab-visual {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 16px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .agent-node {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .agent-node:hover {
+            transform: scale(1.1);
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background-color: var(--border-color);
+            transform-origin: left center;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .close-button:hover {
+            color: var(--text-primary);
+        }
+
+        /* Performance Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .metric-card {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-hover);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-color);
+        }
+
+
+        /* chat panel */
+        .panel {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        #chatPanel {
+            display: flex; /* Show this panel by default */
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            box-sizing: border-box;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background: #1e1e1e;
+            min-height: 0;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 8px;
+            background: #2d2d2d;
+            border: 1px solid #555;
+            color: white;
+        }
+
+        .chat-input-area button {
+            background: #007acc;
+            border: none;
+            padding: 8px 12px;
+            color: white;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="vscode-container">
+        <div class="main-layout">
+        <!-- Activity Bar -->
+         <!-- 
+        <div class="activity-bar">
+            <div class="activity-icon" title="Explorer">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.5 0h-9L7 1.5V6H2.5L1 7.5v15.07L2.5 24h12.07L16 22.57V18h4.7l1.3-1.43v-15ZM14 2v5H9V2Zm-7 7h7v7H7Zm7 9v5H9v-5ZM3 9h4v7H3Zm13 7h4v-7h-4Z"/>
+                </svg>
+            </div>
+            <div class="activity-icon" title="Search">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.25 0a8.25 8.25 0 0 0-6.18 13.72L1 22.88l1.12 1L10.29 16a8.25 8.25 0 1 0 4.96-16Zm0 15a6.75 6.75 0 1 1 0-13.5a6.75 6.75 0 0 1 0 13.5Z"/>
+                </svg>
+            </div>
+            <div class="activity-icon" title="Source Control">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21.007 8.222A3.738 3.738 0 0 0 15.045 5.2a3.737 3.737 0 0 0 1.156 6.583a2.988 2.988 0 0 1-2.668 1.67h-2.99a4.456 4.456 0 0 0-2.989 1.165V7.4a3.737 3.737 0 1 0-1.494 0v9.117a3.776 3.776 0 1 0 1.816.099a2.99 2.99 0 0 1 2.668-1.667h2.99a4.484 4.484 0 0 0 4.223-3.039a3.736 3.736 0 0 0 3.25-3.687zM4.565 3.738a2.242 2.242 0 1 1 4.484 0a2.242 2.242 0 0 1-4.484 0zm4.484 16.441a2.242 2.242 0 1 1-4.484 0a2.242 2.242 0 0 1 4.484 0zm8.221-9.715a2.242 2.242 0 1 1 0-4.485a2.242 2.242 0 0 1 0 4.485z"/>
+                </svg>
+            </div>
+            <div class="activity-icon" title="Run and Debug">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10.94 13.5l-1.32 1.32a3.73 3.73 0 0 0-7.24 0L1.06 13.5L0 14.56l1.72 1.72l-.22.22V18H0v1.5h1.5v.08c.077.489.214.966.41 1.42L0 22.94L1.06 24l1.65-1.65A4.308 4.308 0 0 0 6 24a4.31 4.31 0 0 0 3.29-1.65L10.94 24L12 22.94L10.09 21c.198-.464.336-.951.41-1.45v-.1H12V18h-1.5v-1.5l-.22-.22L12 14.56l-1.06-1.06zM6 13.5a2.25 2.25 0 0 1 2.25 2.25h-4.5A2.25 2.25 0 0 1 6 13.5zm3 6a3.33 3.33 0 0 1-3 3a3.33 3.33 0 0 1-3-3v-2.25h6v2.25zm14.76-9.9v1.26L13.5 17.37V15.6l8.5-5.37L9 2v9.46a5.07 5.07 0 0 0-1.5-.72V.63L8.64 0l15.12 9.6z"/>
+                </svg>
+            </div>
+            <div class="activity-icon active" title="MultiAgenticSwarm">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2a3 3 0 0 0-3 3c0 .6.18 1.16.5 1.63L7.91 8.22C7.42 7.89 6.84 7.71 6.21 7.71a3 3 0 0 0 0 6c.84 0 1.61-.35 2.16-.93l2.65 2.65c-.24.48-.37 1.01-.37 1.57a3 3 0 0 0 6 0c0-.84-.35-1.61-.93-2.16l2.65-2.65c.48.24 1.01.37 1.57.37a3 3 0 0 0 0-6c-.56 0-1.09.13-1.57.37l-2.65-2.65c.58-.55.93-1.32.93-2.16a3 3 0 0 0-3-3zm0 2a1 1 0 1 1 0 2a1 1 0 0 1 0-2zM6.21 9.71a1 1 0 1 1 0 2a1 1 0 0 1 0-2zm11.58 0a1 1 0 1 1 0 2a1 1 0 0 1 0-2zM12 15a1 1 0 1 1 0 2a1 1 0 0 1 0-2z"/>
+                </svg>
+            </div>
+            <div class="activity-icon" title="Extensions">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13.5 1.5L15 0H22.5L24 1.5V9L22.5 10.5H15L13.5 9V1.5ZM15 1.5V9H22.5V1.5H15ZM0 15V6L1.5 4.5H9L10.5 6V13.5H18L19.5 15V22.5L18 24H10.5L9 22.5V15H1.5L0 13.5ZM9 13.5V6H1.5V13.5H9ZM18 22.5V15H10.5V22.5H18Z"/>
+                </svg>
+            </div>
+        </div>
+        -->
+
+        <!-- Editor Space (Mock) -->
+         <!--
+        <div class="editor-space">
+            <div class="editor-placeholder">
+                <h3>Welcome to VSCode</h3>
+                <p>Open a folder to start coding</p>
+                <p style="margin-top: 20px; font-size: 12px;">MultiAgenticSwarm panel is open →</p>
+            </div>
+        </div>
+        -->
+
+        <!-- chat panel -->
+         
+         <div class="panel chat-panel" id="chatPanel">
+            <div class="chat-messages" id="chatMessages"></div>
+             <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Type a message..." />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <!-- Extension Panel -->
+        <div class="extension-panel">
+            <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span>🤖</span>
+                    <span>MultiAgenticSwarm</span>
+                </div>
+                <div class="swarm-selector">
+                    <div class="dropdown">
+                        <button class="dropdown-button" onclick="toggleDropdown('swarmDropdown')">
+                            <span>FlutterSwarm</span>
+                            <span>▼</span>
+                        </button>
+                        <div class="dropdown-menu" id="swarmDropdown">
+                            <div class="dropdown-item" onclick="selectSwarm(this)">FlutterSwarm</div>
+                            <div class="dropdown-item" onclick="selectSwarm(this)">PythonSwarm</div>
+                            <div class="dropdown-item" onclick="selectSwarm(this)">ReactSwarm</div>
+                            <div class="dropdown-item" onclick="selectSwarm(this)">DataScienceSwarm</div>
+                            <div class="dropdown-item add-new" onclick="openModal('newSwarmModal')">+ Create New Swarm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="agents-section">
+                <div class="section-title">
+                    <span>AGENTS</span>
+                    <button class="add-button" onclick="openModal('newAgentModal')">+</button>
+                </div>
+                
+                <div id="agentsList">
+                    <div class="agent-card active" onclick="selectAgent(this, 'orchestrator')">
+                        <div class="agent-header">
+                            <div class="agent-name">
+                                <div class="agent-color" style="background-color: var(--accent-blue);"></div>
+                                <span>Orchestrator Agent</span>
+                            </div>
+                            <div class="agent-status"></div>
+                        </div>
+                        <div class="agent-tools">4 tools enabled</div>
+                    </div>
+                    
+                    <div class="agent-card" onclick="selectAgent(this, 'cicd')">
+                        <div class="agent-header">
+                            <div class="agent-name">
+                                <div class="agent-color" style="background-color: var(--accent-green);"></div>
+                                <span>CI/CD Agent</span>
+                            </div>
+                            <div class="agent-status"></div>
+                        </div>
+                        <div class="agent-tools">3 tools enabled</div>
+                    </div>
+                    
+                    <div class="agent-card" onclick="selectAgent(this, 'tests')">
+                        <div class="agent-header">
+                            <div class="agent-name">
+                                <div class="agent-color" style="background-color: var(--accent-purple);"></div>
+                                <span>Tests Agent</span>
+                            </div>
+                            <div class="agent-status"></div>
+                        </div>
+                        <div class="agent-tools">5 tools enabled</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="main-header">
+                <h2 id="currentAgentName">Orchestrator Agent Configuration</h2>
+                <div class="header-actions">
+                    <button class="icon-button" title="Export Configuration" onclick="exportConfig()">📤</button>
+                    <button class="icon-button" title="Import Configuration" onclick="importConfig()">📥</button>
+                    <button class="icon-button" title="View Metrics" onclick="openModal('metricsModal')">📊</button>
+                    <button class="icon-button" title="Settings" onclick="openModal('settingsModal')">⚙️</button>
+                </div>
+            </div>
+            
+            <div class="agent-config">
+                <!-- Basic Configuration -->
+                <div class="config-section">
+                    <h3 class="config-title">Basic Configuration</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Agent Name</label>
+                        <input type="text" class="form-input" id="agentName" value="Orchestrator Agent">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">System Prompt</label>
+                        <textarea class="form-textarea" id="systemPrompt">You are an orchestrator agent responsible for coordinating tasks between different agents in the Flutter development workflow. Analyze incoming requests and delegate appropriately.</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">LLM Configuration</label>
+                        <div class="dropdown">
+                            <button class="dropdown-button" onclick="toggleDropdown('llmDropdown')">
+                                <span>OpenAI GPT-4</span>
+                                <span>▼</span>
+                            </button>
+                            <div class="dropdown-menu" id="llmDropdown">
+                                <div class="dropdown-item">OpenAI GPT-4</div>
+                                <div class="dropdown-item">Claude 3</div>
+                                <div class="dropdown-item">Local LLM (Ollama)</div>
+                                <div class="dropdown-item">Custom API</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">API Key / Connection String</label>
+                        <input type="password" class="form-input" id="apiKey" placeholder="sk-...">
+                    </div>
+                </div>
+                
+                <!-- Tools Configuration -->
+                <div class="config-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3 class="config-title" style="margin: 0;">Agent Tools</h3>
+                        <button class="add-button" onclick="openModal('newToolModal')">+</button>
+                    </div>
+                    
+                    <div class="tools-list">
+                        <div class="tool-item">
+                            <div class="tool-info">
+                                <div class="tool-name">Code Analysis</div>
+                                <div class="tool-description">Analyzes Flutter code for best practices and patterns</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="tool-item">
+                            <div class="tool-info">
+                                <div class="tool-name">Task Delegation</div>
+                                <div class="tool-description">Delegates tasks to appropriate specialized agents</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="tool-item">
+                            <div class="tool-info">
+                                <div class="tool-name">Progress Tracking</div>
+                                <div class="tool-description">Monitors and reports on task completion status</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="tool-item">
+                            <div class="tool-info">
+                                <div class="tool-name">Dependency Resolution</div>
+                                <div class="tool-description">Manages package dependencies and version conflicts</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Collaboration Configuration -->
+                <div class="config-section">
+                    <h3 class="config-title">Agent Collaboration</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Collaboration Rules</label>
+                        <textarea class="form-textarea" id="collabRules">Orchestrator receives all initial requests → CI/CD Agent handles deployment tasks → Tests Agent validates all code changes → All agents report back to Orchestrator</textarea>
+                    </div>
+                    
+                    <div class="collab-visual" id="collabVisual">
+                        <div class="agent-node" style="background-color: var(--accent-blue); left: 50%; top: 20%; transform: translateX(-50%);">O</div>
+                        <div class="agent-node" style="background-color: var(--accent-green); left: 20%; bottom: 20%;">C</div>
+                        <div class="agent-node" style="background-color: var(--accent-purple); right: 20%; bottom: 20%;">T</div>
+                        <svg style="position: absolute; width: 100%; height: 100%; pointer-events: none;">
+                            <line x1="50%" y1="35%" x2="30%" y2="65%" stroke="var(--border-color)" stroke-width="2"/>
+                            <line x1="50%" y1="35%" x2="70%" y2="65%" stroke="var(--border-color)" stroke-width="2"/>
+                            <line x1="30%" y1="70%" x2="70%" y2="70%" stroke="var(--border-color)" stroke-width="2" stroke-dasharray="5,5"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Chat Interface -->
+                <div class="config-section">
+                    <h3 class="config-title">Test Agent Responses</h3>
+                    
+                    <div class="chat-section">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message agent-1">
+                                <div class="message-header">Orchestrator Agent</div>
+                                <div>I've received your request to implement a new authentication feature. Let me coordinate this with the team.</div>
+                            </div>
+                            
+                            <div class="message agent-2">
+                                <div class="message-header">CI/CD Agent</div>
+                                <div>I'll set up the deployment pipeline for the auth feature branch and configure the environment variables.</div>
+                            </div>
+                            
+                            <div class="message agent-3">
+                                <div class="message-header">Tests Agent</div>
+                                <div>I'm preparing unit tests for the authentication module and will run integration tests once the implementation is ready.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <input type="text" class="form-input chat-input" id="chatInput" placeholder="Ask your agents...">
+                            <button class="send-button" onclick="sendMessage()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <div class="status-item">
+                <span>🌿</span>
+                <span>main</span>
+            </div>
+            <div class="status-item">
+                <span>⚡</span>
+                <span>MultiAgenticSwarm v1.0.0</span>
+            </div>
+        </div>
+        <div class="status-right">
+            <div class="status-item">
+                <span>🤖</span>
+                <span>3 Agents Active</span>
+            </div>
+            <div class="status-item">
+                <span>Ln 1, Col 1</span>
+            </div>
+            <div class="status-item">
+                <span>UTF-8</span>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <!-- Modals -->
+    <!-- New Agent Modal -->
+    <div class="modal" id="newAgentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Agent</h3>
+                <button class="close-button" onclick="closeModal('newAgentModal')">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Agent Name</label>
+                <input type="text" class="form-input" placeholder="e.g., Database Agent">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Agent Color</label>
+                <input type="color" class="form-input" value="#ff6b6b">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Initial System Prompt</label>
+                <textarea class="form-textarea" placeholder="Describe the agent's role and capabilities..."></textarea>
+            </div>
+            
+            <button class="send-button" style="width: 100%;" onclick="createNewAgent()">Create Agent</button>
+        </div>
+    </div>
+    
+    <!-- New Tool Modal -->
+    <div class="modal" id="newToolModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Tool</h3>
+                <button class="close-button" onclick="closeModal('newToolModal')">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Tool Name</label>
+                <input type="text" class="form-input" placeholder="e.g., API Integration">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Implementation Type</label>
+                <div class="dropdown">
+                    <button class="dropdown-button" onclick="toggleDropdown('implDropdown')">
+                        <span>AI-Generated Function</span>
+                        <span>▼</span>
+                    </button>
+                    <div class="dropdown-menu" id="implDropdown">
+                        <div class="dropdown-item" onclick="selectImplementation(this)">AI-Generated Function</div>
+                        <div class="dropdown-item" onclick="selectImplementation(this)">Lambda Function</div>
+                        <div class="dropdown-item" onclick="selectImplementation(this)">External API</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Tool Description / Lambda Function</label>
+                <textarea class="form-textarea" placeholder="Describe what this tool should do or paste your lambda function..."></textarea>
+            </div>
+            
+            <button class="send-button" style="width: 100%;" onclick="createNewTool()">Generate Tool</button>
+        </div>
+    </div>
+    
+    <!-- Metrics Modal -->
+    <div class="modal" id="metricsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Agent Performance Metrics</h3>
+                <button class="close-button" onclick="closeModal('metricsModal')">&times;</button>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">247</div>
+                    <div class="metric-label">Tasks Completed</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">98%</div>
+                    <div class="metric-label">Success Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">1.2s</div>
+                    <div class="metric-label">Avg Response Time</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">15</div>
+                    <div class="metric-label">Active Tools</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">$3.47</div>
+                    <div class="metric-label">API Cost Today</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value">4.8/5</div>
+                    <div class="metric-label">User Rating</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <button class="send-button" style="width: 100%;" onclick="exportMetrics()">Export Detailed Report</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- New Swarm Modal -->
+    <div class="modal" id="newSwarmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create Custom Swarm</h3>
+                <button class="close-button" onclick="closeModal('newSwarmModal')">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Swarm Name</label>
+                <input type="text" class="form-input" placeholder="e.g., E-commerce Swarm">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" placeholder="Describe the purpose of this swarm..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Template</label>
+                <div class="dropdown">
+                    <button class="dropdown-button" onclick="toggleDropdown('templateDropdown')">
+                        <span>Start from Scratch</span>
+                        <span>▼</span>
+                    </button>
+                    <div class="dropdown-menu" id="templateDropdown">
+                        <div class="dropdown-item" onclick="selectTemplate(this)">Start from Scratch</div>
+                        <div class="dropdown-item" onclick="selectTemplate(this)">Clone FlutterSwarm</div>
+                        <div class="dropdown-item" onclick="selectTemplate(this)">Clone PythonSwarm</div>
+                        <div class="dropdown-item" onclick="selectTemplate(this)">Basic Web Development</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="send-button" style="width: 100%;" onclick="createNewSwarm()">Create Swarm</button>
+        </div>
+    </div>
+    
+    <script>
+        // Activity Bar functionality
+        const activityIcons = document.querySelectorAll('.activity-icon');
+        const extensionPanel = document.querySelector('.extension-panel');
+        
+        activityIcons.forEach((icon, index) => {
+            icon.addEventListener('click', () => {
+                // Remove active class from all icons
+                activityIcons.forEach(i => i.classList.remove('active'));
+                
+                // Add active class to clicked icon
+                icon.classList.add('active');
+                
+                // Toggle extension panel for MultiAgenticSwarm (index 4)
+                if (index === 4) {
+                    extensionPanel.classList.remove('hidden');
+                } else {
+                    extensionPanel.classList.add('hidden');
+                }
+            });
+        });
+
+        // Global state
+        let activeAgent = 'orchestrator';
+        let agents = {
+            orchestrator: {
+                name: 'Orchestrator Agent',
+                color: 'var(--accent-blue)',
+                tools: 4,
+                systemPrompt: 'You are an orchestrator agent responsible for coordinating tasks...'
+            },
+            cicd: {
+                name: 'CI/CD Agent',
+                color: 'var(--accent-green)',
+                tools: 3,
+                systemPrompt: 'You handle continuous integration and deployment tasks...'
+            },
+            tests: {
+                name: 'Tests Agent',
+                color: 'var(--accent-purple)',
+                tools: 5,
+                systemPrompt: 'You are responsible for creating and running tests...'
+            }
+        };
+        
+        // Toggle dropdown
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const allDropdowns = document.querySelectorAll('.dropdown-menu');
+            
+            allDropdowns.forEach(d => {
+                if (d.id !== id) {
+                    d.classList.remove('active');
+                }
+            });
+            
+            dropdown.classList.toggle('active');
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown-menu').forEach(d => {
+                    d.classList.remove('active');
+                });
+            }
+        });
+        
+        // Select agent
+        function selectAgent(element, agentId) {
+            document.querySelectorAll('.agent-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            element.classList.add('active');
+            activeAgent = agentId;
+            
+            // Update main content
+            document.getElementById('currentAgentName').textContent = agents[agentId].name + ' Configuration';
+            document.getElementById('agentName').value = agents[agentId].name;
+            document.getElementById('systemPrompt').value = agents[agentId].systemPrompt;
+        }
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // Create new agent
+        function createNewAgent() {
+            const modal = document.getElementById("newAgentModal");
+
+            const nameInput = modal.querySelector("input[type='text']");
+            const colorInput = modal.querySelector("input[type='color']");
+            const promptInput = modal.querySelector("textarea");
+
+            const agentName = nameInput.value.trim() || "Untitled Agent";
+            const agentColor = colorInput.value || "#ff6b6b";
+            const agentPrompt = promptInput.value.trim() || "You are a new agent. Customize my behavior!";
+
+            const agentId = `agent_${Date.now()}`;
+
+            // Create visual agent card
+            const newAgentCard = document.createElement('div');
+            newAgentCard.className = 'agent-card';
+            newAgentCard.setAttribute('onclick', `selectAgent(this, '${agentId}')`);
+            newAgentCard.innerHTML = `
+                <div class="agent-header">
+                    <div class="agent-name">
+                        <div class="agent-color" style="background-color: ${agentColor};"></div>
+                        <span>${agentName}</span>
+                    </div>
+                    <div class="agent-status"></div>
+                </div>
+                <div class="agent-tools">0 tools enabled</div>
+            `;
+
+            // Append to sidebar
+            document.getElementById('agentsList').appendChild(newAgentCard);
+
+            // Add to global agent config
+            agents[agentId] = {
+                name: agentName,
+                color: agentColor,
+                tools: 0,
+                systemPrompt: agentPrompt
+            };
+
+            // Reset modal fields
+            nameInput.value = "";
+            colorInput.value = "#ff6b6b";
+            promptInput.value = "";
+
+            // Close modal
+            closeModal('newAgentModal');
+
+            // Auto-select the new agent
+            selectAgent(newAgentCard, agentId);
+        }
+
+
+        // Create new tool
+        function createNewTool() {
+            const modal = document.getElementById("newToolModal");
+
+            const nameInput = modal.querySelector("input.form-input");
+            const implDropdown = modal.querySelector(".dropdown-button span:first-child");
+            const descInput = modal.querySelector("textarea.form-textarea");
+
+            const toolName = nameInput.value.trim();
+            const implType = implDropdown.textContent.trim();
+            const toolDesc = descInput.value.trim();
+
+            if (!toolName) {
+                alert("Please enter a tool name.");
+                return;
+            }
+
+            // Create tool card
+            const newTool = document.createElement("div");
+            newTool.className = "tool-item";
+            newTool.innerHTML = `
+                <div class="tool-info">
+                    <div class="tool-name">${toolName}</div>
+                    <div class="tool-description">${toolDesc || "No description provided."}</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            `;
+
+            document.querySelector(".tools-list").appendChild(newTool);
+
+            console.log("✅ New Tool Created:", {
+                name: toolName,
+                type: implType,
+                description: toolDesc
+            });
+
+            // Reset modal fields
+            nameInput.value = "";
+            descInput.value = "";
+            implDropdown.textContent = "AI-Generated Function";
+
+            // Close modal
+            closeModal("newToolModal");
+        }
+
+        
+        // Send message in chat
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message';
+                userMessage.style.borderLeftColor = 'var(--accent-orange)';
+                userMessage.innerHTML = `
+                    <div class="message-header">You</div>
+                    <div>${message}</div>
+                `;
+                
+                chatMessages.appendChild(userMessage);
+                input.value = '';
+                
+                // Simulate agent responses
+                setTimeout(() => {
+                    const agentMessage = document.createElement('div');
+                    agentMessage.className = 'message agent-1';
+                    agentMessage.innerHTML = `
+                        <div class="message-header"> Agent</div>
+                        <div>Processing your request: "${message}"</div>
+                    `;
+                    chatMessages.appendChild(agentMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        }
+        
+        // Export configuration
+        function exportConfig() {
+            const config = {
+                swarm: 'FlutterSwarm',
+                agents: agents,
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'swarm-config.json';
+            a.click();
+        }
+        
+        // Import configuration
+        function importConfig() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const config = JSON.parse(event.target.result);
+                        console.log('Imported config:', config);
+                        alert('Configuration imported successfully!');
+                    } catch (err) {
+                        alert('Error importing configuration');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+        
+        // Create new swarm
+        function createNewSwarm() {
+            const nameInput = document.querySelector('#newSwarmModal input.form-input');
+            const descInput = document.querySelector('#newSwarmModal textarea.form-textarea');
+            const templateButton = document.querySelector('#templateDropdown').previousElementSibling;
+    
+            const swarmName = nameInput.value.trim();
+            const description = descInput.value.trim();
+            const template = templateButton.querySelector('span:first-child').textContent.trim();
+
+            if (!swarmName) {
+                alert("Please enter a name for the new swarm.");
+                return;
+            }
+
+            // Create new swarm dropdown item
+            const newItem = document.createElement("div");
+            newItem.className = "dropdown-item";
+            newItem.textContent = swarmName;
+            newItem.setAttribute("onclick", "selectSwarm(this)");
+
+            // Insert before the '+ Create New Swarm' item
+            const dropdown = document.getElementById("swarmDropdown");
+            const createNew = dropdown.querySelector(".add-new");
+            dropdown.insertBefore(newItem, createNew);
+
+            // Select the newly created swarm
+            selectSwarm(newItem);
+
+            // (Optional) Log or use the full config
+            console.log("✅ Created new swarm:", {
+                name: swarmName,
+                description,
+                template
+            });
+
+            // Clear inputs
+            nameInput.value = "";
+            descInput.value = "";
+            templateButton.querySelector('span:first-child').textContent = "Start from Scratch";
+
+            // Close modal
+            closeModal("newSwarmModal");
+        }
+
+        function selectTemplate(item) {
+            const template = item.textContent.trim();
+            const button = item.closest('.dropdown').querySelector('.dropdown-button span:first-child');
+            button.textContent = template;
+            item.closest('.dropdown-menu').classList.remove('active');
+        }
+
+
+        
+        // Export metrics
+        function exportMetrics() {
+            alert('Detailed metrics report exported!');
+        }
+
+        // Select swarm from dropdown
+        function selectSwarm(element) {
+            const selected = element.textContent.trim();
+
+            // Update visible label (first <span> inside button)
+            const button = document.querySelector('.swarm-selector .dropdown-button span:first-child');
+            button.textContent = selected;
+
+            // Store selected value for later use
+            const dropdownButton = document.querySelector('.swarm-selector .dropdown-button');
+            dropdownButton.setAttribute('data-value', selected);
+
+            // Close dropdown
+            document.getElementById('swarmDropdown').classList.remove('active');
+        }
+
+        
+        // Enter key to send message
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+
+        // for new agent tool
+        function selectImplementation(item) {
+            const value = item.textContent.trim();
+            const button = item.closest(".dropdown").querySelector(".dropdown-button span:first-child");
+            button.textContent = value;
+
+            item.closest(".dropdown-menu").classList.remove("active");
+        }
+
+
+    </script>
+</body>
+</html>

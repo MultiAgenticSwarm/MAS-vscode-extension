@@ -1,51 +1,31 @@
 {
-  "name": "ai-chat-vscode-extension",
-  "displayName": "AI Code Assistant",
-  "description": "A beautiful chat-based AI assistant in VS Code.",
-  "version": "0.0.1",
+  "name": "multiagent-extension",
+  "displayName": "MultiAgenticSwarm",
+  "description": "A VS Code extension for coordinating AI agents",
+  "version": "1.0.0",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.88.0"
   },
-  "categories": [
-    "Other"
-  ],
   "activationEvents": [
-    "onView:aiChatView"
+    "onCommand:multiAgentSwarm.openPanel"
   ],
-  "main": "./dist/extension.js",
-  "contributes": {
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "aiChat",
-          "title": "AI Chat"
-        }
-      ]
-    },
-    "views": {
-      "aiChat": [
-        {
-          "id": "aiChatView",
-          "name": "Chat"
-        }
-      ]
-    }
+  "main": "./out/extension.js",
+  "contributes": { 
+    "commands": [
+      {
+        "command": "multiAgentSwarm.openPanel",
+        "title": "Open MultiAgenticSwarm Panel"
+      }
+    ]
   },
   "scripts": {
-    "build": "pnpm run build:ext && pnpm run build:web",
-   "build:ext": "esbuild src/extension.ts --bundle --platform=node --outfile=dist/extension.js --external:vscode",
-    "build:web": "esbuild src/webview/webview.ts --bundle --outfile=media/chat.js"
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@types/node": "^24.0.4",
-    "@types/vscode": "^1.85.0",
-    "dotenv": "^16.5.0",
-    "esbuild": "^0.20.0",
-    "glob": "^11.0.3",
-    "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "node-fetch": "^3.3.2"
+    "@types/node": "^18.18.0",
+    "typescript": "^5.4.0",
+    "vscode": "^1.1.37"
   }
 }

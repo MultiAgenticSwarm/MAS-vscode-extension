@@ -10,14 +10,18 @@
     "onCommand:multiAgentSwarm.openPanel"
   ],
   "main": "./out/extension.js",
-  "contributes": { 
-    "commands": [
-      {
-        "command": "multiAgentSwarm.openPanel",
-        "title": "Open MultiAgenticSwarm Panel"
-      }
-    ]
-  },
+  "contributes": {
+  "commands": [
+    {
+      "command": "multiagent-swarm-ui.open",
+      "title": "Open MultiAgenticSwarm UI"
+    }
+  ]
+},
+"activationEvents": [
+  "onCommand:multiagent-swarm-ui.open"
+]
+,
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
     "compile": "tsc -p ./",

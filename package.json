@@ -1,35 +1,62 @@
 {
-  "name": "multiagent-extension",
-  "displayName": "MultiAgenticSwarm",
-  "description": "A VS Code extension for coordinating AI agents",
+  "name": "multiagent-swarm",
+  "displayName": "MultiAgent Swarm",
+  "description": "AI-powered multi-agent development assistant",
   "version": "1.0.0",
   "engines": {
-    "vscode": "^1.88.0"
+    "vscode": "^1.74.0"
   },
-  "activationEvents": [
-    "onCommand:multiAgentSwarm.openPanel"
-  ],
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
   "main": "./out/extension.js",
   "contributes": {
-  "commands": [
-    {
-      "command": "multiagent-swarm-ui.open",
-      "title": "Open MultiAgenticSwarm UI"
+    "commands": [
+      {
+        "command": "multiagentSwarm.openPanel",
+        "title": "Open MultiAgent Swarm",
+        "icon": "$(robot)"
+      },
+      {
+        "command": "multiagentSwarm.togglePanel",
+        "title": "Toggle MultiAgent Swarm Panel"
+      }
+    ],
+    "views": {
+      "multiagentSwarm": [
+        {
+          "id": "multiagentSwarm.mainView",
+          "name": "Agent Response Center",
+          "when": "multiagentSwarm:panelVisible"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "multiagentSwarm",
+          "title": "MultiAgent Swarm",
+          "icon": "media/icon.png"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "multiagentSwarm.togglePanel",
+          "when": "view == multiagentSwarm.mainView",
+          "group": "navigation"
+        }
+      ]
     }
-  ]
-},
-"activationEvents": [
-  "onCommand:multiagent-swarm-ui.open"
-]
-,
+  },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./",
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/node": "^18.18.0",
-    "typescript": "^5.4.0",
-    "vscode": "^1.1.37"
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
   }
 }

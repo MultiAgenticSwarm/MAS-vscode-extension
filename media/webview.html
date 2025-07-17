@@ -59,6 +59,7 @@
             z-index: 100;
             display: flex;
             flex-direction: column;
+<<<<<<< HEAD
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateX(0);
         }
@@ -66,6 +67,42 @@
         .floating-sidebar.collapsed {
             width: 80px;
             transform: translateX(0);
+=======
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateX(0);
+            overflow: visible;
+        }
+
+        .floating-sidebar.collapsed {
+            width: 0px;
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .floating-sidebar.collapsed .sidebar-header-content {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .floating-sidebar:not(.collapsed) .sidebar-header-content {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s;
+        }
+
+        .floating-sidebar.collapsed .agents-section {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .floating-sidebar:not(.collapsed) .agents-section {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s;
+>>>>>>> temp-work
         }
 
         .sidebar-header {
@@ -74,7 +111,18 @@
             background: var(--gradient-primary);
             border-radius: 16px 16px 0 0;
             position: relative;
+<<<<<<< HEAD
             overflow: hidden;
+=======
+            overflow: visible;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 999997;
+        }
+
+        .floating-sidebar.collapsed .sidebar-header {
+            padding: 24px 12px;
+            border-bottom: none;
+>>>>>>> temp-work
         }
 
         .sidebar-header::before {
@@ -91,6 +139,10 @@
         .sidebar-header-content {
             position: relative;
             z-index: 1;
+<<<<<<< HEAD
+=======
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+>>>>>>> temp-work
         }
 
         .logo {
@@ -98,6 +150,7 @@
             align-items: center;
             gap: 12px;
             color: white;
+<<<<<<< HEAD
             font-size: 18px;
             font-weight: 700;
             margin-bottom: 16px;
@@ -112,28 +165,150 @@
             align-items: center;
             justify-content: center;
             font-size: 16px;
+=======
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.7;
+            margin-top: 2px;
+>>>>>>> temp-work
         }
 
         .swarm-selector {
             position: relative;
+<<<<<<< HEAD
+=======
+            z-index: 999998;
+>>>>>>> temp-work
         }
 
         .swarm-dropdown {
             width: 100%;
+<<<<<<< HEAD
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             padding: 12px 16px;
+=======
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            padding: 10px 12px;
+>>>>>>> temp-work
             color: white;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: all 0.2s ease;
+<<<<<<< HEAD
         }
 
         .swarm-dropdown:hover {
             background: rgba(255, 255, 255, 0.15);
+=======
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .swarm-dropdown:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .swarm-dropdown.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .swarm-dropdown-arrow {
+            transition: transform 0.2s ease;
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .swarm-dropdown.active .swarm-dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .swarm-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            margin-top: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 999999;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            max-height: 200px;
+        }
+
+        .swarm-dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .swarm-dropdown-item {
+            padding: 10px 12px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            font-size: 13px;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .swarm-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .swarm-dropdown-item:hover {
+            background: rgba(88, 166, 255, 0.08);
+            color: var(--accent-blue);
+        }
+
+        .swarm-dropdown-item.selected {
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .swarm-dropdown-item .check-icon {
+            font-size: 12px;
+            color: var(--accent-green);
+>>>>>>> temp-work
         }
 
         .collapse-btn {
@@ -150,16 +325,66 @@
             display: flex;
             align-items: center;
             justify-content: center;
+<<<<<<< HEAD
             transition: all 0.2s ease;
             z-index: 2;
+=======
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 2;
+            backdrop-filter: blur(10px);
+>>>>>>> temp-work
         }
 
         .collapse-btn:hover {
             background: rgba(255, 255, 255, 0.2);
+<<<<<<< HEAD
+=======
+            transform: scale(1.05);
+        }
+
+        .collapse-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Collapsed state collapse button - moves to main panel */
+        .collapse-btn-main {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            width: 32px;
+            height: 32px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--vscode-fg);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 150;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .collapse-btn-main:hover {
+            background: var(--vscode-hover);
+            transform: scale(1.05);
+        }
+
+        .collapse-btn-main:active {
+            transform: scale(0.95);
+        }
+
+        /* Show main collapse button when sidebar is collapsed */
+        .sidebar-collapsed .collapse-btn-main {
+            display: flex;
+>>>>>>> temp-work
         }
 
         .agents-section {
             flex: 1;
+<<<<<<< HEAD
             padding: 24px;
             overflow-y: auto;
         }
@@ -181,12 +406,44 @@
             background: var(--gradient-secondary);
             border: none;
             border-radius: 6px;
+=======
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: visible;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--vscode-descriptionForeground);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            letter-spacing: 0.5px;
+        }
+
+        .add-agent-btn {
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-secondary);
+            border: none;
+            border-radius: 4px;
+>>>>>>> temp-work
             color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+<<<<<<< HEAD
             font-size: 14px;
+=======
+            font-size: 12px;
+>>>>>>> temp-work
             transition: all 0.2s ease;
         }
 
@@ -198,13 +455,23 @@
         .agent-card {
             background: var(--vscode-list-inactiveSelectionBackground);
             border: 1px solid var(--vscode-border);
+<<<<<<< HEAD
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 12px;
+=======
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+>>>>>>> temp-work
             cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+<<<<<<< HEAD
+=======
+            z-index: 1;
+>>>>>>> temp-work
         }
 
         .agent-card::before {
@@ -212,7 +479,11 @@
             position: absolute;
             top: 0;
             left: 0;
+<<<<<<< HEAD
             width: 4px;
+=======
+            width: 3px;
+>>>>>>> temp-work
             height: 100%;
             background: var(--accent-blue);
             opacity: 0;
@@ -221,8 +492,13 @@
 
         .agent-card:hover {
             border-color: var(--accent-blue);
+<<<<<<< HEAD
             transform: translateY(-2px);
             box-shadow: 0 8px 24px var(--shadow);
+=======
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow);
+>>>>>>> temp-work
         }
 
         .agent-card.active {
@@ -238,12 +514,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+<<<<<<< HEAD
             margin-bottom: 8px;
+=======
+            margin-bottom: 6px;
+>>>>>>> temp-work
         }
 
         .agent-name {
             display: flex;
             align-items: center;
+<<<<<<< HEAD
             gap: 12px;
             font-weight: 600;
         }
@@ -252,17 +533,37 @@
             width: 32px;
             height: 32px;
             border-radius: 8px;
+=======
+            gap: 10px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .agent-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+>>>>>>> temp-work
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
+<<<<<<< HEAD
             font-size: 14px;
         }
 
         .agent-status {
             width: 8px;
             height: 8px;
+=======
+            font-size: 12px;
+        }
+
+        .agent-status {
+            width: 6px;
+            height: 6px;
+>>>>>>> temp-work
             border-radius: 50%;
             background: var(--accent-green);
             position: relative;
@@ -287,8 +588,66 @@
         }
 
         .agent-tools {
+<<<<<<< HEAD
             font-size: 12px;
             color: var(--vscode-descriptionForeground);
+=======
+            font-size: 11px;
+            color: var(--vscode-descriptionForeground);
+            font-weight: 500;
+        }
+
+        .agent-description {
+            font-size: 11px;
+            color: var(--vscode-descriptionForeground);
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+        }
+
+        .swarm-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .status-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+        }
+
+        .status-value {
+            font-size: 11px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .agent-count {
+            margin-bottom: 8px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s infinite;
+>>>>>>> temp-work
         }
 
         /* Main Content Area */
@@ -298,11 +657,19 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
+<<<<<<< HEAD
             transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .main-content.sidebar-collapsed {
             margin-left: 120px;
+=======
+            transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 20px;
+>>>>>>> temp-work
         }
 
         .main-header {
@@ -778,7 +1145,11 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(8px);
+<<<<<<< HEAD
             z-index: 1000;
+=======
+            z-index: 1000000;
+>>>>>>> temp-work
             justify-content: center;
             align-items: center;
         }
@@ -856,7 +1227,11 @@
             }
             
             .main-content.sidebar-collapsed {
+<<<<<<< HEAD
                 margin-left: 120px;
+=======
+                margin-left: 20px;
+>>>>>>> temp-work
             }
         }
 
@@ -874,7 +1249,11 @@
             }
             
             .main-content.sidebar-collapsed {
+<<<<<<< HEAD
                 margin-left: 90px;
+=======
+                margin-left: 20px;
+>>>>>>> temp-work
             }
             
             .tools-grid {
@@ -903,18 +1282,60 @@
 </head>
 <body>
     <div class="main-container">
+<<<<<<< HEAD
+=======
+        <!-- Main Collapse Button (shows when sidebar is collapsed) -->
+        <button class="collapse-btn-main" onclick="toggleSidebar()" title="Show Sidebar" id="mainCollapseBtn">
+            <span>▶</span>
+        </button>
+
+>>>>>>> temp-work
         <!-- Floating Sidebar -->
         <div class="floating-sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-header-content">
                     <div class="logo">
                         <div class="logo-icon">🤖</div>
+<<<<<<< HEAD
                         <span id="logoText">MultiAgent Swarm</span>
                     </div>
                     <div class="swarm-selector" id="swarmSelector">
                         <div class="swarm-dropdown" onclick="toggleSwarmDropdown()">
                             <span id="selectedSwarm">FlutterSwarm</span>
                             <span>▼</span>
+=======
+                        <div>
+                            <div class="logo-text" id="logoText">MultiAgenticSwarm</div>
+                            <div class="logo-subtitle">AI Development Assistant</div>
+                        </div>
+                    </div>
+                    <div class="swarm-selector" id="swarmSelector">
+                        <div class="swarm-dropdown" onclick="toggleSwarmDropdown()">
+                            <span id="selectedSwarm">WebDevSwarm</span>
+                            <span class="swarm-dropdown-arrow">▼</span>
+                        </div>
+                        <div class="swarm-dropdown-menu" id="swarmDropdownMenu">
+                            <div class="swarm-dropdown-item" onclick="selectSwarm('FlutterSwarm')">
+                                <span>FlutterSwarm</span>
+                                <span class="check-icon" style="opacity: 0;">✓</span>
+                            </div>
+                            <div class="swarm-dropdown-item selected" onclick="selectSwarm('WebDevSwarm')">
+                                <span>WebDevSwarm</span>
+                                <span class="check-icon">✓</span>
+                            </div>
+                            <div class="swarm-dropdown-item" onclick="selectSwarm('MobileSwarm')">
+                                <span>MobileSwarm</span>
+                                <span class="check-icon" style="opacity: 0;">✓</span>
+                            </div>
+                            <div class="swarm-dropdown-item" onclick="selectSwarm('AISwarm')">
+                                <span>AISwarm</span>
+                                <span class="check-icon" style="opacity: 0;">✓</span>
+                            </div>
+                            <div class="swarm-dropdown-item" onclick="selectSwarm('DataSwarm')">
+                                <span>DataSwarm</span>
+                                <span class="check-icon" style="opacity: 0;">✓</span>
+                            </div>
+>>>>>>> temp-work
                         </div>
                     </div>
                 </div>
@@ -938,6 +1359,10 @@
                             </div>
                             <div class="agent-status active"></div>
                         </div>
+<<<<<<< HEAD
+=======
+                        <div class="agent-description">Coordination & Task Management</div>
+>>>>>>> temp-work
                         <div class="agent-tools">4 tools enabled</div>
                     </div>
 
@@ -949,6 +1374,10 @@
                             </div>
                             <div class="agent-status active"></div>
                         </div>
+<<<<<<< HEAD
+=======
+                        <div class="agent-description">Deployment & Integration</div>
+>>>>>>> temp-work
                         <div class="agent-tools">3 tools enabled</div>
                     </div>
 
@@ -960,10 +1389,32 @@
                             </div>
                             <div class="agent-status active"></div>
                         </div>
+<<<<<<< HEAD
+=======
+                        <div class="agent-description">Quality Assurance</div>
+>>>>>>> temp-work
                         <div class="agent-tools">5 tools enabled</div>
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
+=======
+            
+            <!-- Status Footer -->
+            <div class="sidebar-footer">
+                <div class="swarm-status">
+                    <span class="status-label">Active Swarm:</span>
+                    <span class="status-value" id="footerSwarmName">WebDevSwarm</span>
+                </div>
+                <div class="agent-count">
+                    <span class="status-label" id="agentCount">3 agents configured</span>
+                </div>
+                <div class="system-status">
+                    <span class="status-indicator-dot"></span>
+                    <span class="status-label">All systems operational</span>
+                </div>
+            </div>
+>>>>>>> temp-work
         </div>
 
         <!-- Main Content -->
@@ -1234,12 +1685,17 @@
             const sidebar = document.getElementById('sidebar');
             const mainContent = document.getElementById('mainContent');
             const collapseIcon = document.getElementById('collapseIcon');
+<<<<<<< HEAD
+=======
+            const mainCollapseBtn = document.getElementById('mainCollapseBtn');
+>>>>>>> temp-work
             const logoText = document.getElementById('logoText');
             const swarmSelector = document.getElementById('swarmSelector');
 
             sidebarCollapsed = !sidebarCollapsed;
 
             if (sidebarCollapsed) {
+<<<<<<< HEAD
                 sidebar.classList.add('collapsed');
                 mainContent.classList.add('sidebar-collapsed');
                 collapseIcon.textContent = '▶';
@@ -1251,6 +1707,44 @@
                 collapseIcon.textContent = '◀';
                 logoText.style.display = 'block';
                 swarmSelector.style.display = 'block';
+=======
+                // Hide sidebar completely
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('sidebar-collapsed');
+                document.body.classList.add('sidebar-collapsed');
+                
+                // Update button states
+                collapseIcon.textContent = '▶';
+                if (mainCollapseBtn) {
+                    mainCollapseBtn.style.display = 'flex';
+                }
+                
+                // Hide elements immediately since sidebar is sliding out
+                if (logoText) logoText.style.display = 'none';
+                if (swarmSelector) swarmSelector.style.display = 'none';
+            } else {
+                // Show sidebar
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('sidebar-collapsed');
+                document.body.classList.remove('sidebar-collapsed');
+                
+                // Update button states
+                collapseIcon.textContent = '◀';
+                if (mainCollapseBtn) {
+                    mainCollapseBtn.style.display = 'none';
+                }
+                
+                // Show elements with smooth transition after sidebar appears
+                setTimeout(() => {
+                    if (logoText) logoText.style.display = 'block';
+                    if (swarmSelector) swarmSelector.style.display = 'block';
+                }, 200);
+            }
+            
+            // Add haptic feedback simulation
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+>>>>>>> temp-work
             }
         }
 
@@ -1523,6 +2017,7 @@
             addMessage('agent', 'System', 'New agent "' + name + '" has been created successfully!', '🎉', 'var(--gradient-secondary)');
         }
 
+<<<<<<< HEAD
         // Swarm dropdown (placeholder)
         function toggleSwarmDropdown() {
             console.log('Swarm dropdown toggled');
@@ -1533,15 +2028,176 @@
             if (event.target.classList.contains('modal')) {
                 event.target.classList.remove('active');
             }
+=======
+        // Swarm dropdown functionality
+        let dropdownOpen = false;
+        let currentSwarm = 'WebDevSwarm';
+
+        function toggleSwarmDropdown() {
+            const dropdown = document.querySelector('.swarm-dropdown');
+            const dropdownMenu = document.getElementById('swarmDropdownMenu');
+            
+            dropdownOpen = !dropdownOpen;
+            
+            if (dropdownOpen) {
+                dropdown.classList.add('active');
+                dropdownMenu.classList.add('active');
+            } else {
+                dropdown.classList.remove('active');
+                dropdownMenu.classList.remove('active');
+            }
+        }
+
+        function selectSwarm(swarmName) {
+            currentSwarm = swarmName;
+            
+            // Update the selected swarm text
+            document.getElementById('selectedSwarm').textContent = swarmName;
+            
+            // Update footer
+            document.getElementById('footerSwarmName').textContent = swarmName;
+            
+            // Update the dropdown items
+            document.querySelectorAll('.swarm-dropdown-item').forEach(item => {
+                const itemText = item.querySelector('span:first-child').textContent;
+                const checkIcon = item.querySelector('.check-icon');
+                
+                if (itemText === swarmName) {
+                    item.classList.add('selected');
+                    checkIcon.style.opacity = '1';
+                } else {
+                    item.classList.remove('selected');
+                    checkIcon.style.opacity = '0';
+                }
+            });
+            
+            // Close the dropdown
+            toggleSwarmDropdown();
+            
+            // Update agents based on selected swarm
+            updateAgentsForSwarm(swarmName);
+            
+            // Send message to extension
+            vscode.postMessage({
+                command: 'swarmChanged',
+                data: { swarm: swarmName }
+            });
+            
+            // Show notification
+            addMessage('agent', 'System', 'Switched to ' + swarmName + '. Loading specialized agents...', '🔄', 'var(--gradient-secondary)');
+        }
+
+        function updateAgentsForSwarm(swarmName) {
+            // Define agents for different swarms
+            const swarmAgents = {
+                'WebDevSwarm': [
+                    { id: 'orchestrator', name: 'Orchestrator', avatar: 'O', gradient: 'var(--gradient-primary)', tools: 4, description: 'Coordination & Task Management' },
+                    { id: 'frontend', name: 'Frontend Agent', avatar: 'F', gradient: 'linear-gradient(135deg, var(--accent-blue), var(--accent-green))', tools: 6, description: 'UI/UX Development' },
+                    { id: 'backend', name: 'Backend Agent', avatar: 'B', gradient: 'linear-gradient(135deg, var(--accent-green), var(--accent-blue))', tools: 5, description: 'Server & API Development' }
+                ],
+                'FlutterSwarm': [
+                    { id: 'orchestrator', name: 'Orchestrator', avatar: 'O', gradient: 'var(--gradient-primary)', tools: 4, description: 'Coordination & Task Management' },
+                    { id: 'cicd', name: 'CI/CD Agent', avatar: 'C', gradient: 'var(--gradient-secondary)', tools: 3, description: 'Deployment & Integration' },
+                    { id: 'tests', name: 'Tests Agent', avatar: 'T', gradient: 'linear-gradient(135deg, var(--accent-purple), var(--accent-red))', tools: 5, description: 'Quality Assurance' }
+                ],
+                'MobileSwarm': [
+                    { id: 'orchestrator', name: 'Orchestrator', avatar: 'O', gradient: 'var(--gradient-primary)', tools: 4, description: 'Coordination & Task Management' },
+                    { id: 'android', name: 'Android Agent', avatar: 'A', gradient: 'linear-gradient(135deg, var(--accent-green), var(--accent-blue))', tools: 7, description: 'Android Development' },
+                    { id: 'ios', name: 'iOS Agent', avatar: 'I', gradient: 'linear-gradient(135deg, var(--accent-blue), var(--accent-purple))', tools: 6, description: 'iOS Development' }
+                ],
+                'AISwarm': [
+                    { id: 'orchestrator', name: 'Orchestrator', avatar: 'O', gradient: 'var(--gradient-primary)', tools: 4, description: 'Coordination & Task Management' },
+                    { id: 'ml', name: 'ML Agent', avatar: 'M', gradient: 'linear-gradient(135deg, var(--accent-blue), var(--accent-purple))', tools: 8, description: 'Machine Learning' },
+                    { id: 'nlp', name: 'NLP Agent', avatar: 'N', gradient: 'linear-gradient(135deg, var(--accent-purple), var(--accent-orange))', tools: 6, description: 'Natural Language Processing' }
+                ],
+                'DataSwarm': [
+                    { id: 'orchestrator', name: 'Orchestrator', avatar: 'O', gradient: 'var(--gradient-primary)', tools: 4, description: 'Coordination & Task Management' },
+                    { id: 'data', name: 'Data Agent', avatar: 'D', gradient: 'linear-gradient(135deg, var(--accent-green), var(--accent-orange))', tools: 5, description: 'Data Analysis' },
+                    { id: 'database', name: 'Database Agent', avatar: 'B', gradient: 'linear-gradient(135deg, var(--accent-orange), var(--accent-red))', tools: 4, description: 'Database Management' }
+                ]
+            };
+            
+            const agentsList = document.getElementById('agentsList');
+            const swarmAgentsData = swarmAgents[swarmName] || swarmAgents['WebDevSwarm'];
+            
+            // Clear current agents
+            agentsList.innerHTML = '';
+            
+            // Add new agents
+            swarmAgentsData.forEach((agent, index) => {
+                const agentCard = document.createElement('div');
+                agentCard.className = 'agent-card' + (index === 0 ? ' active' : '');
+                agentCard.onclick = function() { selectAgent(agentCard, agent.id); };
+                
+                agentCard.innerHTML = 
+                    '<div class="agent-header">' +
+                        '<div class="agent-name">' +
+                            '<div class="agent-avatar" style="background: ' + agent.gradient + ';">' + agent.avatar + '</div>' +
+                            '<span>' + agent.name + '</span>' +
+                        '</div>' +
+                        '<div class="agent-status active"></div>' +
+                    '</div>' +
+                    '<div class="agent-description">' + agent.description + '</div>' +
+                    '<div class="agent-tools">' + agent.tools + ' tools enabled</div>';
+                
+                agentsList.appendChild(agentCard);
+                
+                // Update global agents object
+                agents[agent.id] = agent;
+            });
+            
+            // Select first agent by default
+            currentAgent = swarmAgentsData[0].id;
+            updateMainTitle();
+            updateChatHeader();
+            
+            // Update agent count in footer
+            document.getElementById('agentCount').textContent = swarmAgentsData.length + ' agents configured';
+        }
+
+        // Close modals and dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            // Close modals
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+            
+            // Close dropdown if clicking outside
+            if (dropdownOpen && !event.target.closest('.swarm-selector')) {
+                const dropdown = document.querySelector('.swarm-dropdown');
+                const dropdownMenu = document.getElementById('swarmDropdownMenu');
+                
+                dropdown.classList.remove('active');
+                dropdownMenu.classList.remove('active');
+                dropdownOpen = false;
+            }
+>>>>>>> temp-work
         });
 
         // Keyboard shortcuts
         document.addEventListener('keydown', function(event) {
+<<<<<<< HEAD
             // Escape to close modals
+=======
+            // Escape to close modals and dropdowns
+>>>>>>> temp-work
             if (event.key === 'Escape') {
                 document.querySelectorAll('.modal.active').forEach(function(modal) {
                     modal.classList.remove('active');
                 });
+<<<<<<< HEAD
+=======
+                
+                // Close dropdown
+                if (dropdownOpen) {
+                    const dropdown = document.querySelector('.swarm-dropdown');
+                    const dropdownMenu = document.getElementById('swarmDropdownMenu');
+                    
+                    dropdown.classList.remove('active');
+                    dropdownMenu.classList.remove('active');
+                    dropdownOpen = false;
+                }
+>>>>>>> temp-work
             }
             
             // Ctrl/Cmd + / to focus chat input

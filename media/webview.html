@@ -312,6 +312,7 @@
         .agents-section {
             flex: 1;
             padding: 20px;
+            padding-top: 24px;
             overflow-y: auto;
             transition: all 0.3s ease;
         }
@@ -327,7 +328,7 @@
             font-weight: 600;
             text-transform: uppercase;
             color: var(--vscode-descriptionForeground);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -358,11 +359,15 @@
             border: 1px solid var(--vscode-border);
             border-radius: 12px;
             padding: 16px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
+        }
+
+        .agent-card:first-child {
+            margin-top: 8px;
         }
 
         .agent-card::before {

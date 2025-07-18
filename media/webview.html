@@ -53,7 +53,7 @@
             left: 20px;
             top: 20px;
             bottom: 20px;
-            width: 320px;
+            width: 380px;
             background: var(--vscode-bg);
             border: 1px solid var(--vscode-border);
             border-radius: 12px;
@@ -96,6 +96,16 @@
         .sidebar-header-content {
             position: relative;
             z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
         }
 
         .logo {
@@ -105,15 +115,29 @@
             color: white;
             font-size: 18px;
             font-weight: 700;
-            margin-bottom: 4px;
             transition: all 0.3s ease;
             position: relative;
+            flex: 1;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .floating-sidebar.collapsed .logo {
             gap: 0;
             justify-content: center;
             margin-bottom: 0;
+        }
+
+        .floating-sidebar.collapsed .header-top {
+            justify-content: center;
+        }
+
+        .floating-sidebar.collapsed .header-controls {
+            display: none;
         }
 
         .logo-icon {
@@ -151,7 +175,6 @@
             font-size: 13px;
             color: rgba(255, 255, 255, 0.8);
             font-weight: 400;
-            margin-bottom: 12px;
             transition: all 0.3s ease;
         }
 
@@ -160,6 +183,10 @@
             height: 0;
             margin: 0;
             overflow: hidden;
+        }
+
+        .floating-sidebar.collapsed .sidebar-header-content {
+            gap: 8px;
         }
 
         .swarm-selector {
@@ -287,7 +314,7 @@
             transform: translateY(-15px) scale(0.95);
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            min-width: 280px;
+            min-width: 340px;
             overflow: hidden;
             padding: 12px;
             max-height: 400px;
@@ -440,53 +467,93 @@
         }
 
         /* Theme Toggle */
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--vscode-border);
+            background: var(--vscode-bg);
+            border-radius: 0 0 12px 12px;
+            transition: all 0.3s ease;
+        }
+
+        .floating-sidebar.collapsed .sidebar-footer {
+            display: none;
+        }
+
         .theme-toggle-container {
             position: relative;
-            margin-left: auto;
         }
 
         .theme-toggle-btn {
-            width: 28px;
-            height: 28px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            padding: 4px;
-            color: white;
+            width: 100%;
+            height: 44px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #374151;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .theme-toggle-btn:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-icon {
+            font-size: 16px;
+        }
+
+        .theme-label {
+            flex: 1;
+            text-align: left;
+        }
+
+        .floating-sidebar.collapsed .header-controls {
+            display: none;
+        }
+
+        .collapse-btn {
+            position: relative;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+            color: rgba(255, 255, 255, 0.8);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-            font-size: 12px;
-        }
-
-        .theme-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: scale(1.05);
-        }
-
-        .floating-sidebar.collapsed .theme-toggle-container {
-            display: none;
+            transition: all 0.3s ease;
+            font-size: 10px;
         }
 
         .theme-dropdown-menu {
             position: absolute;
-            top: 100%;
+            bottom: 100%;
+            left: 0;
             right: 0;
-            background: transparent;
-            border: none;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
             border-radius: 12px;
-            box-shadow: none;
+            box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.1);
             z-index: 10001;
             opacity: 0;
-            transform: translateY(-10px) scale(0.95);
+            transform: translateY(10px) scale(0.95);
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-top: 8px;
+            margin-bottom: 8px;
             padding: 8px;
             min-width: 140px;
-            backdrop-filter: none;
+            backdrop-filter: blur(8px);
         }
 
         .theme-dropdown-menu.show {
@@ -499,23 +566,23 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 12px;
+            padding: 12px 16px;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: white;
+            color: #374151;
             font-size: 13px;
             font-weight: 500;
             position: relative;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid transparent;
             margin-bottom: 2px;
         }
 
         .theme-option:hover {
-            background: transparent;
-            border-color: rgba(255, 255, 255, 0.8);
-            color: white;
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+            color: #111827;
             transform: scale(1.02);
         }
 
@@ -530,7 +597,7 @@
         }
 
         .theme-option-check {
-            color: #60a5fa;
+            color: #3b82f6;
             font-weight: 600;
             opacity: 0;
             transition: opacity 0.2s ease;
@@ -572,41 +639,25 @@
             display: flex;
         }
 
-        .collapse-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 24px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 4px;
-            color: rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 2;
-            font-size: 10px;
+        .collapse-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
         }
 
         .floating-sidebar.collapsed .collapse-btn {
+            position: absolute;
+            top: 20px;
             right: 18px;
             width: 20px;
             height: 20px;
             font-size: 8px;
         }
 
-        .collapse-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            color: white;
-        }
-
         .agents-section {
             flex: 1;
             padding: 20px;
             padding-top: 24px;
+            padding-bottom: 0;
             overflow-y: auto;
             transition: all 0.3s ease;
         }
@@ -789,7 +840,7 @@
         /* Main Content Area */
         .main-content {
             flex: 1;
-            margin-left: 360px;
+            margin-left: 420px;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -1717,32 +1768,16 @@
         <div class="floating-sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-header-content">
-                    <div class="logo">
-                        <div class="logo-icon">🤖</div>
-                        <span class="logo-text" id="logoText">MultiAgenticSwarm</span>
-                        
-                        <!-- Theme Toggle -->
-                        <div class="theme-toggle-container" id="themeToggleContainer">
-                            <button class="theme-toggle-btn" onclick="toggleThemeDropdown()" title="Theme">
-                                <span class="theme-icon" id="currentThemeIcon">☀️</span>
+                    <div class="header-top">
+                        <div class="logo">
+                            <div class="logo-icon">🤖</div>
+                            <span class="logo-text" id="logoText">MultiAgenticSwarm</span>
+                        </div>
+                        <div class="header-controls">
+                            <!-- Collapse Button -->
+                            <button class="collapse-btn" onclick="toggleSidebar()" title="Collapse">
+                                <span id="collapseIcon">◀</span>
                             </button>
-                            <div class="theme-dropdown-menu" id="themeDropdownMenu">
-                                <div class="theme-option" onclick="setTheme('light')" data-theme="light">
-                                    <span class="theme-option-icon">☀️</span>
-                                    <span class="theme-option-text">Light</span>
-                                    <span class="theme-option-check" id="lightCheck">✓</span>
-                                </div>
-                                <div class="theme-option" onclick="setTheme('dark')" data-theme="dark">
-                                    <span class="theme-option-icon">🌙</span>
-                                    <span class="theme-option-text">Dark</span>
-                                    <span class="theme-option-check" id="darkCheck"></span>
-                                </div>
-                                <div class="theme-option" onclick="setTheme('system')" data-theme="system">
-                                    <span class="theme-option-icon">🖥️</span>
-                                    <span class="theme-option-text">System</span>
-                                    <span class="theme-option-check" id="systemCheck"></span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="logo-subtitle">AI Development Assistant</div>
@@ -1775,9 +1810,6 @@
                         </div>
                     </div>
                 </div>
-                <button class="collapse-btn" onclick="toggleSidebar()" title="Collapse Sidebar">
-                    <span id="collapseIcon">◀</span>
-                </button>
             </div>
 
             <div class="agents-section">
@@ -1847,6 +1879,33 @@
                                 <span>🛠️</span>
                                 <span>Tools</span>
                             </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Theme Controls at bottom -->
+            <div class="sidebar-footer">
+                <div class="theme-toggle-container" id="themeToggleContainer">
+                    <button class="theme-toggle-btn" onclick="toggleThemeDropdown()" title="Theme">
+                        <span class="theme-icon" id="currentThemeIcon">☀️</span>
+                        <span class="theme-label">Theme</span>
+                    </button>
+                    <div class="theme-dropdown-menu" id="themeDropdownMenu">
+                        <div class="theme-option" onclick="setTheme('light')" data-theme="light">
+                            <span class="theme-option-icon">☀️</span>
+                            <span class="theme-option-text">Light</span>
+                            <span class="theme-option-check" id="lightCheck">✓</span>
+                        </div>
+                        <div class="theme-option" onclick="setTheme('dark')" data-theme="dark">
+                            <span class="theme-option-icon">🌙</span>
+                            <span class="theme-option-text">Dark</span>
+                            <span class="theme-option-check" id="darkCheck"></span>
+                        </div>
+                        <div class="theme-option" onclick="setTheme('system')" data-theme="system">
+                            <span class="theme-option-icon">🖥️</span>
+                            <span class="theme-option-text">System</span>
+                            <span class="theme-option-check" id="systemCheck"></span>
                         </div>
                     </div>
                 </div>

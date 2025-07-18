@@ -17,16 +17,16 @@
             --vscode-border: var(--vscode-panel-border);
             --vscode-hover: var(--vscode-list-hoverBackground);
             --vscode-active: var(--vscode-list-activeSelectionBackground);
-            --accent-blue: #58a6ff;
-            --accent-purple: #bc8cff;
-            --accent-green: #56d364;
-            --accent-orange: #ffa657;
-            --accent-red: #f85149;
-            --gradient-primary: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            --accent-blue: #007acc;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --gradient-primary: linear-gradient(135deg, #667eea, #764ba2);
             --gradient-secondary: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
-            --glass-bg: rgba(88, 166, 255, 0.05);
-            --glass-border: rgba(88, 166, 255, 0.1);
-            --shadow: rgba(0, 0, 0, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --shadow: rgba(0, 0, 0, 0.1);
         }
 
         body {
@@ -54,8 +54,8 @@
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 20px 40px var(--shadow);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px var(--shadow);
             z-index: 100;
             display: flex;
             flex-direction: column;
@@ -64,17 +64,18 @@
         }
 
         .floating-sidebar.collapsed {
-            width: 80px;
+            width: 60px;
             transform: translateX(0);
         }
 
         .sidebar-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--vscode-border);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             background: var(--gradient-primary);
-            border-radius: 16px 16px 0 0;
+            border-radius: 12px 12px 0 0;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .sidebar-header::before {
@@ -84,7 +85,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
         }
 
@@ -98,70 +99,227 @@
             align-items: center;
             gap: 12px;
             color: white;
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .floating-sidebar.collapsed .logo {
+            gap: 0;
+            justify-content: center;
+            margin-bottom: 0;
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .floating-sidebar.collapsed .logo-icon {
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+        }
+
+        .logo-text {
+            transition: all 0.3s ease;
+        }
+
+        .floating-sidebar.collapsed .logo-text {
+            opacity: 0;
+            transform: scale(0.8);
+            width: 0;
+            overflow: hidden;
         }
 
         .swarm-selector {
             position: relative;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-sidebar.collapsed .swarm-selector {
+            display: flex;
+            justify-content: center;
+            padding-top: 8px;
+        }
+
+        .floating-sidebar.collapsed .swarm-dropdown-menu {
+            display: none !important;
+            visibility: hidden !important;
         }
 
         .swarm-dropdown {
             width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: white;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: rgba(255, 255, 255, 0.9);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .floating-sidebar.collapsed .swarm-dropdown {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .floating-sidebar.collapsed .swarm-dropdown .dropdown-text {
+            display: none;
+        }
+
+        .floating-sidebar.collapsed .swarm-dropdown .dropdown-arrow {
+            font-size: 10px;
         }
 
         .swarm-dropdown:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .floating-sidebar.collapsed .swarm-dropdown:hover {
             background: rgba(255, 255, 255, 0.15);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.2s ease;
+        }
+
+        .swarm-dropdown-menu.show ~ .swarm-dropdown .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown Menu */
+        .swarm-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--vscode-dropdown-background);
+            border: 1px solid var(--vscode-dropdown-border);
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+            transition: all 0.2s ease;
+            margin-top: 4px;
+        }
+
+        .swarm-dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .swarm-dropdown-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--vscode-dropdown-foreground);
+            transition: background-color 0.2s ease;
+        }
+
+        .swarm-dropdown-option:hover {
+            background: var(--vscode-list-hoverBackground);
+        }
+
+        .swarm-dropdown-option.selected {
+            background: var(--vscode-list-activeSelectionBackground);
+            color: var(--vscode-list-activeSelectionForeground);
+        }
+
+        /* Expand Icon for Collapsed Sidebar */
+        .sidebar-expand-icon {
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--vscode-button-background);
+            border: 1px solid var(--vscode-button-border);
+            border-radius: 4px;
+            color: var(--vscode-button-foreground);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 99;
+            font-size: 10px;
+        }
+
+        .sidebar-expand-icon:hover {
+            background: var(--vscode-button-hoverBackground);
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-sidebar.collapsed + .main-content .sidebar-expand-icon {
+            display: flex;
         }
 
         .collapse-btn {
             position: absolute;
-            top: 24px;
-            right: 24px;
-            width: 32px;
-            height: 32px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            color: white;
+            top: 20px;
+            right: 20px;
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+            color: rgba(255, 255, 255, 0.8);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             z-index: 2;
+            font-size: 10px;
+        }
+
+        .floating-sidebar.collapsed .collapse-btn {
+            right: 18px;
+            width: 20px;
+            height: 20px;
+            font-size: 8px;
         }
 
         .collapse-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
         }
 
         .agents-section {
             flex: 1;
-            padding: 24px;
+            padding: 20px;
             overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .floating-sidebar.collapsed .agents-section {
+            padding: 12px 8px;
+            opacity: 0;
+            pointer-events: none;
         }
 
         .section-title {
@@ -302,61 +460,59 @@
         }
 
         .main-content.sidebar-collapsed {
-            margin-left: 120px;
+            margin-left: 100px;
         }
 
         .main-header {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px var(--shadow);
+            background: var(--vscode-bg);
+            border: 1px solid var(--vscode-border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            position: relative;
         }
 
         .main-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--vscode-fg);
         }
 
         .main-subtitle {
             color: var(--vscode-descriptionForeground);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .content-tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
+            gap: 4px;
+            margin-bottom: 16px;
+            background: var(--vscode-bg);
+            border: 1px solid var(--vscode-border);
+            border-radius: 6px;
+            padding: 4px;
         }
 
         .tab-button {
-            padding: 12px 24px;
-            background: var(--vscode-button-secondaryBackground);
-            border: 1px solid var(--vscode-border);
-            border-radius: 8px;
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 4px;
             color: var(--vscode-button-secondaryForeground);
             cursor: pointer;
             transition: all 0.2s ease;
             font-weight: 500;
+            font-size: 13px;
         }
 
         .tab-button.active {
-            background: var(--gradient-primary);
-            border-color: transparent;
+            background: var(--accent-blue);
             color: white;
-            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
         }
 
         .tab-button:hover:not(.active) {
             background: var(--vscode-hover);
-            border-color: var(--accent-blue);
         }
 
         .tab-content {
@@ -371,11 +527,9 @@
 
         /* Chat Interface - Primary Focus */
         .chat-container {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px var(--shadow);
+            background: var(--vscode-bg);
+            border: 1px solid var(--vscode-border);
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             height: calc(100vh - 200px);
@@ -383,65 +537,68 @@
             position: relative;
         }
 
-        .chat-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-primary);
-            border-radius: 16px 16px 0 0;
-        }
-
         .chat-header {
-            padding: 20px 24px;
+            padding: 16px 20px;
             border-bottom: 1px solid var(--vscode-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: var(--vscode-bg);
         }
 
         .chat-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 12px;
+            color: var(--vscode-fg);
+        }
+
+        .agent-title-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
         }
 
         .chat-status {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 14px;
+            font-size: 12px;
             color: var(--vscode-descriptionForeground);
         }
 
         .status-indicator {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: var(--accent-green);
-            animation: pulse 2s infinite;
         }
 
         .chat-messages {
             flex: 1;
-            padding: 24px;
+            padding: 20px;
             overflow-y: auto;
             scroll-behavior: smooth;
+            background: var(--vscode-bg);
         }
 
         .message {
-            margin-bottom: 20px;
-            animation: messageSlideIn 0.3s ease-out;
+            margin-bottom: 16px;
+            animation: messageSlideIn 0.2s ease-out;
         }
 
         @keyframes messageSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
@@ -452,49 +609,58 @@
         .message-bubble {
             background: var(--vscode-list-inactiveSelectionBackground);
             border: 1px solid var(--vscode-border);
-            border-radius: 16px;
-            padding: 16px 20px;
+            border-radius: 8px;
+            padding: 12px 16px;
             position: relative;
-            max-width: 80%;
-            box-shadow: 0 2px 8px var(--shadow);
+            max-width: 100%;
+            box-shadow: none;
         }
 
         .message.agent .message-bubble {
             margin-left: 0;
-            border-left: 4px solid var(--accent-blue);
+            background: var(--vscode-list-inactiveSelectionBackground);
+            border: 1px solid var(--vscode-border);
         }
 
         .message.user .message-bubble {
             margin-left: auto;
-            background: var(--gradient-primary);
+            background: var(--accent-blue);
             color: white;
-            border: none;
+            border: 1px solid var(--accent-blue);
+            border-radius: 12px;
+            max-width: 70%;
         }
 
         .message-header {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 8px;
-            font-size: 12px;
-            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 11px;
+            font-weight: 500;
             color: var(--vscode-descriptionForeground);
         }
 
         .message-avatar {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 8px;
+            font-weight: 600;
             color: white;
         }
 
         .message-content {
-            line-height: 1.6;
-            font-size: 14px;
+            line-height: 1.5;
+            font-size: 13px;
+            color: var(--vscode-fg);
+        }
+
+        .message.user .message-content {
+            color: white;
         }
 
         .typing-indicator {
@@ -537,15 +703,15 @@
         }
 
         .chat-input-container {
-            padding: 20px 24px;
+            padding: 16px 20px;
             border-top: 1px solid var(--vscode-border);
-            background: var(--vscode-list-inactiveSelectionBackground);
-            border-radius: 0 0 16px 16px;
+            background: var(--vscode-bg);
+            border-radius: 0 0 8px 8px;
         }
 
         .chat-input-wrapper {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             align-items: flex-end;
         }
 
@@ -553,20 +719,47 @@
             flex: 1;
             background: var(--vscode-input-background);
             border: 1px solid var(--vscode-input-border);
-            border-radius: 12px;
-            padding: 12px 16px;
+            border-radius: 6px;
+            padding: 10px 12px;
             color: var(--vscode-input-foreground);
-            font-size: 14px;
+            font-size: 13px;
             resize: none;
-            min-height: 44px;
-            max-height: 120px;
+            min-height: 36px;
+            max-height: 100px;
             transition: all 0.2s ease;
         }
 
         .chat-input:focus {
             outline: none;
             border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.1);
+        }
+
+        .send-button {
+            background: var(--accent-blue);
+            border: none;
+            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            font-size: 14px;
+        }
+
+        .send-button:hover {
+            background: #005a9e;
+            transform: scale(1.05);
+        }
+
+        .send-button:disabled {
+            background: var(--vscode-button-secondaryBackground);
+            color: var(--vscode-descriptionForeground);
+            cursor: not-allowed;
+            transform: none;
         }
 
         .send-button {
@@ -909,12 +1102,19 @@
                 <div class="sidebar-header-content">
                     <div class="logo">
                         <div class="logo-icon">🤖</div>
-                        <span id="logoText">MultiAgent Swarm</span>
+                        <span class="logo-text" id="logoText">MultiAgent Swarm</span>
                     </div>
                     <div class="swarm-selector" id="swarmSelector">
                         <div class="swarm-dropdown" onclick="toggleSwarmDropdown()">
-                            <span id="selectedSwarm">FlutterSwarm</span>
-                            <span>▼</span>
+                            <span class="dropdown-text" id="selectedSwarm">WebDevSwarm</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                        <div class="swarm-dropdown-menu" id="swarmDropdownMenu">
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('FlutterSwarm')">FlutterSwarm</div>
+                            <div class="swarm-dropdown-option selected" onclick="selectSwarm('WebDevSwarm')">WebDevSwarm</div>
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('MobileSwarm')">MobileSwarm</div>
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('AISwarm')">AISwarm</div>
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('DataSwarm')">DataSwarm</div>
                         </div>
                     </div>
                 </div>
@@ -969,6 +1169,10 @@
         <!-- Main Content -->
         <div class="main-content" id="mainContent">
             <div class="main-header">
+                <!-- Sidebar Expand Icon (shown when sidebar is collapsed) -->
+                <div class="sidebar-expand-icon" onclick="toggleSidebar()" title="Expand Sidebar">
+                    ▶
+                </div>
                 <h1 class="main-title" id="mainTitle">Agent Response Center</h1>
                 <p class="main-subtitle">Interact with your AI agents in real-time</p>
             </div>
@@ -984,12 +1188,15 @@
                 <div class="chat-container">
                     <div class="chat-header">
                         <div class="chat-title">
-                            <span>💬</span>
-                            <span id="chatAgentName">Orchestrator Agent</span>
+                            <div class="agent-title-icon" style="background: var(--accent-blue);">O</div>
+                            <div>
+                                <div style="font-size: 16px; font-weight: 600;">Orchestrator Response Center</div>
+                                <div style="font-size: 12px; color: var(--vscode-descriptionForeground); font-weight: normal;">Interact with your AI agents in real-time</div>
+                            </div>
                         </div>
                         <div class="chat-status">
                             <div class="status-indicator"></div>
-                            <span>Online</span>
+                            <span>Online • Coordination & Task Management</span>
                         </div>
                     </div>
 
@@ -997,13 +1204,11 @@
                         <div class="message agent">
                             <div class="message-bubble">
                                 <div class="message-header">
-                                    <div class="message-avatar" style="background: var(--gradient-primary);">O</div>
-                                    <span>Orchestrator Agent</span>
-                                    <span>•</span>
-                                    <span>2:34 PM</span>
+                                    <div class="message-avatar" style="background: var(--accent-blue);">O</div>
+                                    <span>Orchestrator • 5:07:10 PM</span>
                                 </div>
                                 <div class="message-content">
-                                    Hello! I'm your Orchestrator Agent. I coordinate tasks between different agents in your Flutter development workflow. How can I help you today?
+                                    Hello! I'm your Orchestrator. Coordinates tasks between different agents in your development workflow. How can I help you today?
                                 </div>
                             </div>
                         </div>
@@ -1011,13 +1216,11 @@
                         <div class="message agent">
                             <div class="message-bubble">
                                 <div class="message-header">
-                                    <div class="message-avatar" style="background: var(--gradient-secondary);">C</div>
-                                    <span>CI/CD Agent</span>
-                                    <span>•</span>
-                                    <span>2:35 PM</span>
+                                    <div class="message-avatar" style="background: var(--accent-blue);">O</div>
+                                    <span>Orchestrator • 5:12:45 PM</span>
                                 </div>
                                 <div class="message-content">
-                                    I'm ready to handle deployment pipelines and continuous integration tasks. Just let me know what you need!
+                                    Processing your request: "gjnsq". I'll delegate this to the appropriate agents and get back to you with results.
                                 </div>
                             </div>
                         </div>
@@ -1034,7 +1237,6 @@
                                 oninput="autoResizeTextarea(this)"
                             ></textarea>
                             <button class="send-button" onclick="sendMessage()" id="sendButton">
-                                <span>Send</span>
                                 <span>↗</span>
                             </button>
                         </div>
@@ -1245,6 +1447,15 @@
                 collapseIcon.textContent = '▶';
                 logoText.style.display = 'none';
                 swarmSelector.style.display = 'none';
+                
+                // Close dropdown when collapsing
+                document.querySelectorAll('.swarm-dropdown-menu.show').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+                // Reset all arrows
+                document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
+                    arrow.style.transform = 'rotate(0deg)';
+                });
             } else {
                 sidebar.classList.remove('collapsed');
                 mainContent.classList.remove('sidebar-collapsed');
@@ -1523,10 +1734,64 @@
             addMessage('agent', 'System', 'New agent "' + name + '" has been created successfully!', '🎉', 'var(--gradient-secondary)');
         }
 
-        // Swarm dropdown (placeholder)
+        // Swarm dropdown functionality
         function toggleSwarmDropdown() {
-            console.log('Swarm dropdown toggled');
+            // Don't open dropdown if sidebar is collapsed
+            if (sidebarCollapsed) {
+                return;
+            }
+            
+            const menu = document.getElementById('swarmDropdownMenu');
+            const arrow = document.querySelector('.dropdown-arrow');
+            const isVisible = menu.classList.contains('show');
+            
+            // Close all other dropdowns first
+            document.querySelectorAll('.swarm-dropdown-menu.show').forEach(dropdown => {
+                dropdown.classList.remove('show');
+            });
+            
+            // Reset all arrows
+            document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
+                arrow.style.transform = 'rotate(0deg)';
+            });
+            
+            // Toggle current dropdown
+            if (!isVisible) {
+                menu.classList.add('show');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
         }
+
+        function selectSwarm(swarmName) {
+            const selectedElement = document.getElementById('selectedSwarm');
+            selectedElement.textContent = swarmName;
+            
+            // Update selected option
+            document.querySelectorAll('.swarm-dropdown-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            // Close dropdown
+            document.getElementById('swarmDropdownMenu').classList.remove('show');
+            
+            console.log('Selected swarm:', swarmName);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.swarm-selector')) {
+                document.querySelectorAll('.swarm-dropdown-menu.show').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+                // Reset all arrows
+                document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
+                    arrow.style.transform = 'rotate(0deg)';
+                });
+            }
+        });
 
         // Close modals when clicking outside
         document.addEventListener('click', function(event) {

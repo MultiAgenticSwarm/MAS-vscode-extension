@@ -208,20 +208,17 @@
 
         /* Dropdown Menu */
         .swarm-dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
+            position: fixed;
             background: var(--vscode-dropdown-background);
             border: 1px solid var(--vscode-dropdown-border);
             border-radius: 6px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 9999;
+            z-index: 10000;
             opacity: 0;
             transform: translateY(-10px);
             visibility: hidden;
             transition: all 0.2s ease;
-            margin-top: 4px;
+            min-width: 200px;
         }
 
         .swarm-dropdown-menu.show {
@@ -1743,6 +1740,7 @@
             
             const menu = document.getElementById('swarmDropdownMenu');
             const arrow = document.querySelector('.dropdown-arrow');
+            const swarmDropdown = document.querySelector('.swarm-dropdown');
             const isVisible = menu.classList.contains('show');
             
             // Close all other dropdowns first
@@ -1757,6 +1755,12 @@
             
             // Toggle current dropdown
             if (!isVisible) {
+                // Calculate position for fixed dropdown
+                const rect = swarmDropdown.getBoundingClientRect();
+                menu.style.top = (rect.bottom + 4) + 'px';
+                menu.style.left = rect.left + 'px';
+                menu.style.width = rect.width + 'px';
+                
                 menu.classList.add('show');
                 arrow.style.transform = 'rotate(180deg)';
             } else {

@@ -447,6 +447,42 @@
         .agent-tools {
             font-size: 12px;
             color: var(--vscode-descriptionForeground);
+            margin-bottom: 8px;
+        }
+
+        .agent-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .agent-action-btn {
+            background: var(--vscode-button-secondaryBackground);
+            border: 1px solid var(--vscode-button-border);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 10px;
+            color: var(--vscode-button-secondaryForeground);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            transition: all 0.2s ease;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .agent-action-btn:hover {
+            background: var(--vscode-button-secondaryHoverBackground);
+            transform: translateY(-1px);
+        }
+
+        .agent-action-btn span:first-child {
+            font-size: 11px;
+        }
+
+        .agent-action-btn span:last-child {
+            font-weight: 500;
         }
 
         /* Main Content Area */
@@ -1221,6 +1257,11 @@
             box-shadow: 0 20px 40px var(--shadow);
         }
 
+        .modal-content.agent-modal {
+            max-width: 700px;
+            width: 95%;
+        }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -1381,37 +1422,67 @@
                 </div>
 
                 <div id="agentsList">
-                    <div class="agent-card active" onclick="selectAgent(this, 'orchestrator')">
-                        <div class="agent-header">
+                    <div class="agent-card active" data-agent="orchestrator">
+                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'orchestrator')">
                             <div class="agent-name">
                                 <div class="agent-avatar" style="background: var(--gradient-primary);">O</div>
                                 <span>Orchestrator</span>
                             </div>
                             <div class="agent-status active"></div>
                         </div>
-                        <div class="agent-tools">4 tools enabled</div>
+                        <div class="agent-tools">5 tools enabled</div>
+                        <div class="agent-actions">
+                            <button class="agent-action-btn" onclick="openAgentConfig('orchestrator')" title="Configuration">
+                                <span>⚙️</span>
+                                <span>Config</span>
+                            </button>
+                            <button class="agent-action-btn" onclick="openAgentTools('orchestrator')" title="Tools">
+                                <span>🛠️</span>
+                                <span>Tools</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="agent-card" onclick="selectAgent(this, 'cicd')">
-                        <div class="agent-header">
+                    <div class="agent-card" data-agent="cicd">
+                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'cicd')">
                             <div class="agent-name">
                                 <div class="agent-avatar" style="background: var(--gradient-secondary);">C</div>
                                 <span>CI/CD Agent</span>
                             </div>
                             <div class="agent-status active"></div>
                         </div>
-                        <div class="agent-tools">3 tools enabled</div>
+                        <div class="agent-tools">4 tools enabled</div>
+                        <div class="agent-actions">
+                            <button class="agent-action-btn" onclick="openAgentConfig('cicd')" title="Configuration">
+                                <span>⚙️</span>
+                                <span>Config</span>
+                            </button>
+                            <button class="agent-action-btn" onclick="openAgentTools('cicd')" title="Tools">
+                                <span>🛠️</span>
+                                <span>Tools</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="agent-card" onclick="selectAgent(this, 'tests')">
-                        <div class="agent-header">
+                    <div class="agent-card" data-agent="tests">
+                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'tests')">
                             <div class="agent-name">
                                 <div class="agent-avatar" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-red));">T</div>
                                 <span>Tests Agent</span>
                             </div>
                             <div class="agent-status active"></div>
                         </div>
-                        <div class="agent-tools">5 tools enabled</div>
+                        <div class="agent-tools">3 tools enabled</div>
+                        <div class="agent-actions">
+                            <button class="agent-action-btn" onclick="openAgentConfig('tests')" title="Configuration">
+                                <span>⚙️</span>
+                                <span>Config</span>
+                            </button>
+                            <button class="agent-action-btn" onclick="openAgentTools('tests')" title="Tools">
+                                <span>🛠️</span>
+                                <span>Tools</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1428,434 +1499,61 @@
                 <p class="main-subtitle">Interact with your AI agents in real-time</p>
             </div>
 
-            <div class="content-tabs">
-                <button class="tab-button active" onclick="switchTab('chat')">💬 Chat</button>
-                <button class="tab-button" onclick="switchTab('config')">⚙️ Configuration</button>
-                <button class="tab-button" onclick="switchTab('tools')">🛠️ Tools</button>
-            </div>
-
-            <!-- Chat Tab (Primary Focus) -->
-            <div class="tab-content active" id="chatTab">
-                <div class="chat-container">
-                    <div class="chat-header">
-                        <div class="chat-title">
-                            <div class="agent-title-icon" style="background: var(--accent-blue);">O</div>
-                            <div>
-                                <div style="font-size: 16px; font-weight: 600;">Orchestrator Response Center</div>
-                                <div style="font-size: 12px; color: var(--vscode-descriptionForeground); font-weight: normal;">Interact with your AI agents in real-time</div>
-                            </div>
-                        </div>
-                        <div class="chat-status">
-                            <div class="status-indicator"></div>
-                            <span>Online • Coordination & Task Management</span>
+            <!-- Chat Interface (Primary Focus) -->
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-title">
+                        <div class="agent-title-icon" style="background: var(--accent-blue);">O</div>
+                        <div>
+                            <div style="font-size: 16px; font-weight: 600;">Orchestrator Response Center</div>
+                            <div style="font-size: 12px; color: var(--vscode-descriptionForeground); font-weight: normal;">Interact with your AI agents in real-time</div>
                         </div>
                     </div>
-
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message agent">
-                            <div class="message-bubble">
-                                <div class="message-header">
-                                    <div class="message-avatar" style="background: var(--accent-blue);">O</div>
-                                    <span>Orchestrator • 5:07:10 PM</span>
-                                </div>
-                                <div class="message-content">
-                                    Hello! I'm your Orchestrator. Coordinates tasks between different agents in your development workflow. How can I help you today?
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="message agent">
-                            <div class="message-bubble">
-                                <div class="message-header">
-                                    <div class="message-avatar" style="background: var(--accent-blue);">O</div>
-                                    <span>Orchestrator • 5:12:45 PM</span>
-                                </div>
-                                <div class="message-content">
-                                    Processing your request: "gjnsq". I'll delegate this to the appropriate agents and get back to you with results.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chat-input-container">
-                        <div class="chat-input-wrapper">
-                            <textarea 
-                                class="chat-input" 
-                                id="chatInput" 
-                                placeholder="Ask your agents anything..."
-                                rows="1"
-                                onkeydown="handleChatKeydown(event)"
-                                oninput="autoResizeTextarea(this)"
-                            ></textarea>
-                            <button class="send-button" onclick="sendMessage()" id="sendButton">
-                                <span>↗</span>
-                            </button>
-                        </div>
+                    <div class="chat-status">
+                        <div class="status-indicator"></div>
+                        <span>Online • Coordination & Task Management</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- Configuration Tab -->
-            <div class="tab-content" id="configTab">
-                <div class="config-container">
-                    <!-- Basic Configuration Section -->
-                    <div class="config-section">
-                        <div class="config-section-header" onclick="toggleConfigSection(this)">
-                            <div class="config-section-icon basic">⚙️</div>
-                            <div class="config-section-details">
-                                <h3 class="config-section-title">Basic Configuration</h3>
-                                <p class="config-section-subtitle">Core agent settings and basic configuration options</p>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message agent">
+                        <div class="message-bubble">
+                            <div class="message-header">
+                                <div class="message-avatar" style="background: var(--accent-blue);">O</div>
+                                <span>Orchestrator • 5:07:10 PM</span>
                             </div>
-                            <div class="config-section-toggle">▼</div>
-                        </div>
-                        <div class="config-section-content">
-                            <div class="form-group">
-                                <label class="form-label">Agent Name</label>
-                                <input type="text" class="form-input" value="Orchestrator Agent" onchange="updateAgentName(this.value)">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">System Prompt</label>
-                                <textarea class="form-textarea">You are an orchestrator agent responsible for coordinating tasks between different agents in the Flutter development workflow.</textarea>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">LLM Provider</label>
-                                <select class="form-input">
-                                    <option value="openai-gpt4" selected>OpenAI GPT-4</option>
-                                    <option value="openai-gpt3.5">OpenAI GPT-3.5</option>
-                                    <option value="claude">Claude 3</option>
-                                    <option value="local">Local LLM</option>
-                                </select>
+                            <div class="message-content">
+                                Hello! I'm your Orchestrator. Coordinates tasks between different agents in your development workflow. How can I help you today?
                             </div>
                         </div>
                     </div>
 
-                    <!-- Collaboration Settings Section -->
-                    <div class="config-section">
-                        <div class="config-section-header" onclick="toggleConfigSection(this)">
-                            <div class="config-section-icon collaboration">🤝</div>
-                            <div class="config-section-details">
-                                <h3 class="config-section-title">Collaboration Settings</h3>
-                                <p class="config-section-subtitle">Agent coordination rules and workflow management</p>
+                    <div class="message agent">
+                        <div class="message-bubble">
+                            <div class="message-header">
+                                <div class="message-avatar" style="background: var(--accent-blue);">O</div>
+                                <span>Orchestrator • 5:12:45 PM</span>
                             </div>
-                            <div class="config-section-toggle">▼</div>
-                        </div>
-                        <div class="config-section-content">
-                            <div class="form-group">
-                                <label class="form-label">Collaboration Rules</label>
-                                <textarea class="form-textarea">Orchestrator receives all initial requests → CI/CD Agent handles deployment tasks → Tests Agent validates all code changes → All agents report back to Orchestrator</textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Advanced Settings Section -->
-                    <div class="config-section collapsed">
-                        <div class="config-section-header" onclick="toggleConfigSection(this)">
-                            <div class="config-section-icon advanced">🔧</div>
-                            <div class="config-section-details">
-                                <h3 class="config-section-title">Advanced Settings</h3>
-                                <p class="config-section-subtitle">Performance tuning and advanced configuration options</p>
-                            </div>
-                            <div class="config-section-toggle">▶</div>
-                        </div>
-                        <div class="config-section-content">
-                            <div class="form-group">
-                                <label class="form-label">Response Timeout (ms)</label>
-                                <input type="number" class="form-input" value="5000" min="1000" max="30000">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Max Concurrent Tasks</label>
-                                <input type="number" class="form-input" value="3" min="1" max="10">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Memory Management</label>
-                                <select class="form-input">
-                                    <option value="auto" selected>Auto</option>
-                                    <option value="conservative">Conservative</option>
-                                    <option value="aggressive">Aggressive</option>
-                                </select>
+                            <div class="message-content">
+                                Processing your request: "gjnsq". I'll delegate this to the appropriate agents and get back to you with results.
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Tools Tab -->
-            <div class="tab-content" id="toolsTab">
-                <div class="tools-container">
-                    <!-- Development Section -->
-                    <div class="tools-section">
-                        <div class="section-header" onclick="toggleToolsSection(this)">
-                            <div class="section-icon development">💻</div>
-                            <div class="section-details">
-                                <h3 class="section-title">Development Tools</h3>
-                                <p class="section-subtitle">Code analysis, dependency management, and development utilities</p>
-                            </div>
-                            <div class="section-toggle">▼</div>
-                        </div>
-                        <div class="tools-content">
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Code Analysis</h4>
-                                        <p class="tool-description">Analyzes Flutter code for best practices, performance issues, and potential bugs</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch active" onclick="toggleTool('code-analysis', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Enabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Dependency Resolution</h4>
-                                        <p class="tool-description">Manages package dependencies and resolves version conflicts automatically</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch active" onclick="toggleTool('dependency-resolution', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Enabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Hot Reload Manager</h4>
-                                        <p class="tool-description">Optimizes hot reload performance and manages state preservation</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch" onclick="toggleTool('hot-reload', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Disabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Build Optimization</h4>
-                                        <p class="tool-description">Optimizes build processes and reduces compilation time</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch active" onclick="toggleTool('build-optimization', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Enabled</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Management Section -->
-                    <div class="tools-section">
-                        <div class="section-header" onclick="toggleToolsSection(this)">
-                            <div class="section-icon management">⚙️</div>
-                            <div class="section-details">
-                                <h3 class="section-title">Project Management</h3>
-                                <p class="section-subtitle">Task delegation, coordination, and project oversight tools</p>
-                            </div>
-                            <div class="section-toggle">▼</div>
-                        </div>
-                        <div class="tools-content">
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Task Delegation</h4>
-                                        <p class="tool-description">Intelligently delegates tasks to appropriate specialized agents</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch active" onclick="toggleTool('task-delegation', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Enabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Progress Tracking</h4>
-                                        <p class="tool-description">Monitors and reports on task completion status across all agents</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch active" onclick="toggleTool('progress-tracking', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Enabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Resource Allocation</h4>
-                                        <p class="tool-description">Optimizes resource distribution and workload balancing</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch" onclick="toggleTool('resource-allocation', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Disabled</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Testing Section -->
-                    <div class="tools-section collapsed">
-                        <div class="section-header" onclick="toggleToolsSection(this)">
-                            <div class="section-icon testing">🧪</div>
-                            <div class="section-details">
-                                <h3 class="section-title">Testing & Quality</h3>
-                                <p class="section-subtitle">Automated testing, quality assurance, and validation tools</p>
-                            </div>
-                            <div class="section-toggle">▶</div>
-                        </div>
-                        <div class="tools-content">
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Automated Testing</h4>
-                                        <p class="tool-description">Automatically generates and runs unit tests and integration tests</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch" onclick="toggleTool('automated-testing', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Disabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Coverage Analysis</h4>
-                                        <p class="tool-description">Provides detailed code coverage reports and suggestions</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch" onclick="toggleTool('coverage-analysis', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Disabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Performance Testing</h4>
-                                        <p class="tool-description">Runs performance benchmarks and identifies bottlenecks</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch active" onclick="toggleTool('performance-testing', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Enabled</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Deployment Section -->
-                    <div class="tools-section collapsed">
-                        <div class="section-header" onclick="toggleToolsSection(this)">
-                            <div class="section-icon deployment">🚀</div>
-                            <div class="section-details">
-                                <h3 class="section-title">Deployment & CI/CD</h3>
-                                <p class="section-subtitle">Build automation, deployment pipelines, and release management</p>
-                            </div>
-                            <div class="section-toggle">▶</div>
-                        </div>
-                        <div class="tools-content">
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Build Pipeline</h4>
-                                        <p class="tool-description">Manages automated build processes for multiple platforms</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch active" onclick="toggleTool('build-pipeline', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Enabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Release Management</h4>
-                                        <p class="tool-description">Coordinates release cycles and deployment strategies</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch active" onclick="toggleTool('release-management', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Enabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Environment Management</h4>
-                                        <p class="tool-description">Manages development, staging, and production environments</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch" onclick="toggleTool('environment-management', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Disabled</span>
-                                </div>
-                            </div>
-
-                            <div class="tool-option">
-                                <div class="tool-info">
-                                    <div class="tool-status-dot"></div>
-                                    <div class="tool-details">
-                                        <h4 class="tool-name">Container Orchestration</h4>
-                                        <p class="tool-description">Manages Docker containers and Kubernetes deployments</p>
-                                    </div>
-                                </div>
-                                <div class="tool-toggle">
-                                    <div class="toggle-switch" onclick="toggleTool('container-orchestration', this)">
-                                        <div class="toggle-slider"></div>
-                                    </div>
-                                    <span class="toggle-label">Disabled</span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <textarea 
+                            class="chat-input" 
+                            id="chatInput" 
+                            placeholder="Ask your agents anything..."
+                            rows="1"
+                            onkeydown="handleChatKeydown(event)"
+                            oninput="autoResizeTextarea(this)"
+                        ></textarea>
+                        <button class="send-button" onclick="sendMessage()" id="sendButton">
+                            <span>↗</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1895,6 +1593,34 @@
         </div>
     </div>
 
+    <!-- Agent Configuration Modal -->
+    <div class="modal" id="agentConfigModal">
+        <div class="modal-content agent-modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="configModalTitle">Agent Configuration</h3>
+                <button class="close-button" onclick="closeModal('agentConfigModal')">&times;</button>
+            </div>
+
+            <div class="config-container" id="agentConfigContent">
+                <!-- Configuration content will be dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Agent Tools Modal -->
+    <div class="modal" id="agentToolsModal">
+        <div class="modal-content agent-modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="toolsModalTitle">Agent Tools</h3>
+                <button class="close-button" onclick="closeModal('agentToolsModal')">&times;</button>
+            </div>
+
+            <div class="tools-container" id="agentToolsContent">
+                <!-- Tools content will be dynamically populated -->
+            </div>
+        </div>
+    </div>
+
     <script>
         const vscode = acquireVsCodeApi();
 
@@ -1904,32 +1630,190 @@
         let currentTab = 'chat';
         let isTyping = false;
 
-        // Agent data
+        // Agent data with specific tools and configurations
         const agents = {
             orchestrator: {
                 name: 'Orchestrator Agent',
                 avatar: 'O',
                 gradient: 'var(--gradient-primary)',
-                tools: 4
+                tools: 5,
+                enabledTools: ['task-delegation', 'progress-tracking', 'resource-allocation', 'workflow-management', 'agent-coordination'],
+                toolSections: {
+                    'development': {
+                        title: 'Development',
+                        subtitle: 'Code analysis, dependency management, and development utilities',
+                        icon: '💻',
+                        tools: [
+                            { id: 'code-analysis', name: 'Code Analysis', description: 'Analyzes code for best practices and potential issues', enabled: false },
+                            { id: 'dependency-resolution', name: 'Dependency Resolution', description: 'Manages package dependencies and resolves conflicts', enabled: false }
+                        ]
+                    },
+                    'testing': {
+                        title: 'Testing',
+                        subtitle: 'Quality assurance and validation tools',
+                        icon: '🧪',
+                        tools: [
+                            { id: 'test-coordination', name: 'Test Coordination', description: 'Coordinates testing activities across agents', enabled: false },
+                            { id: 'quality-gates', name: 'Quality Gates', description: 'Enforces quality standards before deployments', enabled: false }
+                        ]
+                    },
+                    'management': {
+                        title: 'Management',
+                        subtitle: 'Task delegation, coordination, and project oversight tools',
+                        icon: '⚙️',
+                        tools: [
+                            { id: 'task-delegation', name: 'Task Delegation', description: 'Intelligently delegates tasks to appropriate specialized agents', enabled: true },
+                            { id: 'progress-tracking', name: 'Progress Tracking', description: 'Monitors and reports on task completion status across all agents', enabled: true },
+                            { id: 'resource-allocation', name: 'Resource Allocation', description: 'Optimizes resource distribution and workload balancing', enabled: true },
+                            { id: 'workflow-management', name: 'Workflow Management', description: 'Manages complex workflows and dependencies between tasks', enabled: true },
+                            { id: 'agent-coordination', name: 'Agent Coordination', description: 'Coordinates communication and collaboration between agents', enabled: true }
+                        ]
+                    },
+                    'deployment': {
+                        title: 'Deployment',
+                        subtitle: 'Release coordination and deployment oversight',
+                        icon: '�',
+                        tools: [
+                            { id: 'deployment-coordination', name: 'Deployment Coordination', description: 'Coordinates deployment activities across environments', enabled: false },
+                            { id: 'release-oversight', name: 'Release Oversight', description: 'Oversees release processes and approvals', enabled: false }
+                        ]
+                    }
+                },
+                config: {
+                    systemPrompt: 'You are an orchestrator agent responsible for coordinating tasks between different agents in the development workflow.',
+                    llmProvider: 'openai-gpt4',
+                    responseTimeout: 5000,
+                    maxConcurrentTasks: 5,
+                    memoryManagement: 'auto',
+                    collaborationRules: 'Orchestrator receives all initial requests → Delegates tasks to specialized agents → Monitors progress → Consolidates results'
+                }
             },
             cicd: {
                 name: 'CI/CD Agent',
                 avatar: 'C',
                 gradient: 'var(--gradient-secondary)',
-                tools: 3
+                tools: 4,
+                enabledTools: ['build-pipeline', 'release-management', 'deployment-automation', 'environment-sync'],
+                toolSections: {
+                    'development': {
+                        title: 'Development',
+                        subtitle: 'Build optimization and development support',
+                        icon: '�',
+                        tools: [
+                            { id: 'build-optimization', name: 'Build Optimization', description: 'Optimizes build processes and reduces compilation time', enabled: false },
+                            { id: 'code-integration', name: 'Code Integration', description: 'Manages continuous integration workflows', enabled: false }
+                        ]
+                    },
+                    'testing': {
+                        title: 'Testing',
+                        subtitle: 'Automated testing and validation in CI/CD pipeline',
+                        icon: '🧪',
+                        tools: [
+                            { id: 'automated-testing', name: 'Automated Testing', description: 'Runs automated tests in the CI/CD pipeline', enabled: false },
+                            { id: 'smoke-testing', name: 'Smoke Testing', description: 'Performs quick validation after deployments', enabled: false }
+                        ]
+                    },
+                    'management': {
+                        title: 'Management',
+                        subtitle: 'Pipeline and process management',
+                        icon: '⚙️',
+                        tools: [
+                            { id: 'pipeline-management', name: 'Pipeline Management', description: 'Manages CI/CD pipeline configurations and workflows', enabled: false },
+                            { id: 'process-monitoring', name: 'Process Monitoring', description: 'Monitors build and deployment processes', enabled: false }
+                        ]
+                    },
+                    'deployment': {
+                        title: 'Deployment',
+                        subtitle: 'Build automation, deployment pipelines, and release management',
+                        icon: '�',
+                        tools: [
+                            { id: 'build-pipeline', name: 'Build Pipeline', description: 'Manages automated build processes for multiple platforms', enabled: true },
+                            { id: 'release-management', name: 'Release Management', description: 'Coordinates release cycles and deployment strategies', enabled: true },
+                            { id: 'deployment-automation', name: 'Deployment Automation', description: 'Automates deployment to various environments', enabled: true },
+                            { id: 'environment-sync', name: 'Environment Sync', description: 'Synchronizes configurations across environments', enabled: true }
+                        ]
+                    }
+                },
+                config: {
+                    systemPrompt: 'You are a CI/CD agent specialized in build automation, deployment pipelines, and release management.',
+                    llmProvider: 'openai-gpt4',
+                    responseTimeout: 8000,
+                    maxConcurrentTasks: 3,
+                    memoryManagement: 'conservative',
+                    collaborationRules: 'CI/CD Agent handles all deployment tasks → Coordinates with Tests Agent for validation → Reports status to Orchestrator'
+                }
             },
             tests: {
                 name: 'Tests Agent',
                 avatar: 'T',
                 gradient: 'linear-gradient(135deg, var(--accent-purple), var(--accent-red))',
-                tools: 5
+                tools: 3,
+                enabledTools: ['automated-testing', 'performance-testing', 'test-reporting'],
+                toolSections: {
+                    'development': {
+                        title: 'Development',
+                        subtitle: 'Development-time testing and code quality',
+                        icon: '💻',
+                        tools: [
+                            { id: 'unit-testing', name: 'Unit Testing', description: 'Generates and runs unit tests during development', enabled: false },
+                            { id: 'code-coverage', name: 'Code Coverage', description: 'Tracks and reports code coverage metrics', enabled: false }
+                        ]
+                    },
+                    'testing': {
+                        title: 'Testing',
+                        subtitle: 'Comprehensive testing and quality assurance tools',
+                        icon: '🧪',
+                        tools: [
+                            { id: 'automated-testing', name: 'Automated Testing', description: 'Automatically generates and runs comprehensive test suites', enabled: true },
+                            { id: 'performance-testing', name: 'Performance Testing', description: 'Runs performance benchmarks and identifies bottlenecks', enabled: true },
+                            { id: 'test-reporting', name: 'Test Reporting', description: 'Generates comprehensive test reports and analytics', enabled: true },
+                            { id: 'regression-testing', name: 'Regression Testing', description: 'Ensures new changes don\'t break existing functionality', enabled: false }
+                        ]
+                    },
+                    'management': {
+                        title: 'Management',
+                        subtitle: 'Test management and coordination',
+                        icon: '⚙️',
+                        tools: [
+                            { id: 'test-planning', name: 'Test Planning', description: 'Plans and organizes testing strategies and schedules', enabled: false },
+                            { id: 'defect-tracking', name: 'Defect Tracking', description: 'Tracks and manages identified defects and issues', enabled: false }
+                        ]
+                    },
+                    'deployment': {
+                        title: 'Deployment',
+                        subtitle: 'Deployment validation and production testing',
+                        icon: '🚀',
+                        tools: [
+                            { id: 'deployment-validation', name: 'Deployment Validation', description: 'Validates deployments in staging and production', enabled: false },
+                            { id: 'production-monitoring', name: 'Production Monitoring', description: 'Monitors application health in production', enabled: false }
+                        ]
+                    }
+                },
+                config: {
+                    systemPrompt: 'You are a testing agent specialized in automated testing, quality assurance, and code validation.',
+                    llmProvider: 'claude',
+                    responseTimeout: 6000,
+                    maxConcurrentTasks: 4,
+                    memoryManagement: 'aggressive',
+                    collaborationRules: 'Tests Agent validates all code changes → Runs comprehensive test suites → Reports results to Orchestrator and CI/CD Agent'
+                }
             }
         };
+
+        function initializeAgentToolsCounts() {
+            // Initialize tools count for all agents
+            updateSidebarToolsCount();
+        }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             updateMainTitle();
             autoResizeAllTextareas();
+            
+            // Initialize tools count for all agents
+            setTimeout(() => {
+                initializeAgentToolsCounts();
+            }, 200);
         });
 
         // Sidebar functions
@@ -1979,6 +1863,169 @@
             updateChatHeader();
         }
 
+        function openAgentConfig(agentId) {
+            currentAgent = agentId;
+            const agent = agents[agentId];
+            if (!agent) return;
+
+            // Update modal title
+            document.getElementById('configModalTitle').textContent = `${agent.name} Configuration`;
+
+            // Generate configuration content
+            const configContent = document.getElementById('agentConfigContent');
+            configContent.innerHTML = generateConfigHTML(agent);
+
+            // Open modal
+            openModal('agentConfigModal');
+        }
+
+        function openAgentTools(agentId) {
+            currentAgent = agentId;
+            const agent = agents[agentId];
+            if (!agent) return;
+
+            // Update modal title
+            document.getElementById('toolsModalTitle').textContent = `${agent.name} Tools`;
+
+            // Generate tools content
+            const toolsContent = document.getElementById('agentToolsContent');
+            toolsContent.innerHTML = generateToolsHTML(agent);
+
+            // Open modal
+            openModal('agentToolsModal');
+        }
+
+        function generateConfigHTML(agent) {
+            return `
+                <!-- Basic Configuration Section -->
+                <div class="config-section">
+                    <div class="config-section-header" onclick="toggleConfigSection(this)">
+                        <div class="config-section-icon basic">⚙️</div>
+                        <div class="config-section-details">
+                            <h3 class="config-section-title">Basic Configuration</h3>
+                            <p class="config-section-subtitle">Core agent settings and basic configuration options</p>
+                        </div>
+                        <div class="config-section-toggle">▼</div>
+                    </div>
+                    <div class="config-section-content">
+                        <div class="form-group">
+                            <label class="form-label">Agent Name</label>
+                            <input type="text" class="form-input" value="${agent.name}" onchange="updateAgentConfig('name', this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">System Prompt</label>
+                            <textarea class="form-textarea" onchange="updateAgentConfig('systemPrompt', this.value)">${agent.config.systemPrompt}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">LLM Provider</label>
+                            <select class="form-input" onchange="updateAgentConfig('llmProvider', this.value)">
+                                <option value="openai-gpt4" ${agent.config.llmProvider === 'openai-gpt4' ? 'selected' : ''}>OpenAI GPT-4</option>
+                                <option value="openai-gpt3.5" ${agent.config.llmProvider === 'openai-gpt3.5' ? 'selected' : ''}>OpenAI GPT-3.5</option>
+                                <option value="claude" ${agent.config.llmProvider === 'claude' ? 'selected' : ''}>Claude 3</option>
+                                <option value="local" ${agent.config.llmProvider === 'local' ? 'selected' : ''}>Local LLM</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collaboration Settings Section -->
+                <div class="config-section collapsed">
+                    <div class="config-section-header" onclick="toggleConfigSection(this)">
+                        <div class="config-section-icon collaboration">🤝</div>
+                        <div class="config-section-details">
+                            <h3 class="config-section-title">Collaboration Settings</h3>
+                            <p class="config-section-subtitle">Agent coordination rules and workflow management</p>
+                        </div>
+                        <div class="config-section-toggle">▶</div>
+                    </div>
+                    <div class="config-section-content">
+                        <div class="form-group">
+                            <label class="form-label">Collaboration Rules</label>
+                            <textarea class="form-textarea" onchange="updateAgentConfig('collaborationRules', this.value)">${agent.config.collaborationRules}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Settings Section -->
+                <div class="config-section collapsed">
+                    <div class="config-section-header" onclick="toggleConfigSection(this)">
+                        <div class="config-section-icon advanced">🔧</div>
+                        <div class="config-section-details">
+                            <h3 class="config-section-title">Advanced Settings</h3>
+                            <p class="config-section-subtitle">Performance tuning and advanced configuration options</p>
+                        </div>
+                        <div class="config-section-toggle">▶</div>
+                    </div>
+                    <div class="config-section-content">
+                        <div class="form-group">
+                            <label class="form-label">Response Timeout (ms)</label>
+                            <input type="number" class="form-input" value="${agent.config.responseTimeout}" min="1000" max="30000" onchange="updateAgentConfig('responseTimeout', parseInt(this.value))">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Max Concurrent Tasks</label>
+                            <input type="number" class="form-input" value="${agent.config.maxConcurrentTasks}" min="1" max="10" onchange="updateAgentConfig('maxConcurrentTasks', parseInt(this.value))">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Memory Management</label>
+                            <select class="form-input" onchange="updateAgentConfig('memoryManagement', this.value)">
+                                <option value="auto" ${agent.config.memoryManagement === 'auto' ? 'selected' : ''}>Auto</option>
+                                <option value="conservative" ${agent.config.memoryManagement === 'conservative' ? 'selected' : ''}>Conservative</option>
+                                <option value="aggressive" ${agent.config.memoryManagement === 'aggressive' ? 'selected' : ''}>Aggressive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateToolsHTML(agent) {
+            if (!agent.toolSections) return '<p>No tools available for this agent.</p>';
+
+            let html = '';
+            const sectionOrder = ['development', 'testing', 'management', 'deployment'];
+            
+            sectionOrder.forEach((sectionKey, index) => {
+                const section = agent.toolSections[sectionKey];
+                if (!section) return; // Skip if section doesn't exist for this agent
+                
+                const isCollapsed = index !== 0; // First section open by default
+
+                html += `
+                    <div class="tools-section ${isCollapsed ? 'collapsed' : ''}">
+                        <div class="section-header" onclick="toggleToolsSection(this)">
+                            <div class="section-icon ${sectionKey}">${section.icon}</div>
+                            <div class="section-details">
+                                <h3 class="section-title">${section.title}</h3>
+                                <p class="section-subtitle">${section.subtitle}</p>
+                            </div>
+                            <div class="section-toggle">${isCollapsed ? '▶' : '▼'}</div>
+                        </div>
+                        <div class="tools-content">
+                            ${section.tools.map(tool => `
+                                <div class="tool-option">
+                                    <div class="tool-info">
+                                        <div class="tool-status-dot"></div>
+                                        <div class="tool-details">
+                                            <h4 class="tool-name">${tool.name}</h4>
+                                            <p class="tool-description">${tool.description}</p>
+                                        </div>
+                                    </div>
+                                    <div class="tool-toggle">
+                                        <div class="toggle-switch ${tool.enabled ? 'active' : ''}" onclick="toggleAgentTool('${tool.id}', this)">
+                                            <div class="toggle-slider"></div>
+                                        </div>
+                                        <span class="toggle-label">${tool.enabled ? 'Enabled' : 'Disabled'}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
         function updateMainTitle() {
             const agent = agents[currentAgent];
             const mainTitle = document.getElementById('mainTitle');
@@ -1997,23 +2044,6 @@
             if (agent) {
                 chatAgentName.textContent = agent.name;
             }
-        }
-
-        // Tab switching
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(tabName + 'Tab').classList.add('active');
-
-            currentTab = tabName;
         }
 
         // Chat functions
@@ -2157,11 +2187,33 @@
             }
         }
 
+        function updateAgentConfig(field, value) {
+            if (agents[currentAgent] && agents[currentAgent].config) {
+                if (field === 'name') {
+                    updateAgentName(value);
+                } else {
+                    agents[currentAgent].config[field] = value;
+                    
+                    // Send config update to extension
+                    vscode.postMessage({
+                        command: 'updateAgentConfig',
+                        data: { 
+                            id: currentAgent, 
+                            field: field, 
+                            value: value,
+                            config: agents[currentAgent].config
+                        }
+                    });
+                }
+            }
+        }
+
         // Tool functions
-        function toggleTool(toolId, toggleElement) {
+        function toggleAgentTool(toolId, toggleElement) {
             const label = toggleElement.parentElement.querySelector('.toggle-label');
+            const isEnabled = toggleElement.classList.contains('active');
             
-            if (toggleElement.classList.contains('active')) {
+            if (isEnabled) {
                 // Disable tool
                 toggleElement.classList.remove('active');
                 label.textContent = 'Disabled';
@@ -2171,13 +2223,47 @@
                 label.textContent = 'Enabled';
             }
 
+            // Update the agent's tool data
+            if (agents[currentAgent] && agents[currentAgent].toolSections) {
+                Object.keys(agents[currentAgent].toolSections).forEach(sectionKey => {
+                    const section = agents[currentAgent].toolSections[sectionKey];
+                    const tool = section.tools.find(t => t.id === toolId);
+                    if (tool) {
+                        tool.enabled = !isEnabled;
+                    }
+                });
+
+                // Update enabled tools count
+                const enabledCount = Object.values(agents[currentAgent].toolSections)
+                    .flatMap(section => section.tools)
+                    .filter(tool => tool.enabled).length;
+                
+                agents[currentAgent].tools = enabledCount;
+                
+                // Update the sidebar display
+                updateSidebarToolsCount();
+            }
+
             // Send to extension
             vscode.postMessage({
                 command: 'toggleTool',
                 data: { 
                     toolId: toolId, 
-                    enabled: toggleElement.classList.contains('active'),
+                    enabled: !isEnabled,
                     agent: currentAgent 
+                }
+            });
+        }
+
+        function updateSidebarToolsCount() {
+            const agentCards = document.querySelectorAll('.agent-card');
+            agentCards.forEach(card => {
+                const agentId = card.getAttribute('data-agent');
+                const toolsElement = card.querySelector('.agent-tools');
+                
+                if (agentId && toolsElement && agents[agentId]) {
+                    const count = agents[agentId].tools;
+                    toolsElement.textContent = `${count} tools enabled`;
                 }
             });
         }
@@ -2229,27 +2315,84 @@
             ];
             const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
 
+            // Create default tools structure for new agent
+            const defaultToolSections = {
+                'development': {
+                    title: 'Development',
+                    subtitle: 'Code analysis, dependency management, and development utilities',
+                    icon: '💻',
+                    tools: [
+                        { id: 'basic-analysis', name: 'Basic Analysis', description: 'Performs basic analysis and reporting', enabled: true },
+                        { id: 'code-review', name: 'Code Review', description: 'Assists with code review processes', enabled: false }
+                    ]
+                },
+                'testing': {
+                    title: 'Testing',
+                    subtitle: 'Quality assurance and validation tools',
+                    icon: '🧪',
+                    tools: [
+                        { id: 'basic-testing', name: 'Basic Testing', description: 'Performs basic testing and validation', enabled: false }
+                    ]
+                },
+                'management': {
+                    title: 'Management',
+                    subtitle: 'Task management and coordination tools',
+                    icon: '⚙️',
+                    tools: [
+                        { id: 'task-management', name: 'Task Management', description: 'Manages assigned tasks and responsibilities', enabled: false }
+                    ]
+                },
+                'deployment': {
+                    title: 'Deployment',
+                    subtitle: 'Deployment support and coordination',
+                    icon: '🚀',
+                    tools: [
+                        { id: 'deployment-support', name: 'Deployment Support', description: 'Provides support during deployment processes', enabled: false }
+                    ]
+                }
+            };
+
             agents[agentId] = {
                 name: name,
                 avatar: avatar,
                 gradient: randomGradient,
-                tools: 0
+                tools: 1,
+                enabledTools: ['basic-analysis'],
+                toolSections: defaultToolSections,
+                config: {
+                    systemPrompt: prompt || `You are a ${role} agent specialized in ${name.toLowerCase()} tasks.`,
+                    llmProvider: 'openai-gpt4',
+                    responseTimeout: 5000,
+                    maxConcurrentTasks: 3,
+                    memoryManagement: 'auto',
+                    collaborationRules: `${name} agent handles ${role} tasks → Coordinates with other agents as needed → Reports results to Orchestrator`
+                }
             };
 
             // Add to sidebar
             const agentsList = document.getElementById('agentsList');
             const newAgentCard = document.createElement('div');
             newAgentCard.className = 'agent-card';
-            newAgentCard.onclick = function() { selectAgent(newAgentCard, agentId); };
+            newAgentCard.setAttribute('data-agent', agentId);
             newAgentCard.innerHTML = 
-                '<div class="agent-header">' +
-                    '<div class="agent-name">' +
-                        '<div class="agent-avatar" style="background: ' + randomGradient + ';">' + avatar + '</div>' +
-                        '<span>' + name + '</span>' +
-                    '</div>' +
-                    '<div class="agent-status active"></div>' +
-                '</div>' +
-                '<div class="agent-tools">0 tools enabled</div>';
+                `<div class="agent-header" onclick="selectAgent(this.parentElement, '${agentId}')">
+                    <div class="agent-name">
+                        <div class="agent-avatar" style="background: ${randomGradient};">${avatar}</div>
+                        <span>${name}</span>
+                    </div>
+                    <div class="agent-status active"></div>
+                </div>
+                <div class="agent-tools">1 tools enabled</div>
+                <div class="agent-actions">
+                    <button class="agent-action-btn" onclick="openAgentConfig('${agentId}')" title="Configuration">
+                        <span>⚙️</span>
+                        <span>Config</span>
+                    </button>
+                    <button class="agent-action-btn" onclick="openAgentTools('${agentId}')" title="Tools">
+                        <span>🛠️</span>
+                        <span>Tools</span>
+                    </button>
+                </div>`;
 
             agentsList.appendChild(newAgentCard);
 

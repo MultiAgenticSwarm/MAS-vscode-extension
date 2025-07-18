@@ -875,27 +875,84 @@
         }
 
         /* Tools Tab */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+        .tools-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
             height: calc(100vh - 200px);
             overflow-y: auto;
+            padding: 4px;
+        }
+
+        .tools-category {
+            background: var(--vscode-bg);
+            border: 1px solid var(--vscode-border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .category-header {
+            padding: 16px 20px;
+            background: var(--vscode-list-inactiveSelectionBackground);
+            border-bottom: 1px solid var(--vscode-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .category-icon.development {
+            background: var(--accent-blue);
+        }
+
+        .category-icon.management {
+            background: var(--accent-orange);
+        }
+
+        .category-icon.testing {
+            background: var(--accent-green);
+        }
+
+        .category-icon.deployment {
+            background: var(--accent-purple);
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--vscode-fg);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            padding: 20px;
         }
 
         .tool-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 16px var(--shadow);
+            background: var(--vscode-bg);
+            border: 1px solid var(--vscode-border);
+            border-radius: 8px;
+            padding: 20px;
             transition: all 0.2s ease;
+            position: relative;
         }
 
         .tool-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 32px var(--shadow);
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(0, 122, 204, 0.1);
         }
 
         .tool-header {
@@ -1290,71 +1347,107 @@
 
             <!-- Tools Tab -->
             <div class="tab-content" id="toolsTab">
-                <div class="tools-grid">
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3 class="tool-name">Code Analysis</h3>
-                            <label class="tool-toggle">
-                                <input type="checkbox" checked onchange="toggleTool('code-analysis', this.checked)">
-                                <span class="toggle-slider"></span>
-                            </label>
+                <div class="tools-container">
+                    <!-- Development Category -->
+                    <div class="tools-category">
+                        <div class="category-header">
+                            <div class="category-icon development">💻</div>
+                            <h3 class="category-title">Development</h3>
                         </div>
-                        <p class="tool-description">Analyzes Flutter code for best practices, performance issues, and potential bugs.</p>
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <h3 class="tool-name">Code Analysis</h3>
+                                    <label class="tool-toggle">
+                                        <input type="checkbox" checked onchange="toggleTool('code-analysis', this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <p class="tool-description">Analyzes Flutter code for best practices, performance issues, and potential bugs.</p>
+                            </div>
+
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <h3 class="tool-name">Dependency Resolution</h3>
+                                    <label class="tool-toggle">
+                                        <input type="checkbox" checked onchange="toggleTool('dependency-resolution', this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <p class="tool-description">Manages package dependencies and resolves version conflicts automatically.</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3 class="tool-name">Task Delegation</h3>
-                            <label class="tool-toggle">
-                                <input type="checkbox" checked onchange="toggleTool('task-delegation', this.checked)">
-                                <span class="toggle-slider"></span>
-                            </label>
+                    <!-- Management Category -->
+                    <div class="tools-category">
+                        <div class="category-header">
+                            <div class="category-icon management">⚙️</div>
+                            <h3 class="category-title">Management</h3>
                         </div>
-                        <p class="tool-description">Intelligently delegates tasks to appropriate specialized agents based on context.</p>
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <h3 class="tool-name">Task Delegation</h3>
+                                    <label class="tool-toggle">
+                                        <input type="checkbox" checked onchange="toggleTool('task-delegation', this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <p class="tool-description">Intelligently delegates tasks to appropriate specialized agents based on context.</p>
+                            </div>
+
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <h3 class="tool-name">Progress Tracking</h3>
+                                    <label class="tool-toggle">
+                                        <input type="checkbox" checked onchange="toggleTool('progress-tracking', this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <p class="tool-description">Monitors and reports on task completion status across all agents.</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3 class="tool-name">Progress Tracking</h3>
-                            <label class="tool-toggle">
-                                <input type="checkbox" checked onchange="toggleTool('progress-tracking', this.checked)">
-                                <span class="toggle-slider"></span>
-                            </label>
+                    <!-- Testing Category -->
+                    <div class="tools-category">
+                        <div class="category-header">
+                            <div class="category-icon testing">🧪</div>
+                            <h3 class="category-title">Testing</h3>
                         </div>
-                        <p class="tool-description">Monitors and reports on task completion status across all agents.</p>
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <h3 class="tool-name">Testing Automation</h3>
+                                    <label class="tool-toggle">
+                                        <input type="checkbox" checked onchange="toggleTool('testing-automation', this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <p class="tool-description">Automatically generates and runs unit tests, integration tests, and widget tests.</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3 class="tool-name">Dependency Resolution</h3>
-                            <label class="tool-toggle">
-                                <input type="checkbox" checked onchange="toggleTool('dependency-resolution', this.checked)">
-                                <span class="toggle-slider"></span>
-                            </label>
+                    <!-- Deployment Category -->
+                    <div class="tools-category">
+                        <div class="category-header">
+                            <div class="category-icon deployment">🚀</div>
+                            <h3 class="category-title">Deployment</h3>
                         </div>
-                        <p class="tool-description">Manages package dependencies and resolves version conflicts automatically.</p>
-                    </div>
-
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3 class="tool-name">Testing Automation</h3>
-                            <label class="tool-toggle">
-                                <input type="checkbox" checked onchange="toggleTool('testing-automation', this.checked)">
-                                <span class="toggle-slider"></span>
-                            </label>
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-header">
+                                    <h3 class="tool-name">CI/CD Pipeline</h3>
+                                    <label class="tool-toggle">
+                                        <input type="checkbox" checked onchange="toggleTool('cicd-pipeline', this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <p class="tool-description">Sets up and manages continuous integration and deployment pipelines.</p>
+                            </div>
                         </div>
-                        <p class="tool-description">Automatically generates and runs unit tests, integration tests, and widget tests.</p>
-                    </div>
-
-                    <div class="tool-card">
-                        <div class="tool-header">
-                            <h3 class="tool-name">CI/CD Pipeline</h3>
-                            <label class="tool-toggle">
-                                <input type="checkbox" checked onchange="toggleTool('cicd-pipeline', this.checked)">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <p class="tool-description">Sets up and manages continuous integration and deployment pipelines.</p>
                     </div>
                 </div>
             </div>

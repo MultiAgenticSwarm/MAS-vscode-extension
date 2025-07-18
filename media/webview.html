@@ -164,15 +164,48 @@
             width: 100%;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 6px;
-            padding: 8px 12px;
-            color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.95);
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .swarm-dropdown::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .swarm-dropdown:hover::before {
+            opacity: 1;
+        }
+
+        .dropdown-text {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropdown-text::before {
+            content: '';
+            margin-right: 4px;
         }
 
         .floating-sidebar.collapsed .swarm-dropdown {
@@ -193,7 +226,10 @@
         }
 
         .swarm-dropdown:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .floating-sidebar.collapsed .swarm-dropdown:hover {
@@ -201,49 +237,148 @@
         }
 
         .dropdown-arrow {
-            transition: transform 0.2s ease;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .swarm-dropdown:hover .dropdown-arrow {
+            opacity: 1;
+            transform: scale(1.1);
         }
 
         .swarm-dropdown-menu.show ~ .swarm-dropdown .dropdown-arrow {
-            transform: rotate(180deg);
+            transform: rotate(180deg) scale(1.1);
+            opacity: 1;
         }
 
         /* Dropdown Menu */
         .swarm-dropdown-menu {
             position: fixed;
-            background: var(--vscode-dropdown-background);
-            border: 1px solid var(--vscode-dropdown-border);
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: rgba(20, 25, 35, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
             z-index: 10000;
             opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(-15px) scale(0.95);
             visibility: hidden;
-            transition: all 0.2s ease;
-            min-width: 200px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 220px;
+            overflow: hidden;
+            padding: 8px;
+        }
+
+        .swarm-dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border-radius: 12px;
         }
 
         .swarm-dropdown-menu.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
             visibility: visible;
+            animation: dropdownSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes dropdownSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-15px) scale(0.95);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(-5px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .swarm-dropdown-option {
-            padding: 8px 12px;
+            padding: 12px 16px;
             cursor: pointer;
             font-size: 13px;
-            color: var(--vscode-dropdown-foreground);
-            transition: background-color 0.2s ease;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 8px;
+            margin-bottom: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1;
+        }
+
+        .swarm-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .swarm-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .swarm-dropdown-option::before {
+            content: '';
+            position: absolute;
+            right: 12px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            opacity: 0;
+            transition: all 0.2s ease;
         }
 
         .swarm-dropdown-option:hover {
-            background: var(--vscode-list-hoverBackground);
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .swarm-dropdown-option:hover .swarm-icon {
+            transform: scale(1.2);
+        }
+
+        .swarm-dropdown-option:hover::before {
+            opacity: 1;
+            background: var(--accent-green);
+            transform: scale(1.2);
         }
 
         .swarm-dropdown-option.selected {
-            background: var(--vscode-list-activeSelectionBackground);
-            color: var(--vscode-list-activeSelectionForeground);
+            background: linear-gradient(135deg, rgba(0, 122, 204, 0.2), rgba(0, 122, 204, 0.1));
+            color: white;
+            border: 1px solid rgba(0, 122, 204, 0.3);
+        }
+
+        .swarm-dropdown-option.selected::before {
+            opacity: 1;
+            background: var(--accent-blue);
+            box-shadow: 0 0 8px rgba(0, 122, 204, 0.4);
+        }
+
+        .swarm-dropdown-option.selected .swarm-icon {
+            transform: scale(1.1);
+        }
+
+        .swarm-dropdown-option:last-child {
+            margin-bottom: 0;
         }
 
         /* Expand Icon for Collapsed Sidebar */
@@ -1435,15 +1570,30 @@
                     </div>
                     <div class="swarm-selector" id="swarmSelector">
                         <div class="swarm-dropdown" onclick="toggleSwarmDropdown()">
-                            <span class="dropdown-text" id="selectedSwarm">WebDevSwarm</span>
+                            <span class="dropdown-text" id="selectedSwarm">🌐 WebDevSwarm</span>
                             <span class="dropdown-arrow">▼</span>
                         </div>
                         <div class="swarm-dropdown-menu" id="swarmDropdownMenu">
-                            <div class="swarm-dropdown-option" onclick="selectSwarm('FlutterSwarm')">FlutterSwarm</div>
-                            <div class="swarm-dropdown-option selected" onclick="selectSwarm('WebDevSwarm')">WebDevSwarm</div>
-                            <div class="swarm-dropdown-option" onclick="selectSwarm('MobileSwarm')">MobileSwarm</div>
-                            <div class="swarm-dropdown-option" onclick="selectSwarm('AISwarm')">AISwarm</div>
-                            <div class="swarm-dropdown-option" onclick="selectSwarm('DataSwarm')">DataSwarm</div>
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('FlutterSwarm')" data-icon="📱">
+                                <span class="swarm-icon">📱</span>
+                                <span class="swarm-name">FlutterSwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-option selected" onclick="selectSwarm('WebDevSwarm')" data-icon="🌐">
+                                <span class="swarm-icon">🌐</span>
+                                <span class="swarm-name">WebDevSwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('MobileSwarm')" data-icon="📲">
+                                <span class="swarm-icon">📲</span>
+                                <span class="swarm-name">MobileSwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('AISwarm')" data-icon="🧠">
+                                <span class="swarm-icon">🧠</span>
+                                <span class="swarm-name">AISwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('DataSwarm')" data-icon="📊">
+                                <span class="swarm-icon">📊</span>
+                                <span class="swarm-name">DataSwarm</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2491,13 +2641,31 @@
 
         function selectSwarm(swarmName) {
             const selectedElement = document.getElementById('selectedSwarm');
-            selectedElement.textContent = swarmName;
+            
+            // Get the icon for the selected swarm
+            const swarmIcons = {
+                'FlutterSwarm': '📱',
+                'WebDevSwarm': '🌐',
+                'MobileSwarm': '📲',
+                'AISwarm': '🧠',
+                'DataSwarm': '📊'
+            };
+            
+            selectedElement.innerHTML = `${swarmIcons[swarmName] || '🔄'} ${swarmName}`;
             
             // Update selected option
             document.querySelectorAll('.swarm-dropdown-option').forEach(option => {
                 option.classList.remove('selected');
             });
-            event.target.classList.add('selected');
+            
+            // Find the clicked option by checking the swarm name
+            const clickedOption = Array.from(document.querySelectorAll('.swarm-dropdown-option')).find(option => {
+                return option.querySelector('.swarm-name').textContent === swarmName;
+            });
+            
+            if (clickedOption) {
+                clickedOption.classList.add('selected');
+            }
             
             // Close dropdown
             document.getElementById('swarmDropdownMenu').classList.remove('show');

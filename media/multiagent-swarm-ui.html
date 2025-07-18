@@ -96,14 +96,9 @@
             z-index: 100;
             display: flex;
             flex-direction: column;
-<<<<<<< HEAD
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(0);
-=======
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             transform: translateX(0);
             overflow: hidden;
->>>>>>> temp-work
         }
 
         .floating-sidebar.collapsed {
@@ -111,8 +106,6 @@
             transform: translateX(0);
         }
 
-<<<<<<< HEAD
-=======
         .floating-sidebar.collapsed .sidebar-header-content {
             opacity: 0;
             transform: translateX(-20px);
@@ -136,8 +129,6 @@
             transform: translateX(0);
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s;
         }
-
->>>>>>> temp-work
         .sidebar-header {
             padding: 24px;
             border-bottom: 1px solid var(--border-muted);
@@ -145,15 +136,12 @@
             border-radius: 16px 16px 0 0;
             position: relative;
             overflow: hidden;
-<<<<<<< HEAD
-=======
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .floating-sidebar.collapsed .sidebar-header {
             padding: 24px 12px;
             border-bottom: none;
->>>>>>> temp-work
         }
 
         .sidebar-header::before {
@@ -170,10 +158,7 @@
         .sidebar-header-content {
             position: relative;
             z-index: 1;
-<<<<<<< HEAD
-=======
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
->>>>>>> temp-work
         }
 
         .logo {
@@ -219,68 +204,6 @@
             background: rgba(255, 255, 255, 0.15);
         }
 
-<<<<<<< HEAD
-=======
-        .swarm-dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            margin-top: 4px;
-            opacity: 0;
-            transform: translateY(-10px);
-            pointer-events: none;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .swarm-dropdown-menu.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: all;
-        }
-
-        .swarm-dropdown-item {
-            padding: 12px 16px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .swarm-dropdown-item:hover {
-            background: rgba(88, 166, 255, 0.1);
-        }
-
-        .swarm-dropdown-item.active {
-            background: rgba(88, 166, 255, 0.2);
-            font-weight: 600;
-        }
-
-        .swarm-dropdown-item:first-child {
-            border-radius: 8px 8px 0 0;
-        }
-
-        .swarm-dropdown-item:last-child {
-            border-radius: 0 0 8px 8px;
-        }
-
-        .swarm-dropdown-arrow {
-            transition: transform 0.2s ease;
-        }
-
-        .swarm-dropdown-arrow.rotated {
-            transform: rotate(180deg);
-        }
-
->>>>>>> temp-work
         .collapse-btn {
             position: absolute;
             top: 24px;
@@ -295,20 +218,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-<<<<<<< HEAD
-            transition: all 0.2s ease;
-            z-index: 2;
-=======
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             z-index: 2;
             backdrop-filter: blur(10px);
->>>>>>> temp-work
         }
 
         .collapse-btn:hover {
             background: rgba(255, 255, 255, 0.2);
-<<<<<<< HEAD
-=======
             transform: scale(1.05);
         }
 
@@ -319,15 +235,12 @@
         .floating-sidebar.collapsed .collapse-btn {
             right: 24px;
             background: rgba(255, 255, 255, 0.15);
->>>>>>> temp-work
         }
 
         .agents-section {
             flex: 1;
             padding: 24px;
             overflow-y: auto;
-<<<<<<< HEAD
-=======
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
@@ -415,7 +328,6 @@
 
         .floating-sidebar:not(.collapsed) .agent-card:nth-child(3) {
             animation-delay: 0.3s;
->>>>>>> temp-work
         }
 
         .section-title {
@@ -552,11 +464,7 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-<<<<<<< HEAD
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-=======
             transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
->>>>>>> temp-work
         }
 
         .main-content.sidebar-collapsed {
@@ -1157,11 +1065,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-blue);
         }
-<<<<<<< HEAD
-    </style>
-</head>
-<body>
-=======
 
         /* Notification System */
         .notification-container {
@@ -1244,7 +1147,6 @@
 <body>
     <!-- Notification Container -->
     <div class="notification-container" id="notificationContainer"></div>
->>>>>>> temp-work
     <div class="main-container">
         <!-- Floating Sidebar -->
         <div class="floating-sidebar" id="sidebar">
@@ -1257,9 +1159,7 @@
                     <div class="swarm-selector" id="swarmSelector">
                         <div class="swarm-dropdown" onclick="toggleSwarmDropdown()">
                             <span id="selectedSwarm">FlutterSwarm</span>
-<<<<<<< HEAD
                             <span>▼</span>
-=======
                             <span class="swarm-dropdown-arrow" id="swarmArrow">▼</span>
                         </div>
                         <div class="swarm-dropdown-menu" id="swarmDropdownMenu">
@@ -1283,7 +1183,6 @@
                                 <span>🔧</span>
                                 <span>GeneralSwarm</span>
                             </div>
->>>>>>> temp-work
                         </div>
                     </div>
                 </div>
@@ -1422,7 +1321,6 @@
                         <div class="config-section-content">
                             <div class="form-group">
                                 <label class="form-label">Agent Name</label>
-<<<<<<< HEAD
                                 <input type="text" class="form-input" defaultValue="Orchestrator Agent" onchange="updateAgentName(this.value)">
                             </div>
                             <div class="form-group">
@@ -1433,7 +1331,6 @@
                                 <label class="form-label">LLM Provider</label>
                                 <select class="form-input" defaultValue="openai-gpt4">
                                     <option value="openai-gpt4">OpenAI GPT-4</option>
-=======
                                 <input type="text" class="form-input" id="agentNameInput" value="Orchestrator Agent" onchange="updateAgentName(this.value)">
                             </div>
                             <div class="form-group">
@@ -1444,7 +1341,6 @@
                                 <label class="form-label">LLM Provider</label>
                                 <select class="form-input" id="llmProviderSelect" onchange="updateLLMProvider(this.value)">
                                     <option value="openai-gpt4" selected>OpenAI GPT-4</option>
->>>>>>> temp-work
                                     <option value="openai-gpt3.5">OpenAI GPT-3.5</option>
                                     <option value="claude">Claude 3</option>
                                     <option value="local">Local LLM</option>
@@ -1461,11 +1357,8 @@
                         <div class="config-section-content">
                             <div class="form-group">
                                 <label class="form-label">Collaboration Rules</label>
-<<<<<<< HEAD
                                 <textarea class="form-textarea" defaultValue="Orchestrator receives all initial requests → CI/CD Agent handles deployment tasks → Tests Agent validates all code changes → All agents report back to Orchestrator"></textarea>
-=======
                                 <textarea class="form-textarea" id="collaborationRulesInput" onchange="updateCollaborationRules(this.value)">Orchestrator receives all initial requests → CI/CD Agent handles deployment tasks → Tests Agent validates all code changes → All agents report back to Orchestrator</textarea>
->>>>>>> temp-work
                             </div>
                         </div>
                     </div>
@@ -1479,11 +1372,8 @@
                         <div class="tool-header">
                             <h3 class="tool-name">Code Analysis</h3>
                             <label class="tool-toggle">
-<<<<<<< HEAD
                                 <input type="checkbox" defaultChecked onchange="toggleTool('code-analysis', this.checked)">
-=======
                                 <input type="checkbox" checked onchange="toggleTool('code-analysis', this.checked)">
->>>>>>> temp-work
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
@@ -1494,11 +1384,8 @@
                         <div class="tool-header">
                             <h3 class="tool-name">Task Delegation</h3>
                             <label class="tool-toggle">
-<<<<<<< HEAD
                                 <input type="checkbox" defaultChecked onchange="toggleTool('task-delegation', this.checked)">
-=======
                                 <input type="checkbox" checked onchange="toggleTool('task-delegation', this.checked)">
->>>>>>> temp-work
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
@@ -1509,11 +1396,8 @@
                         <div class="tool-header">
                             <h3 class="tool-name">Progress Tracking</h3>
                             <label class="tool-toggle">
-<<<<<<< HEAD
                                 <input type="checkbox" defaultChecked onchange="toggleTool('progress-tracking', this.checked)">
-=======
                                 <input type="checkbox" checked onchange="toggleTool('progress-tracking', this.checked)">
->>>>>>> temp-work
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
@@ -1524,11 +1408,8 @@
                         <div class="tool-header">
                             <h3 class="tool-name">Dependency Resolution</h3>
                             <label class="tool-toggle">
-<<<<<<< HEAD
                                 <input type="checkbox" defaultChecked onchange="toggleTool('dependency-resolution', this.checked)">
-=======
                                 <input type="checkbox" checked onchange="toggleTool('dependency-resolution', this.checked)">
->>>>>>> temp-work
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
@@ -1539,11 +1420,8 @@
                         <div class="tool-header">
                             <h3 class="tool-name">Testing Automation</h3>
                             <label class="tool-toggle">
-<<<<<<< HEAD
                                 <input type="checkbox" defaultChecked onchange="toggleTool('testing-automation', this.checked)">
-=======
                                 <input type="checkbox" checked onchange="toggleTool('testing-automation', this.checked)">
->>>>>>> temp-work
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
@@ -1554,11 +1432,8 @@
                         <div class="tool-header">
                             <h3 class="tool-name">CI/CD Pipeline</h3>
                             <label class="tool-toggle">
-<<<<<<< HEAD
                                 <input type="checkbox" defaultChecked onchange="toggleTool('cicd-pipeline', this.checked)">
-=======
                                 <input type="checkbox" checked onchange="toggleTool('cicd-pipeline', this.checked)">
->>>>>>> temp-work
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
@@ -1608,8 +1483,6 @@
         let sidebarCollapsed = false;
         let currentTab = 'chat';
         let isTyping = false;
-<<<<<<< HEAD
-=======
         let swarmDropdownOpen = false;
         let currentSwarm = 'FlutterSwarm';
 
@@ -1650,7 +1523,6 @@
             'PythonSwarm': { icon: '🐍', name: 'PythonSwarm' },
             'GeneralSwarm': { icon: '🔧', name: 'GeneralSwarm' }
         };
->>>>>>> temp-work
 
         // Agent data
         const agents = {
@@ -1678,10 +1550,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateMainTitle();
             autoResizeAllTextareas();
-<<<<<<< HEAD
-        });
-
-=======
             loadAgentConfig();
             setupEventListeners();
         });
@@ -1731,8 +1599,6 @@
                 document.getElementById('llmProviderSelect').value = config.llmProvider;
             }
         }
-
->>>>>>> temp-work
         // Sidebar functions
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -1747,10 +1613,6 @@
                 sidebar.classList.add('collapsed');
                 mainContent.classList.add('sidebar-collapsed');
                 collapseIcon.textContent = '▶';
-<<<<<<< HEAD
-                logoText.style.display = 'none';
-                swarmSelector.style.display = 'none';
-=======
                 
                 // Hide elements with smooth transition
                 setTimeout(() => {
@@ -1760,15 +1622,10 @@
                 
                 // Close dropdown if open
                 closeSwarmDropdown();
->>>>>>> temp-work
             } else {
                 sidebar.classList.remove('collapsed');
                 mainContent.classList.remove('sidebar-collapsed');
                 collapseIcon.textContent = '◀';
-<<<<<<< HEAD
-                logoText.style.display = 'block';
-                swarmSelector.style.display = 'block';
-=======
                 
                 // Show elements with smooth transition
                 setTimeout(() => {
@@ -1780,7 +1637,6 @@
             // Add haptic feedback simulation
             if (navigator.vibrate) {
                 navigator.vibrate(50);
->>>>>>> temp-work
             }
         }
 
@@ -1795,13 +1651,10 @@
             currentAgent = agentId;
             updateMainTitle();
             updateChatHeader();
-<<<<<<< HEAD
-=======
             loadAgentConfig();
             
             // Show visual feedback
             showNotification(`Switched to ${agents[agentId].name}`, 'success');
->>>>>>> temp-work
         }
 
         function updateMainTitle() {
@@ -1839,8 +1692,6 @@
             document.getElementById(tabName + 'Tab').classList.add('active');
 
             currentTab = tabName;
-<<<<<<< HEAD
-=======
             
             // Load appropriate data for the tab
             if (tabName === 'config') {
@@ -1888,7 +1739,6 @@
             setTimeout(() => {
                 notification.remove();
             }, 300);
->>>>>>> temp-work
         }
 
         // Chat functions
@@ -1913,11 +1763,9 @@
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
-<<<<<<< HEAD
 
             if (!message) return;
 
-=======
             const sendButton = document.getElementById('sendButton');
 
             if (!message) return;
@@ -1926,7 +1774,6 @@
             sendButton.disabled = true;
             sendButton.innerHTML = '<span>Sending...</span><span>⌛</span>';
 
->>>>>>> temp-work
             // Add user message
             addMessage('user', 'You', message);
             input.value = '';
@@ -1935,7 +1782,6 @@
             // Show typing indicator
             showTypingIndicator();
 
-<<<<<<< HEAD
             // Simulate agent response
             setTimeout(() => {
                 hideTypingIndicator();
@@ -1949,7 +1795,6 @@
                 const randomResponse = responses[Math.floor(Math.random() * responses.length)];
                 addMessage('agent', agent.name, randomResponse, agent.avatar, agent.gradient);
             }, 1500);
-=======
             // Simulate agent response with more realistic timing
             const responseTime = Math.random() * 2000 + 1000; // 1-3 seconds
             setTimeout(() => {
@@ -1988,7 +1833,6 @@
             };
             
             return responses[agentType] || responses.orchestrator;
->>>>>>> temp-work
         }
 
         function addMessage(type, sender, content, avatar = null, gradient = null) {
@@ -2053,12 +1897,9 @@
         }
 
         function updateAgentName(newName) {
-<<<<<<< HEAD
             if (agents[currentAgent]) {
-=======
             if (agentConfig[currentAgent]) {
                 agentConfig[currentAgent].name = newName;
->>>>>>> temp-work
                 agents[currentAgent].name = newName;
                 updateMainTitle();
                 updateChatHeader();
@@ -2071,7 +1912,6 @@
                         nameSpan.textContent = newName;
                     }
                 }
-<<<<<<< HEAD
             }
         }
 
@@ -2079,7 +1919,6 @@
         function toggleTool(toolId, enabled) {
             console.log(`Tool ${toolId} ${enabled ? 'enabled' : 'disabled'}`);
             // Here you would typically update the agent's tool configuration
-=======
                 
                 showNotification('Agent name updated', 'success');
             }
@@ -2128,7 +1967,6 @@
             showNotification(`${toolId.replace('-', ' ')} ${status}`, enabled ? 'success' : 'warning');
             
             console.log(`Tool ${toolId} ${status}`);
->>>>>>> temp-work
         }
 
         // Modal functions
@@ -2145,10 +1983,8 @@
             const role = document.getElementById('newAgentRole').value;
             const prompt = document.getElementById('newAgentPrompt').value.trim();
 
-<<<<<<< HEAD
             if (!name) {
                 alert('Please enter an agent name');
-=======
             // Validation
             if (!name) {
                 showNotification('Please enter an agent name', 'error');
@@ -2164,7 +2000,6 @@
             const existingAgent = Object.values(agents).find(agent => agent.name.toLowerCase() === name.toLowerCase());
             if (existingAgent) {
                 showNotification('Agent with this name already exists', 'error');
->>>>>>> temp-work
                 return;
             }
 
@@ -2175,12 +2010,8 @@
                 'var(--gradient-primary)',
                 'var(--gradient-secondary)',
                 'linear-gradient(135deg, var(--accent-purple), var(--accent-red))',
-<<<<<<< HEAD
-                'linear-gradient(135deg, var(--accent-orange), var(--accent-red))'
-=======
                 'linear-gradient(135deg, var(--accent-orange), var(--accent-red))',
                 'linear-gradient(135deg, var(--accent-green), var(--accent-blue))'
->>>>>>> temp-work
             ];
             const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
 
@@ -2191,8 +2022,6 @@
                 tools: 0
             };
 
-<<<<<<< HEAD
-=======
             // Add to configuration
             agentConfig[agentId] = {
                 name: name,
@@ -2200,7 +2029,6 @@
                 llmProvider: 'openai-gpt4'
             };
 
->>>>>>> temp-work
             // Add to sidebar
             const agentsList = document.getElementById('agentsList');
             const newAgentCard = document.createElement('div');
@@ -2226,7 +2054,6 @@
             closeModal('newAgentModal');
 
             // Show success message
-<<<<<<< HEAD
             addMessage('agent', 'System', `New agent "${name}" has been created successfully!`, '🎉', 'var(--gradient-secondary)');
         }
 
@@ -2236,7 +2063,6 @@
             console.log('Swarm dropdown toggled');
         }
 
-=======
             showNotification(`Agent "${name}" created successfully!`, 'success');
             addMessage('agent', 'System', `New agent "${name}" has been created and is ready to assist!`, '🎉', 'var(--gradient-secondary)');
         }
@@ -2334,7 +2160,6 @@
             enhancedInit();
         });
 
->>>>>>> temp-work
         // Close modals when clicking outside
         document.addEventListener('click', function(event) {
             if (event.target.classList.contains('modal')) {
@@ -2349,22 +2174,16 @@
                 document.querySelectorAll('.modal.active').forEach(modal => {
                     modal.classList.remove('active');
                 });
-<<<<<<< HEAD
-=======
                 closeSwarmDropdown();
->>>>>>> temp-work
             }
             
             // Ctrl/Cmd + / to focus chat input
             if ((event.ctrlKey || event.metaKey) && event.key === '/') {
                 event.preventDefault();
-<<<<<<< HEAD
                 document.getElementById('chatInput').focus();
-=======
                 if (currentTab === 'chat') {
                     document.getElementById('chatInput').focus();
                 }
->>>>>>> temp-work
             }
         });
     </script>

@@ -608,6 +608,38 @@
             color: white;
         }
 
+        .multi-agent-icon {
+            display: flex;
+            align-items: center;
+            gap: -4px;
+            position: relative;
+        }
+
+        .agent-mini-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+            border: 2px solid var(--vscode-bg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .agent-mini-avatar:nth-child(2) {
+            margin-left: -8px;
+            z-index: 2;
+        }
+
+        .agent-mini-avatar:nth-child(3) {
+            margin-left: -8px;
+            z-index: 3;
+        }
+
         .chat-status {
             display: flex;
             align-items: center;
@@ -1500,7 +1532,7 @@
                 <div class="sidebar-expand-icon" onclick="toggleSidebar()" title="Expand Sidebar">
                     ▶
                 </div>
-                <h1 class="main-title" id="mainTitle">Agent Response Center</h1>
+                <h1 class="main-title" id="mainTitle">Multi-Agent Collaboration Hub</h1>
                 <p class="main-subtitle">Interact with your AI agents in real-time</p>
             </div>
 
@@ -1508,15 +1540,19 @@
             <div class="chat-container">
                 <div class="chat-header">
                     <div class="chat-title">
-                        <div class="agent-title-icon" style="background: var(--accent-blue);">O</div>
+                        <div class="multi-agent-icon">
+                            <div class="agent-mini-avatar" style="background: var(--gradient-primary);">O</div>
+                            <div class="agent-mini-avatar" style="background: var(--gradient-secondary);">C</div>
+                            <div class="agent-mini-avatar" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-red));">T</div>
+                        </div>
                         <div>
-                            <div style="font-size: 16px; font-weight: 600;">Orchestrator Response Center</div>
-                            <div style="font-size: 12px; color: var(--vscode-descriptionForeground); font-weight: normal;">Interact with your AI agents in real-time</div>
+                            <div style="font-size: 16px; font-weight: 600;">Multi-Agent Collaboration Hub</div>
+                            <div style="font-size: 12px; color: var(--vscode-descriptionForeground); font-weight: normal;">Chat with all your AI agents in one unified space</div>
                         </div>
                     </div>
                     <div class="chat-status">
                         <div class="status-indicator"></div>
-                        <span>Online • Coordination & Task Management</span>
+                        <span id="chatStatusText">3 agents online • Ready to collaborate</span>
                     </div>
                 </div>
 
@@ -1524,11 +1560,11 @@
                     <div class="message agent">
                         <div class="message-bubble">
                             <div class="message-header">
-                                <div class="message-avatar" style="background: var(--accent-blue);">O</div>
-                                <span>Orchestrator • 5:07:10 PM</span>
+                                <div class="message-avatar" style="background: var(--gradient-primary);">🤖</div>
+                                <span>System • 5:07:10 PM</span>
                             </div>
                             <div class="message-content">
-                                Hello! I'm your Orchestrator. Coordinates tasks between different agents in your development workflow. How can I help you today?
+                                Welcome to your Multi-Agent Collaboration Hub! All your agents are ready to work together on your tasks. Simply ask a question or request, and the appropriate agents will collaborate to provide the best solution.
                             </div>
                         </div>
                     </div>
@@ -1540,7 +1576,7 @@
                                 <span>Orchestrator • 5:12:45 PM</span>
                             </div>
                             <div class="message-content">
-                                Processing your request: "gjnsq". I'll delegate this to the appropriate agents and get back to you with results.
+                                I'll coordinate between all agents to handle your requests efficiently. The CI/CD Agent handles deployments, Tests Agent ensures quality, and I manage the overall workflow. How can we assist you today?
                             </div>
                         </div>
                     </div>
@@ -2032,22 +2068,18 @@
         }
 
         function updateMainTitle() {
-            const agent = agents[currentAgent];
+            // Keep the main title consistent as multi-agent collaboration hub
             const mainTitle = document.getElementById('mainTitle');
-            const chatAgentName = document.getElementById('chatAgentName');
-
-            if (agent) {
-                mainTitle.textContent = agent.name + ' Response Center';
-                chatAgentName.textContent = agent.name;
-            }
+            mainTitle.textContent = 'Multi-Agent Collaboration Hub';
         }
 
         function updateChatHeader() {
-            const agent = agents[currentAgent];
-            const chatAgentName = document.getElementById('chatAgentName');
+            // Update the chat status to show active agents count
+            const activeAgentCount = Object.keys(agents).length;
+            const chatStatusText = document.getElementById('chatStatusText');
             
-            if (agent) {
-                chatAgentName.textContent = agent.name;
+            if (chatStatusText) {
+                chatStatusText.textContent = `${activeAgentCount} agents online • Ready to collaborate`;
             }
         }
 
@@ -2400,6 +2432,9 @@
                 </div>`;
 
             agentsList.appendChild(newAgentCard);
+
+            // Update chat header to reflect new agent count
+            updateChatHeader();
 
             // Clear form and close modal
             document.getElementById('newAgentName').value = '';

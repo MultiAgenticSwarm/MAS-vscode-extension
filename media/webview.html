@@ -878,144 +878,242 @@
         .tools-container {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
             height: calc(100vh - 200px);
             overflow-y: auto;
-            padding: 4px;
-        }
-
-        .tools-category {
+            overflow-x: hidden;
+            padding: 24px;
+            padding-right: 20px;
             background: var(--vscode-bg);
-            border: 1px solid var(--vscode-border);
-            border-radius: 12px;
-            overflow: hidden;
+            scroll-behavior: smooth;
+            position: relative;
         }
 
-        .category-header {
-            padding: 16px 20px;
-            background: var(--vscode-list-inactiveSelectionBackground);
-            border-bottom: 1px solid var(--vscode-border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .tools-container::before {
+            content: '';
+            position: sticky;
+            top: 0;
+            height: 0;
+            background: linear-gradient(to bottom, var(--vscode-bg) 0%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
         }
 
-        .category-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: white;
-            font-weight: 600;
+        .tools-container::after {
+            content: '';
+            position: sticky;
+            bottom: 0;
+            height: 0;
+            background: linear-gradient(to top, var(--vscode-bg) 0%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
         }
 
-        .category-icon.development {
-            background: var(--accent-blue);
-        }
-
-        .category-icon.management {
-            background: var(--accent-orange);
-        }
-
-        .category-icon.testing {
-            background: var(--accent-green);
-        }
-
-        .category-icon.deployment {
-            background: var(--accent-purple);
-        }
-
-        .category-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--vscode-fg);
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-            padding: 20px;
-        }
-
-        .tool-card {
+        .tools-section {
             background: var(--vscode-bg);
             border: 1px solid var(--vscode-border);
             border-radius: 8px;
-            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            overflow: visible;
+            transition: all 0.2s ease;
+            min-height: 80px;
+            flex-shrink: 0;
+        }
+
+        .tools-section:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            padding: 20px 24px;
+            background: var(--vscode-bg);
+            border-bottom: 1px solid var(--vscode-border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
             transition: all 0.2s ease;
             position: relative;
         }
 
-        .tool-card:hover {
-            border-color: var(--accent-blue);
-            box-shadow: 0 4px 12px rgba(0, 122, 204, 0.1);
+        .section-header:hover {
+            background: var(--vscode-list-hoverBackground);
         }
 
-        .tool-header {
+        .section-toggle {
+            margin-left: auto;
+            font-size: 14px;
+            color: var(--vscode-descriptionForeground);
+            transition: transform 0.2s ease;
+        }
+
+        .tools-section.collapsed .section-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
         }
 
-        .tool-name {
+        .section-icon.development {
+            background: linear-gradient(135deg, #007acc, #0056a3);
+        }
+
+        .section-icon.management {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .section-icon.testing {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .section-icon.deployment {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .section-details {
+            flex: 1;
+        }
+
+        .section-title {
             font-size: 16px;
             font-weight: 600;
             color: var(--vscode-fg);
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: var(--vscode-descriptionForeground);
+            font-weight: 400;
+            line-height: 1.3;
+        }
+
+        .tools-content {
+            padding: 0;
+            background: var(--vscode-bg);
+            overflow: visible;
+            transition: all 0.3s ease;
+            opacity: 1;
+            max-height: none;
+        }
+
+        .tools-section.collapsed .tools-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .tool-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--vscode-border);
+            transition: all 0.2s ease;
+        }
+
+        .tool-option:last-child {
+            border-bottom: none;
+        }
+
+        .tool-option:hover {
+            background: var(--vscode-list-hoverBackground);
+        }
+
+        .tool-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .tool-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            flex-shrink: 0;
+        }
+
+        .tool-details {
+            flex: 1;
+        }
+
+        .tool-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--vscode-fg);
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .tool-description {
+            font-size: 12px;
+            color: var(--vscode-descriptionForeground);
+            line-height: 1.4;
+            margin: 0;
         }
 
         .tool-toggle {
-            position: relative;
-            width: 48px;
-            height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
-        .tool-toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--vscode-input-background);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: #374151;
+            border-color: #374151;
         }
 
         .toggle-slider {
             position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--vscode-hover);
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
+            top: 2px;
+            left: 2px;
             width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
+            height: 18px;
+            background: white;
             border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
-        input:checked + .toggle-slider {
-            background: var(--gradient-secondary);
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
         }
 
-        input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        .tool-description {
+        .toggle-label {
+            font-size: 12px;
+            font-weight: 500;
             color: var(--vscode-descriptionForeground);
-            font-size: 14px;
-            line-height: 1.5;
+            min-width: 50px;
+            text-align: left;
+        }
+
+        .toggle-switch.active + .toggle-label {
+            color: var(--vscode-fg);
         }
 
         /* Modals */
@@ -1128,7 +1226,9 @@
             }
             
             .tools-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 16px;
+                padding: 20px;
             }
         }
 
@@ -1147,6 +1247,26 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
+            background: var(--vscode-scrollbarSlider-activeBackground);
+        }
+
+        /* Enhanced scrollbar for tools container */
+        .tools-container::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .tools-container::-webkit-scrollbar-track {
+            background: var(--vscode-scrollbarSlider-background);
+            border-radius: 6px;
+        }
+
+        .tools-container::-webkit-scrollbar-thumb {
+            background: var(--vscode-scrollbarSlider-hoverBackground);
+            border-radius: 6px;
+            border: 2px solid var(--vscode-bg);
+        }
+
+        .tools-container::-webkit-scrollbar-thumb:hover {
             background: var(--vscode-scrollbarSlider-activeBackground);
         }
     </style>
@@ -1348,104 +1468,278 @@
             <!-- Tools Tab -->
             <div class="tab-content" id="toolsTab">
                 <div class="tools-container">
-                    <!-- Development Category -->
-                    <div class="tools-category">
-                        <div class="category-header">
-                            <div class="category-icon development">💻</div>
-                            <h3 class="category-title">Development</h3>
+                    <!-- Development Section -->
+                    <div class="tools-section">
+                        <div class="section-header" onclick="toggleToolsSection(this)">
+                            <div class="section-icon development">💻</div>
+                            <div class="section-details">
+                                <h3 class="section-title">Development Tools</h3>
+                                <p class="section-subtitle">Code analysis, dependency management, and development utilities</p>
+                            </div>
+                            <div class="section-toggle">▼</div>
                         </div>
-                        <div class="tools-grid">
-                            <div class="tool-card">
-                                <div class="tool-header">
-                                    <h3 class="tool-name">Code Analysis</h3>
-                                    <label class="tool-toggle">
-                                        <input type="checkbox" checked onchange="toggleTool('code-analysis', this.checked)">
-                                        <span class="toggle-slider"></span>
-                                    </label>
+                        <div class="tools-content">
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Code Analysis</h4>
+                                        <p class="tool-description">Analyzes Flutter code for best practices, performance issues, and potential bugs</p>
+                                    </div>
                                 </div>
-                                <p class="tool-description">Analyzes Flutter code for best practices, performance issues, and potential bugs.</p>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch active" onclick="toggleTool('code-analysis', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Enabled</span>
+                                </div>
                             </div>
 
-                            <div class="tool-card">
-                                <div class="tool-header">
-                                    <h3 class="tool-name">Dependency Resolution</h3>
-                                    <label class="tool-toggle">
-                                        <input type="checkbox" checked onchange="toggleTool('dependency-resolution', this.checked)">
-                                        <span class="toggle-slider"></span>
-                                    </label>
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Dependency Resolution</h4>
+                                        <p class="tool-description">Manages package dependencies and resolves version conflicts automatically</p>
+                                    </div>
                                 </div>
-                                <p class="tool-description">Manages package dependencies and resolves version conflicts automatically.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Management Category -->
-                    <div class="tools-category">
-                        <div class="category-header">
-                            <div class="category-icon management">⚙️</div>
-                            <h3 class="category-title">Management</h3>
-                        </div>
-                        <div class="tools-grid">
-                            <div class="tool-card">
-                                <div class="tool-header">
-                                    <h3 class="tool-name">Task Delegation</h3>
-                                    <label class="tool-toggle">
-                                        <input type="checkbox" checked onchange="toggleTool('task-delegation', this.checked)">
-                                        <span class="toggle-slider"></span>
-                                    </label>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch active" onclick="toggleTool('dependency-resolution', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Enabled</span>
                                 </div>
-                                <p class="tool-description">Intelligently delegates tasks to appropriate specialized agents based on context.</p>
                             </div>
 
-                            <div class="tool-card">
-                                <div class="tool-header">
-                                    <h3 class="tool-name">Progress Tracking</h3>
-                                    <label class="tool-toggle">
-                                        <input type="checkbox" checked onchange="toggleTool('progress-tracking', this.checked)">
-                                        <span class="toggle-slider"></span>
-                                    </label>
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Hot Reload Manager</h4>
+                                        <p class="tool-description">Optimizes hot reload performance and manages state preservation</p>
+                                    </div>
                                 </div>
-                                <p class="tool-description">Monitors and reports on task completion status across all agents.</p>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch" onclick="toggleTool('hot-reload', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Disabled</span>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Testing Category -->
-                    <div class="tools-category">
-                        <div class="category-header">
-                            <div class="category-icon testing">🧪</div>
-                            <h3 class="category-title">Testing</h3>
-                        </div>
-                        <div class="tools-grid">
-                            <div class="tool-card">
-                                <div class="tool-header">
-                                    <h3 class="tool-name">Testing Automation</h3>
-                                    <label class="tool-toggle">
-                                        <input type="checkbox" checked onchange="toggleTool('testing-automation', this.checked)">
-                                        <span class="toggle-slider"></span>
-                                    </label>
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Build Optimization</h4>
+                                        <p class="tool-description">Optimizes build processes and reduces compilation time</p>
+                                    </div>
                                 </div>
-                                <p class="tool-description">Automatically generates and runs unit tests, integration tests, and widget tests.</p>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch active" onclick="toggleTool('build-optimization', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Enabled</span>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Deployment Category -->
-                    <div class="tools-category">
-                        <div class="category-header">
-                            <div class="category-icon deployment">🚀</div>
-                            <h3 class="category-title">Deployment</h3>
+                    <!-- Management Section -->
+                    <div class="tools-section">
+                        <div class="section-header" onclick="toggleToolsSection(this)">
+                            <div class="section-icon management">⚙️</div>
+                            <div class="section-details">
+                                <h3 class="section-title">Project Management</h3>
+                                <p class="section-subtitle">Task delegation, coordination, and project oversight tools</p>
+                            </div>
+                            <div class="section-toggle">▼</div>
                         </div>
-                        <div class="tools-grid">
-                            <div class="tool-card">
-                                <div class="tool-header">
-                                    <h3 class="tool-name">CI/CD Pipeline</h3>
-                                    <label class="tool-toggle">
-                                        <input type="checkbox" checked onchange="toggleTool('cicd-pipeline', this.checked)">
-                                        <span class="toggle-slider"></span>
-                                    </label>
+                        <div class="tools-content">
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Task Delegation</h4>
+                                        <p class="tool-description">Intelligently delegates tasks to appropriate specialized agents</p>
+                                    </div>
                                 </div>
-                                <p class="tool-description">Sets up and manages continuous integration and deployment pipelines.</p>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch active" onclick="toggleTool('task-delegation', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Enabled</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Progress Tracking</h4>
+                                        <p class="tool-description">Monitors and reports on task completion status across all agents</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch active" onclick="toggleTool('progress-tracking', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Enabled</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Resource Allocation</h4>
+                                        <p class="tool-description">Optimizes resource distribution and workload balancing</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch" onclick="toggleTool('resource-allocation', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Disabled</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testing Section -->
+                    <div class="tools-section collapsed">
+                        <div class="section-header" onclick="toggleToolsSection(this)">
+                            <div class="section-icon testing">🧪</div>
+                            <div class="section-details">
+                                <h3 class="section-title">Testing & Quality</h3>
+                                <p class="section-subtitle">Automated testing, quality assurance, and validation tools</p>
+                            </div>
+                            <div class="section-toggle">▶</div>
+                        </div>
+                        <div class="tools-content">
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Automated Testing</h4>
+                                        <p class="tool-description">Automatically generates and runs unit tests and integration tests</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch" onclick="toggleTool('automated-testing', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Disabled</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Coverage Analysis</h4>
+                                        <p class="tool-description">Provides detailed code coverage reports and suggestions</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch" onclick="toggleTool('coverage-analysis', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Disabled</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Performance Testing</h4>
+                                        <p class="tool-description">Runs performance benchmarks and identifies bottlenecks</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch active" onclick="toggleTool('performance-testing', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Enabled</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deployment Section -->
+                    <div class="tools-section collapsed">
+                        <div class="section-header" onclick="toggleToolsSection(this)">
+                            <div class="section-icon deployment">🚀</div>
+                            <div class="section-details">
+                                <h3 class="section-title">Deployment & CI/CD</h3>
+                                <p class="section-subtitle">Build automation, deployment pipelines, and release management</p>
+                            </div>
+                            <div class="section-toggle">▶</div>
+                        </div>
+                        <div class="tools-content">
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Build Pipeline</h4>
+                                        <p class="tool-description">Manages automated build processes for multiple platforms</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch active" onclick="toggleTool('build-pipeline', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Enabled</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Release Management</h4>
+                                        <p class="tool-description">Coordinates release cycles and deployment strategies</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch active" onclick="toggleTool('release-management', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Enabled</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Environment Management</h4>
+                                        <p class="tool-description">Manages development, staging, and production environments</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch" onclick="toggleTool('environment-management', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Disabled</span>
+                                </div>
+                            </div>
+
+                            <div class="tool-option">
+                                <div class="tool-info">
+                                    <div class="tool-status-dot"></div>
+                                    <div class="tool-details">
+                                        <h4 class="tool-name">Container Orchestration</h4>
+                                        <p class="tool-description">Manages Docker containers and Kubernetes deployments</p>
+                                    </div>
+                                </div>
+                                <div class="tool-toggle">
+                                    <div class="toggle-switch" onclick="toggleTool('container-orchestration', this)">
+                                        <div class="toggle-slider"></div>
+                                    </div>
+                                    <span class="toggle-label">Disabled</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1744,14 +2038,42 @@
         }
 
         // Tool functions
-        function toggleTool(toolId, enabled) {
-            console.log('Tool ' + toolId + ' ' + (enabled ? 'enabled' : 'disabled'));
+        function toggleTool(toolId, toggleElement) {
+            const label = toggleElement.parentElement.querySelector('.toggle-label');
             
+            if (toggleElement.classList.contains('active')) {
+                // Disable tool
+                toggleElement.classList.remove('active');
+                label.textContent = 'Disabled';
+            } else {
+                // Enable tool
+                toggleElement.classList.add('active');
+                label.textContent = 'Enabled';
+            }
+
             // Send to extension
             vscode.postMessage({
                 command: 'toggleTool',
-                data: { toolId: toolId, enabled: enabled, agent: currentAgent }
+                data: { 
+                    toolId: toolId, 
+                    enabled: toggleElement.classList.contains('active'),
+                    agent: currentAgent 
+                }
             });
+        }
+
+        function toggleToolsSection(header) {
+            const section = header.parentElement;
+            const content = section.querySelector('.tools-content');
+            const arrow = header.querySelector('.section-toggle');
+
+            section.classList.toggle('collapsed');
+            
+            if (section.classList.contains('collapsed')) {
+                arrow.textContent = '▶';
+            } else {
+                arrow.textContent = '▼';
+            }
         }
 
         // Modal functions

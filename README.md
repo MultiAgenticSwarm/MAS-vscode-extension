@@ -1,54 +1,54 @@
 # MultiAgent Swarm VS Code Extension
 
-🤖 **AI-Powered Multi-Agent Development Assistant**
+**AI-Powered Multi-Agent Development Assistant**
 
-> **🎭 Demo Branch (ycdemo)**: This branch contains a fully functional demonstration with simulated AI responses and interactive features. Perfect for showcasing multi-agent collaboration without requiring actual LLM API connections.
+> **Demo Branch (ycdemo)**: This branch contains a fully functional demonstration with simulated AI responses and interactive features. Perfect for showcasing multi-agent collaboration without requiring actual LLM API connections.
 
 Transform your VS Code development experience with intelligent AI agents that collaborate seamlessly to accelerate your coding workflow. MultiAgent Swarm brings specialized AI assistants directly into your editor, each optimized for different aspects of software development.
 
-## ✨ Features
+## Features
 
-### � **Demo Features (ycdemo Branch)**
+### **Demo Features (ycdemo Branch)**
 This demonstration branch showcases:
 
-- **🎯 Live Multi-Agent Collaboration**: Watch 4 specialized agents work together on real projects
-- **✨ Interactive Prompt Engineering**: Edit system prompts and see instant behavioral changes
-- **📝 Writer Agent Showcase**: Specialized agent with 4 tool categories demonstrating prompt editing workflow
-- **🔄 Dynamic Project Workflows**: Request "make me a basic notes app" and watch agents coordinate in real-time
-- **📊 Activity Logging**: Real-time activity feeds showing what each agent is working on
-- **💬 Contextual Responses**: Agents provide realistic, context-aware responses without requiring API connections
-- **⚡ Realistic Timing**: Simulated processing delays (1-3 seconds) for believable agent interactions
+- **Live Multi-Agent Collaboration**: Watch 4 specialized agents work together on real projects
+- **Interactive Prompt Engineering**: Edit system prompts and see instant behavioral changes
+- **Writer Agent Showcase**: Specialized agent with 4 tool categories demonstrating prompt editing workflow
+- **Dynamic Project Workflows**: Request "make me a basic notes app" and watch agents coordinate in real-time
+- **Activity Logging**: Real-time activity feeds showing what each agent is working on
+- **Contextual Responses**: Agents provide realistic, context-aware responses without requiring API connections
+- **Realistic Timing**: Simulated processing delays (1-3 seconds) for believable agent interactions
 
-### 🤖 **Demo Agents**
+### **Demo Agents**
 **Current Demo Configuration:**
-1. **🎯 Orchestrator Agent** - Coordinates tasks and delegates work between agents
-2. **🚀 CI/CD Agent** - Handles deployment pipelines, automation, and infrastructure
-3. **🧪 Tests Agent** - Manages test creation, quality assurance, and validation
-4. **✍️ Writer Agent** ⭐ - **Star Feature**: Demonstrates live prompt editing with immediate behavioral changes
+1. **Orchestrator Agent** - Coordinates tasks and delegates work between agents
+2. **CI/CD Agent** - Handles deployment pipelines, automation, and infrastructure
+3. **Tests Agent** - Manages test creation, quality assurance, and validation
+4. **Writer Agent**- **Star Feature**: Demonstrates live prompt editing with immediate behavioral changes
 
-### �🎯 **Multi-Agent System**
+### **Multi-Agent System**
 - **Specialized AI Agents**: Each agent is trained for specific development tasks
 - **Seamless Collaboration**: Agents work together to solve complex problems
 - **Real-time Communication**: Chat with agents and get instant responses
 - **Context-Aware Assistance**: Agents understand your project structure and codebase
 
-### 🔄 **Dynamic Swarm Selection**
+### **Dynamic Swarm Selection**
 Choose from specialized swarms tailored to your development needs:
 
-- **🌐 WebDevSwarm**: Frontend, Backend, and Orchestrator agents for web development
-- **📱 FlutterSwarm**: CI/CD, Tests, and Orchestrator agents for Flutter development
-- **📱 MobileSwarm**: Android, iOS, and Orchestrator agents for mobile development
-- **🧠 AISwarm**: ML, NLP, and Orchestrator agents for AI/ML projects
-- **📊 DataSwarm**: Data Analysis, Database, and Orchestrator agents for data projects
+- **WebDevSwarm**: Frontend, Backend, and Orchestrator agents for web development
+- **FlutterSwarm**: CI/CD, Tests, and Orchestrator agents for Flutter development
+- **MobileSwarm**: Android, iOS, and Orchestrator agents for mobile development
+- **AISwarm**: ML, NLP, and Orchestrator agents for AI/ML projects
+- **DataSwarm**: Data Analysis, Database, and Orchestrator agents for data projects
 
-### 🎨 **Modern, Intuitive Interface**
+### **Modern, Intuitive Interface**
 - **Floating Sidebar**: Clean, collapsible panel with glass-morphism design
 - **Agent Cards**: Visual representation of each agent with status indicators
 - **Real-time Chat**: Interactive chat interface with typing indicators
 - **Tool Management**: Enable/disable tools for each agent
 - **Configuration Panel**: Customize agents and system settings
 
-### 🛠️ **Agent Capabilities**
+### **Agent Capabilities**
 Each agent comes with specialized tools:
 
 - **Code Analysis**: Analyze code for best practices and potential issues
@@ -58,9 +58,9 @@ Each agent comes with specialized tools:
 - **CI/CD Pipeline**: Set up continuous integration and deployment
 - **Dependency Management**: Handle package dependencies and version conflicts
 
-## 🚀 Getting Started (Demo)
+## Getting Started (Demo)
 
-### 🎭 **Demo Experience**
+### **Demo Experience**
 1. **Install the Extension**: Load the extension in VS Code development mode
 2. **Open the Panel**: Click the robot icon in the Activity Bar or use `Ctrl+Shift+P` → "Open MultiAgent Swarm"
 3. **Try the Demo Features**:
@@ -69,22 +69,22 @@ Each agent comes with specialized tools:
    - **Edit prompts**: Select Writer Agent → Config → Edit system prompt → See instant changes
    - **Watch activity logs**: Observe real-time agent collaboration
 
-### 🎪 **Demo Scenarios to Try**
+### **Demo Scenarios to Try**
 - **"Create a basic notes app"** - Watch all 4 agents collaborate on project creation
 - **"Help me with testing"** - See Tests Agent provide specialized responses
 - **Edit Writer Agent prompt** - Add keywords like "casual", "technical", or "creative" to see behavioral changes
 - **Switch between agents** - Notice how each agent has specialized knowledge and responses
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Install the Extension**: Search for "MultiAgent Swarm" in VS Code Extensions
 2. **Open the Panel**: Click the robot icon in the Activity Bar or use `Ctrl+Shift+P` → "Open MultiAgent Swarm"
 3. **Select Your Swarm**: Choose the appropriate swarm for your project type
 4. **Start Chatting**: Interact with your AI agents in real-time
 
-## 🏃 How to Run
+## How to Run
 
-### 🎭 For Demo (ycdemo Branch)
+### For Demo (ycdemo Branch)
 This demo branch runs without requiring API keys or external services:
 
 1. **Clone Demo Branch**:
@@ -199,19 +199,19 @@ MAS-vscode-extension/
 └── README.md               # This file
 ```
 
-## 🎭 Demo Documentation
+## Demo Documentation
 
 ### Additional Demo Resources
-- **📋 DEMO_FEATURES.md** - Comprehensive overview of all demo features
-- **📝 PROMPT_EDITING_GUIDE.md** - Step-by-step guide for the prompt editing demonstration
-- **🎯 Interactive Examples** - Built-in examples for testing agent responses
+- **DEMO_FEATURES.md** - Comprehensive overview of all demo features
+- **PROMPT_EDITING_GUIDE.md** - Step-by-step guide for the prompt editing demonstration
+- **Interactive Examples** - Built-in examples for testing agent responses
 
-## 💻 Commands
+## Commands
 
 - `MultiAgent Swarm: Open Panel` - Open the main agent interface
 - `MultiAgent Swarm: Toggle Panel` - Toggle the agent panel visibility
 
-## ⚙️ Configuration
+## Configuration
 
 ### Agent Settings
 - **Agent Name**: Customize individual agent names
@@ -228,7 +228,7 @@ Enable or disable tools for each agent:
 - Testing Automation
 - CI/CD Pipeline
 
-## 🎯 Use Cases
+## Use Cases
 
 ### **Web Development**
 - Frontend agent handles UI/UX development
@@ -245,13 +245,13 @@ Enable or disable tools for each agent:
 - NLP agent specializes in natural language processing
 - Orchestrator coordinates AI workflow
 
-## 🔧 Technical Requirements
+## Technical Requirements
 
 - **VS Code Version**: 1.74.0 or higher
 - **Node.js**: Version 16.x or higher
 - **TypeScript**: 4.9.4 or higher
 
-## 📱 Interface Overview
+## Interface Overview
 
 ### Sidebar Features
 - **Collapsible Design**: Expandable/collapsible sidebar with smooth animations
@@ -265,23 +265,23 @@ Enable or disable tools for each agent:
 - **Typing Indicators**: Visual feedback when agents are responding
 - **Multi-agent Responses**: Coordinated responses from multiple agents
 
-## 🐛 Known Issues
+## Known Issues
 
 - Large codebases may require longer initial analysis time
 - Some LLM providers may have rate limits that affect response times
 - Complex multi-agent coordination may occasionally require manual intervention
 
-## 📝 Release Notes
+## Release Notes
 
 ### ycdemo Branch (Demo Version)
-- **🎭 Full Demo Implementation**: Complete simulation of multi-agent collaboration
-- **✨ Interactive Prompt Engineering**: Live demonstration of how prompt changes affect behavior
-- **📝 Writer Agent Showcase**: Specialized agent with 4 tool categories
-- **🔄 Multi-Agent Project Workflows**: Coordinated responses for complex requests
-- **📊 Real-Time Activity Logging**: Live updates showing agent coordination
-- **💬 Contextual Response System**: Intelligent responses without API dependencies
-- **🎨 Professional UI**: Glass-morphism design with smooth animations
-- **⚡ Realistic Timing**: Simulated processing delays for believable interactions
+- **Full Demo Implementation**: Complete simulation of multi-agent collaboration
+- **Interactive Prompt Engineering**: Live demonstration of how prompt changes affect behavior
+- **Writer Agent Showcase**: Specialized agent with 4 tool categories
+- **Multi-Agent Project Workflows**: Coordinated responses for complex requests
+- **Real-Time Activity Logging**: Live updates showing agent coordination
+- **Contextual Response System**: Intelligent responses without API dependencies
+- **Professional UI**: Glass-morphism design with smooth animations
+- **Realistic Timing**: Simulated processing delays for believable interactions
 
 ### 1.0.0
 - Initial release of MultiAgent Swarm

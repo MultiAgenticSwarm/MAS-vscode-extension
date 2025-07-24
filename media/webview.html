@@ -2041,6 +2041,27 @@
                             </button>
                         </div>
                     </div>
+
+                    <div class="agent-card" data-agent="writer">
+                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'writer')">
+                            <div class="agent-name">
+                                <div class="agent-avatar" style="background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));">✍️</div>
+                                <span>Writer Agent</span>
+                            </div>
+                            <div class="agent-status active"></div>
+                        </div>
+                        <div class="agent-tools">4 tools enabled</div>
+                        <div class="agent-actions">
+                            <button class="agent-action-btn" onclick="openAgentConfig('writer')" title="Configuration">
+                                <span>⚙️</span>
+                                <span>Config</span>
+                            </button>
+                            <button class="agent-action-btn" onclick="openAgentTools('writer')" title="Tools">
+                                <span>🛠️</span>
+                                <span>Tools</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -2111,7 +2132,7 @@
                     </div>
                     <div class="chat-status">
                         <div class="status-indicator"></div>
-                        <span id="chatStatusText">3 agents online • Ready to collaborate</span>
+                        <span id="chatStatusText">4 agents online • Ready to collaborate</span>
                     </div>
                 </div>
 
@@ -2396,6 +2417,62 @@
                     maxConcurrentTasks: 4,
                     memoryManagement: 'aggressive',
                     collaborationRules: 'Tests Agent validates all code changes → Runs comprehensive test suites → Reports results to Orchestrator and CI/CD Agent'
+                }
+            },
+            writer: {
+                name: 'Writer Agent',
+                avatar: '✍️',
+                gradient: 'linear-gradient(135deg, var(--accent-orange), var(--accent-red))',
+                tools: 4,
+                enabledTools: ['content-generation', 'documentation', 'style-adaptation', 'grammar-checking'],
+                toolSections: {
+                    'content': {
+                        title: 'Content Creation',
+                        subtitle: 'Generate various types of written content',
+                        icon: '📝',
+                        tools: [
+                            { id: 'content-generation', name: 'Content Generation', description: 'Creates blogs, articles, and marketing copy', enabled: true },
+                            { id: 'copywriting', name: 'Copywriting', description: 'Writes persuasive marketing and sales content', enabled: false },
+                            { id: 'creative-writing', name: 'Creative Writing', description: 'Produces creative stories and narratives', enabled: false }
+                        ]
+                    },
+                    'documentation': {
+                        title: 'Documentation',
+                        subtitle: 'Technical and user documentation',
+                        icon: '📚',
+                        tools: [
+                            { id: 'documentation', name: 'Documentation', description: 'Creates comprehensive technical documentation', enabled: true },
+                            { id: 'api-docs', name: 'API Documentation', description: 'Generates API reference documentation', enabled: false },
+                            { id: 'user-guides', name: 'User Guides', description: 'Creates user-friendly guides and tutorials', enabled: false }
+                        ]
+                    },
+                    'editing': {
+                        title: 'Editing & Style',
+                        subtitle: 'Content refinement and style adaptation',
+                        icon: '✨',
+                        tools: [
+                            { id: 'style-adaptation', name: 'Style Adaptation', description: 'Adapts content tone and style for different audiences', enabled: true },
+                            { id: 'grammar-checking', name: 'Grammar Checking', description: 'Reviews and corrects grammar and syntax', enabled: true },
+                            { id: 'proofreading', name: 'Proofreading', description: 'Final review and polish of written content', enabled: false }
+                        ]
+                    },
+                    'analysis': {
+                        title: 'Content Analysis',
+                        subtitle: 'Content performance and optimization',
+                        icon: '📊',
+                        tools: [
+                            { id: 'readability', name: 'Readability Analysis', description: 'Analyzes content readability and accessibility', enabled: false },
+                            { id: 'seo-optimization', name: 'SEO Optimization', description: 'Optimizes content for search engines', enabled: false }
+                        ]
+                    }
+                },
+                config: {
+                    systemPrompt: 'You are a professional writer agent specialized in creating clear, engaging, and well-structured content. Write in a professional, informative tone suitable for technical audiences.',
+                    llmProvider: 'openai-gpt4',
+                    responseTimeout: 4000,
+                    maxConcurrentTasks: 3,
+                    memoryManagement: 'auto',
+                    collaborationRules: 'Writer Agent creates content based on requirements → Reviews and refines based on feedback → Collaborates with other agents for technical accuracy'
                 }
             }
         };
@@ -2757,6 +2834,28 @@
                 }, 2500);
             }, 6000);
 
+            // Writer Agent creates documentation
+            setTimeout(() => {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const writerResponse = `✍️ <strong>Documentation Creation:</strong><br>Preparing comprehensive documentation for your notes app...<br><br>` +
+                        `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                        `<strong>Documentation Suite:</strong><br>` +
+                        `📋 README.md with setup instructions<br>` +
+                        `📚 API documentation and examples<br>` +
+                        `👥 User guide and tutorials<br>` +
+                        `🔧 Developer contributing guidelines<br><br>` +
+                        `📝 Style: Clear, professional, and user-friendly<br>` +
+                        `🎯 Audience: Developers and end users</div>`;
+                    
+                    addMessage('agent', agents.writer.name, writerResponse, 
+                              agents.writer.avatar, agents.writer.gradient);
+                    
+                    addLogEntry('writer', 'Documentation: README, API docs, user guides created', '✓ Documented', 'success');
+                }, 2200);
+            }, 8500);
+
             // Final orchestrator summary
             setTimeout(() => {
                 showTypingIndicator();
@@ -2777,7 +2876,7 @@
                     
                     addLogEntry('orchestrator', 'Project setup completed: Ready for development', '✅ Ready', 'success');
                 }, 1800);
-            }, 9000);
+            }, 11000);
         }
 
         function handleGeneralRequest(message) {
@@ -2822,6 +2921,16 @@
                         `📈 <strong>Approach:</strong><br>• Functional testing strategy<br>• Performance benchmarks<br>• Security validation<br>• User acceptance criteria`,
                         
                         `⚡ <strong>Quality Pipeline:</strong><br>Testing infrastructure initialized and ready for validation cycles.`
+                    ],
+                    writer: [
+                        `✍️ <strong>Content Creation:</strong><br>Analyzing your content request: "${message}"<br><br>` +
+                        `<div style="background: var(--input-bg); padding: 8px; border-radius: 6px; margin-top: 8px;">` +
+                        `📝 Content type identified<br>🎯 Target audience analyzed<br>📚 Style guidelines applied<br>✨ Draft ready for review</div>`,
+                        
+                        `📝 <strong>Professional Writing:</strong><br>Content developed with clear, engaging structure for "${message}"<br><br>` +
+                        `📈 <strong>Approach:</strong><br>• Clear, informative tone<br>• Technical accuracy<br>• Professional formatting<br>• Audience-appropriate language`,
+                        
+                        `📚 <strong>Documentation Ready:</strong><br>Content crafted with professional standards and technical precision.`
                     ]
                 };
 
@@ -2933,7 +3042,14 @@
                 if (field === 'name') {
                     updateAgentName(value);
                 } else {
+                    // Store old value for comparison
+                    const oldValue = agents[currentAgent].config[field];
                     agents[currentAgent].config[field] = value;
+
+                    // Special handling for system prompt changes to demonstrate the effect
+                    if (field === 'systemPrompt' && currentAgent === 'writer' && oldValue !== value) {
+                        demonstratePromptChange(oldValue, value);
+                    }
                     
                     // Send config update to extension
                     vscode.postMessage({
@@ -2946,6 +3062,39 @@
                         }
                     });
                 }
+            }
+        }
+
+        function demonstratePromptChange(oldPrompt, newPrompt) {
+            setTimeout(() => {
+                // First, show the "before" example with old prompt
+                const beforeMessage = `📝 <strong>System Prompt Analysis:</strong><br>Let me demonstrate how prompt changes affect my responses.<br><br>` +
+                    `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-bottom: 12px; border-left: 4px solid var(--accent-red);">` +
+                    `<strong>Previous Prompt:</strong><br>"${oldPrompt.substring(0, 100)}${oldPrompt.length > 100 ? '...' : ''}"<br><br>` +
+                    `<strong>Sample Response (Previous Style):</strong><br>` +
+                    `"This document provides comprehensive technical specifications for the proposed solution. The implementation follows industry best practices and ensures optimal performance metrics."</div>` +
+                    
+                    `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; border-left: 4px solid var(--accent-green);">` +
+                    `<strong>Updated Prompt:</strong><br>"${newPrompt.substring(0, 100)}${newPrompt.length > 100 ? '...' : ''}"<br><br>` +
+                    `<strong>Sample Response (New Style):</strong><br>` +
+                    getResponseForPrompt(newPrompt) + `</div>`;
+
+                addMessage('agent', agents.writer.name, beforeMessage, agents.writer.avatar, agents.writer.gradient);
+                addLogEntry('writer', 'System prompt updated: Demonstrating response changes', '📝 Modified', 'modified');
+            }, 500);
+        }
+
+        function getResponseForPrompt(prompt) {
+            if (prompt.toLowerCase().includes('casual') || prompt.toLowerCase().includes('friendly')) {
+                return `"Hey! So here's the deal with this solution - it's pretty awesome and follows all the best practices. You're gonna love how smooth everything runs!"`;
+            } else if (prompt.toLowerCase().includes('technical') || prompt.toLowerCase().includes('detailed')) {
+                return `"Technical Analysis: Implementation utilizes advanced algorithms with O(n log n) complexity. System architecture incorporates microservices pattern with containerized deployment strategy."`;
+            } else if (prompt.toLowerCase().includes('creative') || prompt.toLowerCase().includes('engaging')) {
+                return `"Picture this: a solution that dances through your requirements like a master chef creating the perfect recipe. Every component harmonizes beautifully with the next!"`;
+            } else if (prompt.toLowerCase().includes('concise') || prompt.toLowerCase().includes('brief')) {
+                return `"Solution: Fast, reliable, scalable. Done."`;
+            } else {
+                return `"This solution effectively addresses your requirements with a balanced approach to functionality and performance."`;
             }
         }
 

@@ -460,6 +460,10 @@
             background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
         }
 
+        .swarm-icon.python-icon {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        }
+
         .swarm-icon.custom-icon {
             background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
         }
@@ -2376,15 +2380,19 @@
                     <div class="logo-subtitle">AI Development Assistant</div>
                     <div class="swarm-selector" id="swarmSelector">
                         <div class="swarm-dropdown" onclick="toggleSwarmDropdown()">
-                            <span class="dropdown-text" id="selectedSwarm"><span class="swarm-icon web-icon" style="margin-right: 8px; width: 20px; height: 20px; font-size: 12px;">W</span>WebDevSwarm</span>
+                            <span class="dropdown-text" id="selectedSwarm"><span class="swarm-icon python-icon" style="margin-right: 8px; width: 20px; height: 20px; font-size: 12px;">P</span>PythonSwarm</span>
                             <span class="dropdown-arrow">▼</span>
                         </div>
                         <div class="swarm-dropdown-menu" id="swarmDropdownMenu">
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('PythonSwarm')" data-icon="🐍">
+                                <span class="swarm-icon python-icon">P</span>
+                                <span class="swarm-name">PythonSwarm</span>
+                            </div>
                             <div class="swarm-dropdown-option" onclick="selectSwarm('FlutterSwarm')" data-icon="📱">
                                 <span class="swarm-icon flutter-icon">F</span>
                                 <span class="swarm-name">FlutterSwarm</span>
                             </div>
-                            <div class="swarm-dropdown-option selected" onclick="selectSwarm('WebDevSwarm')" data-icon="🌐">
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('WebDevSwarm')" data-icon="🌐">
                                 <span class="swarm-icon web-icon">W</span>
                                 <span class="swarm-name">WebDevSwarm</span>
                             </div>
@@ -2399,6 +2407,10 @@
                             <div class="swarm-dropdown-option" onclick="selectSwarm('DataSwarm')" data-icon="📊">
                                 <span class="swarm-icon data-icon">D</span>
                                 <span class="swarm-name">DataSwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-option" onclick="selectSwarm('PythonSwarm')" data-icon="🐍">
+                                <span class="swarm-icon python-icon">P</span>
+                                <span class="swarm-name">PythonSwarm</span>
                             </div>
                             <div class="swarm-dropdown-separator"></div>
                             <div class="swarm-dropdown-option ai-generate" onclick="closeSwarmDropdown(); openModal('aiGenerateSwarmModal')" data-icon="🤖">
@@ -3168,8 +3180,220 @@
                     memoryManagement: 'auto',
                     collaborationRules: 'Writer Agent creates content based on requirements → Reviews and refines based on feedback → Collaborates with other agents for technical accuracy'
                 }
+            },
+            python_dev: {
+                name: 'Python Developer',
+                avatar: '🐍',
+                gradient: 'linear-gradient(135deg, #3776ab, #ffd43b)',
+                tools: 6,
+                enabledTools: ['flask-framework', 'sqlite-database', 'python-templating', 'file-management', 'web-development', 'error-handling'],
+                toolSections: {
+                    'development': {
+                        title: 'Python Development',
+                        subtitle: 'Core Python development and web frameworks',
+                        icon: '🐍',
+                        tools: [
+                            { id: 'flask-framework', name: 'Flask Framework', description: 'Creates web applications using Flask framework', enabled: true },
+                            { id: 'django-framework', name: 'Django Framework', description: 'Builds applications with Django framework', enabled: false },
+                            { id: 'fastapi-framework', name: 'FastAPI Framework', description: 'Develops APIs using FastAPI', enabled: false },
+                            { id: 'python-templating', name: 'Python Templating', description: 'Creates Jinja2 templates and HTML rendering', enabled: true },
+                            { id: 'web-development', name: 'Web Development', description: 'Full-stack Python web development', enabled: true }
+                        ]
+                    },
+                    'database': {
+                        title: 'Database',
+                        subtitle: 'Database management and ORM',
+                        icon: '🗄️',
+                        tools: [
+                            { id: 'sqlite-database', name: 'SQLite Database', description: 'Manages SQLite databases and queries', enabled: true },
+                            { id: 'sqlalchemy-orm', name: 'SQLAlchemy ORM', description: 'Object-relational mapping with SQLAlchemy', enabled: false },
+                            { id: 'database-migration', name: 'Database Migration', description: 'Handles database schema migrations', enabled: false }
+                        ]
+                    },
+                    'utilities': {
+                        title: 'Utilities',
+                        subtitle: 'File management and error handling',
+                        icon: '🛠️',
+                        tools: [
+                            { id: 'file-management', name: 'File Management', description: 'Handles file operations and structure', enabled: true },
+                            { id: 'error-handling', name: 'Error Handling', description: 'Implements robust error handling and logging', enabled: true },
+                            { id: 'code-organization', name: 'Code Organization', description: 'Structures and organizes Python projects', enabled: false }
+                        ]
+                    }
+                },
+                config: {
+                    systemPrompt: 'You are a Python developer agent specialized in creating web applications, managing databases, and building robust Python applications. Focus on Flask web development, SQLite databases, and clean code architecture.',
+                    llmProvider: 'openai-gpt4',
+                    responseTimeout: 5000,
+                    maxConcurrentTasks: 4,
+                    memoryManagement: 'auto',
+                    collaborationRules: 'Python Developer creates backend logic → Implements database models → Collaborates with Frontend Agent for UI integration'
+                }
+            },
+            frontend_dev: {
+                name: 'Frontend Developer',
+                avatar: '🎨',
+                gradient: 'linear-gradient(135deg, #61dafb, #21759b)',
+                tools: 5,
+                enabledTools: ['html-css', 'javascript', 'responsive-design', 'ui-components', 'form-handling'],
+                toolSections: {
+                    'styling': {
+                        title: 'Styling & Design',
+                        subtitle: 'CSS, responsive design, and UI components',
+                        icon: '🎨',
+                        tools: [
+                            { id: 'html-css', name: 'HTML & CSS', description: 'Creates semantic HTML and responsive CSS', enabled: true },
+                            { id: 'responsive-design', name: 'Responsive Design', description: 'Builds mobile-first responsive layouts', enabled: true },
+                            { id: 'ui-components', name: 'UI Components', description: 'Designs reusable UI components', enabled: true },
+                            { id: 'css-frameworks', name: 'CSS Frameworks', description: 'Implements Bootstrap, Tailwind CSS', enabled: false }
+                        ]
+                    },
+                    'interaction': {
+                        title: 'User Interaction',
+                        subtitle: 'JavaScript and form handling',
+                        icon: '⚡',
+                        tools: [
+                            { id: 'javascript', name: 'JavaScript', description: 'Implements interactive functionality with vanilla JS', enabled: true },
+                            { id: 'form-handling', name: 'Form Handling', description: 'Creates and validates interactive forms', enabled: true },
+                            { id: 'dom-manipulation', name: 'DOM Manipulation', description: 'Dynamic content updates and event handling', enabled: false }
+                        ]
+                    },
+                    'optimization': {
+                        title: 'Performance',
+                        subtitle: 'Frontend optimization and best practices',
+                        icon: '⚡',
+                        tools: [
+                            { id: 'performance-optimization', name: 'Performance Optimization', description: 'Optimizes frontend performance and loading', enabled: false },
+                            { id: 'accessibility', name: 'Accessibility', description: 'Ensures WCAG compliance and accessibility', enabled: false }
+                        ]
+                    }
+                },
+                config: {
+                    systemPrompt: 'You are a frontend developer agent specialized in creating beautiful, responsive, and interactive user interfaces. Focus on HTML, CSS, JavaScript, and modern web design principles.',
+                    llmProvider: 'claude',
+                    responseTimeout: 4500,
+                    maxConcurrentTasks: 3,
+                    memoryManagement: 'auto',
+                    collaborationRules: 'Frontend Developer creates UI components → Implements responsive design → Integrates with Python Developer\'s backend APIs'
+                }
+            },
+            qa_tester: {
+                name: 'QA Tester',
+                avatar: '🧪',
+                gradient: 'linear-gradient(135deg, #10b981, #059669)',
+                tools: 4,
+                enabledTools: ['unit-testing', 'integration-testing', 'manual-testing', 'bug-reporting'],
+                toolSections: {
+                    'testing': {
+                        title: 'Automated Testing',
+                        subtitle: 'Unit and integration testing',
+                        icon: '🤖',
+                        tools: [
+                            { id: 'unit-testing', name: 'Unit Testing', description: 'Creates comprehensive unit tests with pytest', enabled: true },
+                            { id: 'integration-testing', name: 'Integration Testing', description: 'Tests component integration and API endpoints', enabled: true },
+                            { id: 'test-coverage', name: 'Test Coverage', description: 'Analyzes and improves test coverage', enabled: false }
+                        ]
+                    },
+                    'validation': {
+                        title: 'Manual Testing',
+                        subtitle: 'User experience and functionality testing',
+                        icon: '👤',
+                        tools: [
+                            { id: 'manual-testing', name: 'Manual Testing', description: 'Performs manual testing and usability validation', enabled: true },
+                            { id: 'user-acceptance', name: 'User Acceptance Testing', description: 'Validates user requirements and acceptance criteria', enabled: false },
+                            { id: 'cross-browser', name: 'Cross-browser Testing', description: 'Tests compatibility across different browsers', enabled: false }
+                        ]
+                    },
+                    'reporting': {
+                        title: 'Quality Assurance',
+                        subtitle: 'Bug tracking and quality reports',
+                        icon: '📋',
+                        tools: [
+                            { id: 'bug-reporting', name: 'Bug Reporting', description: 'Documents and tracks bugs with detailed reports', enabled: true },
+                            { id: 'quality-metrics', name: 'Quality Metrics', description: 'Tracks quality metrics and improvement areas', enabled: false }
+                        ]
+                    }
+                },
+                config: {
+                    systemPrompt: 'You are a QA tester agent specialized in ensuring application quality through comprehensive testing. Focus on automated testing with pytest, manual testing procedures, and detailed bug reporting.',
+                    llmProvider: 'claude',
+                    responseTimeout: 4000,
+                    maxConcurrentTasks: 3,
+                    memoryManagement: 'auto',
+                    collaborationRules: 'QA Tester validates all code changes → Runs test suites → Reports issues to development team → Ensures quality before deployment'
+                }
             }
         };
+
+        // Swarm configurations - defines which agents appear for each swarm
+        const swarmConfigurations = {
+            'WebDevSwarm': ['orchestrator', 'cicd', 'tests', 'writer'],
+            'FlutterSwarm': ['orchestrator', 'cicd', 'tests'],
+            'MobileSwarm': ['orchestrator', 'cicd', 'tests'],
+            'AISwarm': ['orchestrator', 'cicd', 'tests', 'writer'],
+            'DataSwarm': ['orchestrator', 'cicd', 'tests', 'writer'],
+            'PythonSwarm': ['orchestrator', 'python_dev', 'frontend_dev', 'qa_tester']
+        };
+
+        let currentSwarm = 'PythonSwarm';
+
+        function renderAgentsForSwarm(swarmName) {
+            console.log('DEBUG: renderAgentsForSwarm called with:', swarmName);
+            const agentsList = document.getElementById('agentsList');
+            const agentIds = swarmConfigurations[swarmName] || swarmConfigurations['WebDevSwarm'];
+            
+            console.log('DEBUG: agentIds for', swarmName, ':', agentIds);
+            console.log('DEBUG: agentsList element:', agentsList);
+            
+            // Clear current agents
+            agentsList.innerHTML = '';
+            
+            // Render agents for this swarm
+            agentIds.forEach((agentId, index) => {
+                const agent = agents[agentId];
+                console.log('DEBUG: Processing agent', agentId, ':', agent);
+                if (!agent) {
+                    console.log('DEBUG: Agent', agentId, 'not found in agents object!');
+                    return;
+                }
+                
+                const isActive = index === 0 ? 'active' : '';
+                const agentCard = `
+                    <div class="agent-card ${isActive}" data-agent="${agentId}">
+                        <div class="agent-header" onclick="selectAgent(this.parentElement, '${agentId}')">
+                            <div class="agent-name">
+                                <div class="agent-avatar" style="background: ${agent.gradient};">${agent.avatar}</div>
+                                <span>${agent.name}</span>
+                            </div>
+                            <div class="agent-status active"></div>
+                        </div>
+                        <div class="agent-tools">${agent.tools} tools enabled</div>
+                        <div class="agent-actions">
+                            <button class="agent-action-btn" onclick="openAgentConfig('${agentId}')" title="Configuration">
+                                <span>⚙️</span>
+                                <span>Config</span>
+                            </button>
+                            <button class="agent-action-btn" onclick="openAgentTools('${agentId}')" title="Tools">
+                                <span>🛠️</span>
+                                <span>Tools</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                agentsList.innerHTML += agentCard;
+                console.log('DEBUG: Added agent card for', agentId);
+            });
+            
+            console.log('DEBUG: Final agentsList innerHTML length:', agentsList.innerHTML.length);
+            
+            // Set first agent as current if it exists
+            if (agentIds.length > 0) {
+                currentAgent = agentIds[0];
+                updateMainTitle();
+                updateChatHeader();
+                console.log('DEBUG: Set currentAgent to:', currentAgent);
+            }
+        }
 
         function initializeAgentToolsCounts() {
             // Initialize tools count for all agents
@@ -3178,12 +3402,26 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DEBUG: DOMContentLoaded fired');
+            console.log('DEBUG: currentSwarm:', currentSwarm);
+            console.log('DEBUG: swarmConfigurations:', swarmConfigurations);
+            console.log('DEBUG: PythonSwarm agents:', swarmConfigurations['PythonSwarm']);
+            console.log('DEBUG: agents object:', agents);
+            
             updateMainTitle();
             autoResizeAllTextareas();
+            
+            // Initialize with PythonSwarm agents
+            console.log('DEBUG: Rendering agents for PythonSwarm');
+            renderAgentsForSwarm('PythonSwarm');
             
             // Initialize tools count for all agents
             setTimeout(() => {
                 initializeAgentToolsCounts();
+                
+                // Force refresh agents after a short delay
+                console.log('DEBUG: Force refreshing agents');
+                renderAgentsForSwarm('PythonSwarm');
             }, 200);
 
             // Setup custom tool category dropdown handler
@@ -3468,36 +3706,161 @@
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
 
-            if (!message) return;
+            console.log('DEBUG: sendMessage called with:', message);
+            console.log('DEBUG: currentSwarm:', currentSwarm);
 
-            // Add user message
-            addMessage('user', 'You', message);
-            input.value = '';
-            autoResizeTextarea(input);
-
-            // Show typing indicator
-            showTypingIndicator();
-
-            // Check if this is a project creation request
-            const isProjectRequest = message.toLowerCase().includes('app') || 
-                                   message.toLowerCase().includes('create') || 
-                                   message.toLowerCase().includes('build') ||
-                                   message.toLowerCase().includes('develop');
-
-            if (isProjectRequest) {
-                handleProjectRequest(message);
+            // Add user message if there is one, otherwise use default demo message
+            const demoMessage = message || 'Create a Python todo app';
+            
+            if (message) {
+                addMessage('user', 'You', message);
+                input.value = '';
+                autoResizeTextarea(input);
             } else {
-                handleGeneralRequest(message);
+                // Show default message for demo
+                addMessage('user', 'You', demoMessage);
             }
 
-            // Send message to extension
-            vscode.postMessage({
-                command: 'sendMessage',
-                data: { agent: currentAgent, message: message }
-            });
+            // ALWAYS TRIGGER DEMO - works with or without input
+            console.log('DEBUG: TRIGGERING PYTHON DEMO');
+            
+            // Start the demo sequence
+            triggerPythonDemo(demoMessage);
+            return;
+        }
+
+        function triggerPythonDemo(originalMessage) {
+            console.log('DEBUG: triggerPythonDemo called with:', originalMessage);
+            
+            // Clear any existing typing indicators
+            hideTypingIndicator();
+            
+            // Start the demo sequence
+            console.log('DEBUG: Starting demo sequence');
+            
+            // Orchestrator response
+            setTimeout(() => {
+                const orchestratorResponse = `🎯 <strong>Python Todo App Project Analysis:</strong><br>Coordinating development of your todo application using Python stack.<br><br>` +
+                    `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                    `<strong>🐍 Python Development Plan:</strong><br>` +
+                    `• Backend: Flask web framework ✓<br>` +
+                    `• Database: SQLite with persistence ✓<br>` +
+                    `• Frontend: HTML/CSS/JavaScript UI ✓<br>` +
+                    `• Testing: Comprehensive QA testing ✓<br><br>` +
+                    `Delegating to Python development specialists...</div>`;
+                
+                addMessage('agent', 'Orchestrator Agent', orchestratorResponse, '🎯', 'linear-gradient(135deg, #667eea, #764ba2)');
+                addLogEntry('orchestrator', 'Python Todo App coordination: Flask + SQLite stack', '🔄 Coordinating', 'coordinating');
+                
+                // Trigger file creation in extension - IMPORTANT: This creates the files
+                console.log('DEBUG: Sending file creation message to extension');
+                vscode.postMessage({
+                    command: 'pythonTodoDemo',
+                    data: { message: originalMessage || 'Create a Python todo app with Flask and SQLite' }
+                });
+            }, 1000);
+            
+            // Python Developer response
+            setTimeout(() => {
+                const pythonDevResponse = `🐍 <strong>Flask Backend Development:</strong><br>Creating the todo app backend with Flask and SQLite...<br><br>` +
+                    `<div style="background: #1a1a1a; color: #00ff00; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 11px; margin-top: 8px;">` +
+                    `<span style="color: #888;">$</span> pip install Flask<br>` +
+                    `<span style="color: #4fc3f7;">✓</span> Flask installed successfully<br>` +
+                    `<span style="color: #888;">$</span> Creating app.py with routes...<br>` +
+                    `<span style="color: #4fc3f7;">✓</span> POST /api/todos - Add new todo<br>` +
+                    `<span style="color: #4fc3f7;">✓</span> GET /api/todos - List all todos<br>` +
+                    `<span style="color: #4fc3f7;">✓</span> PUT /api/todos/:id - Update todo<br>` +
+                    `<span style="color: #4fc3f7;">✓</span> DELETE /api/todos/:id - Delete todo<br>` +
+                    `<span style="color: #888;">$</span> SQLite database initialized</div><br>` +
+                    `<strong>Features implemented:</strong> CRUD operations, data persistence, RESTful API`;
+                
+                addMessage('agent', 'Python Developer', pythonDevResponse, '🐍', 'linear-gradient(135deg, #3b82f6, #1d4ed8)');
+                addLogEntry('python_dev', 'Flask API: CRUD routes created, SQLite database setup', '✓ Backend Ready', 'success');
+            }, 3000);
+            
+            // Frontend Developer response  
+            setTimeout(() => {
+                const frontendResponse = `🎨 <strong>Todo App UI Development:</strong><br>Building responsive frontend interface...<br><br>` +
+                    `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                    `<strong>🎨 Frontend Components Created:</strong><br>` +
+                    `✅ Todo input form with validation<br>` +
+                    `✅ Todo list with edit/delete actions<br>` +
+                    `✅ Status toggle (completed/pending)<br>` +
+                    `✅ Filter controls (all/active/completed)<br>` +
+                    `✅ Responsive CSS with mobile support<br>` +
+                    `✅ JavaScript for API integration<br><br>` +
+                    `<strong>Design:</strong> Clean, modern, user-friendly interface</div>`;
+                
+                addMessage('agent', 'Frontend Developer', frontendResponse, '🎨', 'linear-gradient(135deg, #61dafb, #21759b)');
+                addLogEntry('frontend_dev', 'UI Components: Forms, lists, filters with responsive design', '✓ Frontend Ready', 'success');
+            }, 6000);
+            
+            // QA Tester response
+            setTimeout(() => {
+                const qaResponse = `🧪 <strong>Quality Assurance Complete:</strong><br>Comprehensive testing of Python todo application...<br><br>` +
+                    `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                    `<strong>🧪 Testing Results:</strong><br>` +
+                    `✅ Unit Tests (6/6 passed, 100% coverage)<br>` +
+                    `✅ Integration Tests (API endpoints working)<br>` +
+                    `✅ Frontend Tests (UI interactions verified)<br>` +
+                    `✅ Manual Testing (User workflow validated)<br>` +
+                    `✅ Cross-browser Testing (Chrome, Firefox, Safari)<br><br>` +
+                    `<strong>Status:</strong> Production ready! 🚀</div>`;
+                
+                addMessage('agent', 'QA Tester', qaResponse, '🧪', 'linear-gradient(135deg, #10b981, #059669)');
+                addLogEntry('qa_tester', 'Testing complete: 100% test coverage, all validations passed', '✅ QA Approved', 'success');
+            }, 9000);
+            
+            // Final summary
+            setTimeout(() => {
+                const finalResponse = `🎉 <strong>Python Todo App Complete!</strong><br>Your Flask-based todo application is ready!<br><br>` +
+                    `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                    `<strong>📁 Project Structure:</strong><br>` +
+                    `├── app.py (Flask backend)<br>` +
+                    `├── templates/index.html (UI)<br>` +
+                    `├── static/style.css (Styling)<br>` +
+                    `├── static/script.js (JavaScript)<br>` +
+                    `└── requirements.txt (Dependencies)<br><br>` +
+                    `<strong>🔧 Tech Stack:</strong> Python Flask, SQLite, HTML/CSS/JS<br>` +
+                    `<strong>🚀 Ready to run:</strong> cd python-todo-demo && python app.py</div>`;
+                
+                addMessage('agent', 'Orchestrator Agent', finalResponse, '🎯', 'linear-gradient(135deg, #667eea, #764ba2)');
+                addLogEntry('orchestrator', 'Python Todo App: Complete Flask application ready', '🎉 Deployed', 'success');
+            }, 12000);
         }
 
         function handleProjectRequest(message) {
+            // Check if we're using PythonSwarm and handle Python app creation
+            const lowerMessage = message.toLowerCase();
+            console.log('DEBUG: handleProjectRequest called');
+            console.log('DEBUG: lowerMessage:', lowerMessage);
+            console.log('DEBUG: currentSwarm:', currentSwarm);
+            
+            const pythonDetected = lowerMessage.includes('python');
+            const flaskDetected = lowerMessage.includes('flask');
+            const sqliteDetected = lowerMessage.includes('sqlite');
+            const todoDetected = lowerMessage.includes('todo');
+            const taskDetected = lowerMessage.includes('task');
+            
+            console.log('DEBUG: Detection results:', {
+                pythonDetected,
+                flaskDetected,
+                sqliteDetected,
+                todoDetected,
+                taskDetected
+            });
+            
+            if (currentSwarm === 'PythonSwarm' && 
+                (lowerMessage.includes('python') && (lowerMessage.includes('flask') || lowerMessage.includes('sqlite'))) ||
+                (lowerMessage.includes('todo') || lowerMessage.includes('task'))) {
+                console.log('DEBUG: Python demo triggered!');
+                handlePythonTodoRequest(message);
+                return;
+            }
+            
+            console.log('DEBUG: Python demo NOT triggered, using default handling');
+            
+            // Default project request handling for other swarms
             // First, Orchestrator responds
             setTimeout(() => {
                 hideTypingIndicator();
@@ -3601,6 +3964,128 @@
                               agents.orchestrator.avatar, agents.orchestrator.gradient);
                     
                     addLogEntry('orchestrator', 'Project setup completed: Ready for development', '✅ Ready', 'success');
+                }, 1800);
+            }, 11000);
+        }
+
+        function handlePythonTodoRequest(message) {
+            console.log('DEBUG: handlePythonTodoRequest called with:', message);
+            
+            // First, Orchestrator responds with Python-specific coordination
+            setTimeout(() => {
+                hideTypingIndicator();
+                console.log('DEBUG: Adding orchestrator response');
+                const orchestratorResponse = `🎯 <strong>Python Todo App Project Analysis:</strong><br>Coordinating development of your todo application using Python stack.<br><br>` +
+                    `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                    `<strong>🐍 Python Development Plan:</strong><br>` +
+                    `• Backend: Flask web framework ⏳<br>` +
+                    `• Database: SQLite with persistence ⏳<br>` +
+                    `• Frontend: HTML/CSS/JavaScript UI ⏳<br>` +
+                    `• Testing: Comprehensive QA testing ⏳<br><br>` +
+                    `Delegating to Python development specialists...</div>`;
+                
+                addMessage('agent', agents.orchestrator.name, orchestratorResponse, 
+                          agents.orchestrator.avatar, agents.orchestrator.gradient);
+                
+                addLogEntry('orchestrator', `Python Todo App coordination: Flask + SQLite stack`, '🔄 Coordinating', 'coordinating');
+            }, 1500);
+
+            // Python Developer starts backend development
+            setTimeout(() => {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const pythonDevResponse = `🐍 <strong>Flask Backend Development:</strong><br>Creating the todo app backend with Flask and SQLite...<br><br>` +
+                        `<div style="background: #1a1a1a; color: #00ff00; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 11px; margin-top: 8px;">` +
+                        `<span style="color: #888;">$</span> pip install Flask SQLAlchemy<br>` +
+                        `<span style="color: #4fc3f7;">✓</span> Flask installed successfully<br>` +
+                        `<span style="color: #888;">$</span> Creating app.py with routes...<br>` +
+                        `<span style="color: #4fc3f7;">✓</span> POST /api/todos - Add new todo<br>` +
+                        `<span style="color: #4fc3f7;">✓</span> GET /api/todos - List all todos<br>` +
+                        `<span style="color: #4fc3f7;">✓</span> PUT /api/todos/:id - Update todo<br>` +
+                        `<span style="color: #4fc3f7;">✓</span> DELETE /api/todos/:id - Delete todo<br>` +
+                        `<span style="color: #888;">$</span> SQLite database initialized</div><br>` +
+                        `<strong>Features implemented:</strong> CRUD operations, data persistence, RESTful API`;
+                    
+                    addMessage('agent', agents.python_dev.name, pythonDevResponse, 
+                              agents.python_dev.avatar, agents.python_dev.gradient);
+                    
+                    addLogEntry('python_dev', 'Flask API: CRUD routes created, SQLite database setup', '✓ Backend Ready', 'success');
+                }, 2500);
+            }, 3000);
+
+            // Frontend Developer creates the UI
+            setTimeout(() => {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const frontendResponse = `🎨 <strong>Todo App UI Development:</strong><br>Building responsive frontend interface for the todo application...<br><br>` +
+                        `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                        `<strong>🎨 Frontend Components Created:</strong><br>` +
+                        `✅ Todo input form with validation<br>` +
+                        `✅ Todo list with edit/delete actions<br>` +
+                        `✅ Status toggle (completed/pending)<br>` +
+                        `✅ Filter controls (all/active/completed)<br>` +
+                        `✅ Responsive CSS with mobile support<br>` +
+                        `✅ JavaScript for API integration<br><br>` +
+                        `<strong>Tech Stack:</strong> HTML5, CSS3, Vanilla JavaScript<br>` +
+                        `<strong>Design:</strong> Clean, modern, user-friendly interface</div>`;
+                    
+                    addMessage('agent', agents.frontend_dev.name, frontendResponse, 
+                              agents.frontend_dev.avatar, agents.frontend_dev.gradient);
+                    
+                    addLogEntry('frontend_dev', 'UI Components: Forms, lists, filters with responsive design', '✓ Frontend Ready', 'success');
+                }, 2200);
+            }, 6000);
+
+            // QA Tester validates the application
+            setTimeout(() => {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const qaResponse = `🧪 <strong>Todo App Quality Assurance:</strong><br>Comprehensive testing of Python todo application...<br><br>` +
+                        `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                        `<strong>🔍 Testing Results:</strong><br>` +
+                        `✅ Unit Tests: API endpoints (100% coverage)<br>` +
+                        `✅ Integration Tests: Database operations<br>` +
+                        `✅ Frontend Tests: User interactions<br>` +
+                        `✅ API Tests: CRUD functionality<br>` +
+                        `✅ Manual Testing: End-to-end workflows<br>` +
+                        `✅ Cross-browser: Chrome, Firefox, Safari<br><br>` +
+                        `<strong>Test Framework:</strong> pytest for backend, manual testing for UI<br>` +
+                        `<strong>Status:</strong> All tests passing ✅</div>`;
+                    
+                    addMessage('agent', agents.qa_tester.name, qaResponse, 
+                              agents.qa_tester.avatar, agents.qa_tester.gradient);
+                    
+                    addLogEntry('qa_tester', 'Testing complete: 100% test coverage, all validations passed', '✅ QA Approved', 'success');
+                }, 2000);
+            }, 8500);
+
+            // Final orchestrator summary for Python todo app
+            setTimeout(() => {
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    const finalResponse = `🎉 <strong>Python Todo App Complete!</strong><br>Your Flask-based todo application is ready for deployment.<br><br>` +
+                        `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
+                        `<strong>🚀 Deployment Ready:</strong><br>` +
+                        `📁 <strong>Project Structure:</strong><br>` +
+                        `&nbsp;&nbsp;├── app.py (Flask backend)<br>` +
+                        `&nbsp;&nbsp;├── templates/index.html<br>` +
+                        `&nbsp;&nbsp;├── static/style.css<br>` +
+                        `&nbsp;&nbsp;├── static/script.js<br>` +
+                        `&nbsp;&nbsp;├── todos.db (SQLite database)<br>` +
+                        `&nbsp;&nbsp;└── tests/ (pytest test suite)<br><br>` +
+                        `<strong>🔧 Tech Stack:</strong> Python Flask, SQLite, HTML/CSS/JS<br>` +
+                        `<strong>✅ Features:</strong> Add, edit, delete, filter todos<br>` +
+                        `<strong>🧪 Quality:</strong> 100% test coverage<br>` +
+                        `<strong>🎯 Status:</strong> Production ready! 🚀</div>`;
+                    
+                    addMessage('agent', agents.orchestrator.name, finalResponse, 
+                              agents.orchestrator.avatar, agents.orchestrator.gradient);
+                    
+                    addLogEntry('orchestrator', 'Python Todo App: Complete Flask application with full testing', '🎉 Deployed', 'success');
                 }, 1800);
             }, 11000);
         }
@@ -4762,10 +5247,8 @@
             autoResizeTextarea(input);
         }
 
-        // Update the original sendMessage to use enhanced version
-        function sendMessage() {
-            enhancedSendMessage();
-        }
+        // REMOVED: Update the original sendMessage to use enhanced version
+        // Our sendMessage function should trigger the Python demo directly
 
         function handleCodeContextReceived(data) {
             if (data.context) {
@@ -4836,7 +5319,8 @@
                 'WebDevSwarm': { icon: 'W', class: 'web-icon' },
                 'MobileSwarm': { icon: 'M', class: 'mobile-icon' },
                 'AISwarm': { icon: 'A', class: 'ai-icon' },
-                'DataSwarm': { icon: 'D', class: 'data-icon' }
+                'DataSwarm': { icon: 'D', class: 'data-icon' },
+                'PythonSwarm': { icon: 'P', class: 'python-icon' }
             };
             
             const config = swarmConfig[swarmName] || { 
@@ -4861,6 +5345,10 @@
             
             // Close dropdown
             document.getElementById('swarmDropdownMenu').classList.remove('show');
+            
+            // Update current swarm and render agents
+            currentSwarm = swarmName;
+            renderAgentsForSwarm(swarmName);
             
             console.log('Selected swarm:', swarmName);
         }

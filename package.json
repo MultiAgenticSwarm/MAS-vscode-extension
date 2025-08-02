@@ -53,6 +53,21 @@
       ]
     }
   },
+  "configuration": {
+    "title": "MultiAgent Swarm",
+    "properties": {
+      "multiagentSwarm.openaiApiKey": {
+        "type": "string",
+        "default": "",
+        "description": "OpenAI API Key for AI-powered features"
+      },
+      "multiagentSwarm.enableAIFeatures": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable AI-powered swarm generation and tool creation"
+      }
+    }
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",

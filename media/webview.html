@@ -555,6 +555,27 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
+        .swarm-dropdown-option.ai-generate {
+            color: var(--accent-purple);
+            font-weight: 500;
+        }
+
+        .swarm-dropdown-option.ai-generate:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%);
+            color: var(--accent-purple);
+        }
+
+        .swarm-dropdown-option.ai-generate .swarm-icon {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .swarm-dropdown-option.ai-generate:hover .swarm-icon {
+            background: var(--accent-purple);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
         /* Theme Toggle */
         .sidebar-footer {
             padding: 16px 20px;
@@ -1798,6 +1819,32 @@
             color: var(--vscode-fg);
         }
 
+        .tool-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .delete-tool-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .delete-tool-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
         /* Modals */
         .modal {
             display: none;
@@ -1861,6 +1908,356 @@
         .close-button:hover {
             color: var(--vscode-fg);
             background: var(--vscode-hover);
+        }
+
+        .modal-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .add-tool-btn {
+            background: var(--accent-blue);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .add-tool-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* AI-specific styles */
+        .ai-info-box {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(147, 51, 234, 0.05) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .ai-info-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .ai-info-content h4 {
+            margin: 0 0 8px 0;
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .ai-info-content p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            background: var(--vscode-hover);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkmark {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--input-border);
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .checkmark {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked + .checkmark::after {
+            content: '✓';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .ai-generation-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .ai-status-icon {
+            font-size: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .ai-status-text {
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        .ai-button {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, #7c3aed 100%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .ai-button:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .ai-button-icon {
+            font-size: 16px;
+        }
+
+        .ai-assist-btn {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, #7c3aed 100%);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-assist-btn:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .ai-assist-btn.active {
+            background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+        }
+
+        .ai-assist-panel {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(147, 51, 234, 0.02) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .ai-assist-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: var(--accent-purple);
+            font-weight: 600;
+        }
+
+        .ai-assist-icon {
+            font-size: 18px;
+        }
+
+        .ai-generate-tool-btn {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, #7c3aed 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .ai-generate-tool-btn:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        /* AI Suggestions */
+        .ai-suggestions {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .suggestions-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: var(--accent-blue);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .suggestions-icon {
+            font-size: 16px;
+        }
+
+        .refresh-suggestions-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            margin-left: auto;
+        }
+
+        .refresh-suggestions-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+            transform: rotate(180deg);
+        }
+
+        .suggestions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-chip {
+            background: var(--card-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 13px;
+            color: var(--vscode-fg);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .suggestion-chip:hover {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        /* AI Context Features */
+        .ai-context-btn {
+            background: var(--button-bg);
+            border: 1px solid var(--button-border);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            margin-left: 8px;
+        }
+
+        .ai-context-btn:hover {
+            background: var(--button-hover-bg);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            transform: translateY(-1px);
+        }
+
+        .ai-context-btn.active {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+        }
+
+        .chat-context-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--accent-blue);
+        }
+
+        .context-icon {
+            font-size: 14px;
+        }
+
+        .context-text {
+            flex: 1;
+        }
+
+        .remove-context-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 2px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .remove-context-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
 
         .primary-button {
@@ -2004,6 +2401,10 @@
                                 <span class="swarm-name">DataSwarm</span>
                             </div>
                             <div class="swarm-dropdown-separator"></div>
+                            <div class="swarm-dropdown-option ai-generate" onclick="closeSwarmDropdown(); openModal('aiGenerateSwarmModal')" data-icon="🤖">
+                                <span class="swarm-icon ai-generate-icon">🤖</span>
+                                <span class="swarm-name">AI Generate Swarm</span>
+                            </div>
                             <div class="swarm-dropdown-option create-swarm" onclick="closeSwarmDropdown(); openModal('createSwarmModal')" data-icon="➕">
                                 <span class="swarm-icon create-icon">+</span>
                                 <span class="swarm-name">Create Custom Swarm</span>
@@ -2203,6 +2604,30 @@
                     </div>
                 </div>
 
+                <div class="ai-suggestions" id="aiSuggestions">
+                    <div class="suggestions-header">
+                        <span class="suggestions-icon">💡</span>
+                        <span>AI Suggestions</span>
+                        <button class="refresh-suggestions-btn" onclick="generateAISuggestions()" title="Refresh suggestions">
+                            <span>🔄</span>
+                        </button>
+                    </div>
+                    <div class="suggestions-container" id="suggestionsContainer">
+                        <div class="suggestion-chip" onclick="applySuggestion(this)">
+                            Analyze current code structure
+                        </div>
+                        <div class="suggestion-chip" onclick="applySuggestion(this)">
+                            Generate unit tests for main functions
+                        </div>
+                        <div class="suggestion-chip" onclick="applySuggestion(this)">
+                            Review code for security issues
+                        </div>
+                        <div class="suggestion-chip" onclick="applySuggestion(this)">
+                            Optimize performance bottlenecks
+                        </div>
+                    </div>
+                </div>
+
                 <div class="chat-input-container">
                     <div class="chat-input-wrapper">
                         <textarea 
@@ -2216,6 +2641,14 @@
                         <button class="send-button" onclick="sendMessage()" id="sendButton">
                             <span>↗</span>
                         </button>
+                        <button class="ai-context-btn" onclick="addCodeContext()" id="aiContextBtn" title="Add current file context">
+                            <span>📄</span>
+                        </button>
+                    </div>
+                    <div class="chat-context-indicator" id="chatContextIndicator" style="display: none;">
+                        <span class="context-icon">📄</span>
+                        <span class="context-text">Current file context included</span>
+                        <button class="remove-context-btn" onclick="removeCodeContext()">✕</button>
                     </div>
                 </div>
             </div>
@@ -2227,7 +2660,32 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Create New Agent</h3>
-                <button class="close-button" onclick="closeModal('newAgentModal')">&times;</button>
+                <div class="modal-header-actions">
+                    <button class="ai-assist-btn" onclick="toggleAgentAIAssist()" id="agentAiAssistBtn" title="AI Assistant">
+                        <span>🤖</span>
+                        AI Assist
+                    </button>
+                    <button class="close-button" onclick="closeModal('newAgentModal')">&times;</button>
+                </div>
+            </div>
+
+            <div class="ai-assist-panel" id="agentAiAssistPanel" style="display: none;">
+                <div class="ai-assist-header">
+                    <span class="ai-assist-icon">🧠</span>
+                    <span>AI Agent Generator</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">What should this agent specialize in?</label>
+                    <textarea class="form-textarea" id="aiAgentRequest" placeholder="e.g., 'An agent that handles database operations and API integrations for e-commerce'"></textarea>
+                </div>
+                <button class="ai-generate-tool-btn" onclick="generateAgentWithAI()">
+                    <span class="ai-button-icon">🤖</span>
+                    Generate Agent Details
+                </button>
+                <div class="ai-generation-status" id="aiAgentGenerationStatus" style="display: none;">
+                    <div class="ai-status-icon">🔄</div>
+                    <div class="ai-status-text">Generating agent configuration...</div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -2274,7 +2732,10 @@
         <div class="modal-content agent-modal">
             <div class="modal-header">
                 <h3 class="modal-title" id="toolsModalTitle">Agent Tools</h3>
-                <button class="close-button" onclick="closeModal('agentToolsModal')">&times;</button>
+                <div class="modal-header-actions">
+                    <button class="add-tool-btn" onclick="openModal('addToolModal')" title="Add Custom Tool">+ Add Tool</button>
+                    <button class="close-button" onclick="closeModal('agentToolsModal')">&times;</button>
+                </div>
             </div>
 
             <div class="tools-container" id="agentToolsContent">
@@ -2314,6 +2775,164 @@
             </div>
 
             <button class="primary-button" onclick="createCustomSwarm()">Create Swarm</button>
+        </div>
+    </div>
+
+    <!-- Add Custom Tool Modal -->
+    <div class="modal" id="addToolModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Custom Tool</h3>
+                <div class="modal-header-actions">
+                    <button class="ai-assist-btn" onclick="toggleAIAssist()" id="aiAssistBtn" title="AI Assistant">
+                        <span>🤖</span>
+                        AI Assist
+                    </button>
+                    <button class="close-button" onclick="closeModal('addToolModal')">&times;</button>
+                </div>
+            </div>
+
+            <div class="ai-assist-panel" id="aiAssistPanel" style="display: none;">
+                <div class="ai-assist-header">
+                    <span class="ai-assist-icon">🧠</span>
+                    <span>AI Tool Generator</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Describe what you want the tool to do</label>
+                    <textarea class="form-textarea" id="aiToolRequest" placeholder="e.g., 'A tool that validates database connections and runs health checks'"></textarea>
+                </div>
+                <button class="ai-generate-tool-btn" onclick="generateToolWithAI()">
+                    <span class="ai-button-icon">🤖</span>
+                    Generate Tool Details
+                </button>
+                <div class="ai-generation-status" id="aiToolGenerationStatus" style="display: none;">
+                    <div class="ai-status-icon">🔄</div>
+                    <div class="ai-status-text">Generating tool details...</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Tool Name</label>
+                <input type="text" class="form-input" id="customToolName" placeholder="e.g., Database Query Tool">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" id="customToolDescription" placeholder="Describe what this tool does and how it helps the agent..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Tool Category</label>
+                <select class="form-input" id="customToolCategory">
+                    <option value="development">Development</option>
+                    <option value="testing">Testing</option>
+                    <option value="management">Management</option>
+                    <option value="deployment">Deployment</option>
+                    <option value="custom">Custom Category</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="customCategoryGroup" style="display: none;">
+                <label class="form-label">Custom Category Name</label>
+                <input type="text" class="form-input" id="customCategoryName" placeholder="e.g., Integration Tools">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Initial Status</label>
+                <select class="form-input" id="customToolStatus">
+                    <option value="false">Disabled</option>
+                    <option value="true">Enabled</option>
+                </select>
+            </div>
+
+            <button class="primary-button" onclick="addCustomTool()">Add Tool</button>
+        </div>
+    </div>
+
+    <!-- AI Generate Swarm Modal -->
+    <div class="modal" id="aiGenerateSwarmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🤖 AI Generate Swarm</h3>
+                <button class="close-button" onclick="closeModal('aiGenerateSwarmModal')">&times;</button>
+            </div>
+
+            <div class="ai-info-box">
+                <div class="ai-info-icon">🧠</div>
+                <div class="ai-info-content">
+                    <h4>Smart Swarm Generation</h4>
+                    <p>AI will analyze your project structure and create a customized swarm with relevant agents and tools.</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Project Type</label>
+                <select class="form-input" id="aiProjectType">
+                    <option value="auto">Auto-detect from workspace</option>
+                    <option value="web-frontend">Web Frontend (React, Vue, Angular)</option>
+                    <option value="web-backend">Web Backend (Node.js, Python, Java)</option>
+                    <option value="mobile">Mobile App (React Native, Flutter)</option>
+                    <option value="desktop">Desktop Application</option>
+                    <option value="api">REST/GraphQL API</option>
+                    <option value="microservices">Microservices Architecture</option>
+                    <option value="data-science">Data Science/ML Project</option>
+                    <option value="devops">DevOps/Infrastructure</option>
+                    <option value="game">Game Development</option>
+                    <option value="blockchain">Blockchain/Web3</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Project Description (Optional)</label>
+                <textarea class="form-textarea" id="aiProjectDescription" placeholder="Describe your project goals, tech stack, or specific requirements..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Focus Areas</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="focus-development" checked>
+                        <span class="checkmark"></span>
+                        Development & Coding
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="focus-testing">
+                        <span class="checkmark"></span>
+                        Testing & QA
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="focus-deployment">
+                        <span class="checkmark"></span>
+                        Deployment & CI/CD
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="focus-monitoring">
+                        <span class="checkmark"></span>
+                        Monitoring & Analytics
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="focus-security">
+                        <span class="checkmark"></span>
+                        Security & Compliance
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="focus-documentation">
+                        <span class="checkmark"></span>
+                        Documentation
+                    </label>
+                </div>
+            </div>
+
+            <div class="ai-generation-status" id="aiGenerationStatus" style="display: none;">
+                <div class="ai-status-icon">🔄</div>
+                <div class="ai-status-text">Analyzing project and generating swarm...</div>
+            </div>
+
+            <button class="primary-button ai-button" onclick="generateSwarmWithAI()" id="generateSwarmBtn">
+                <span class="ai-button-icon">🤖</span>
+                Generate Swarm with AI
+            </button>
         </div>
     </div>
 
@@ -2566,6 +3185,31 @@
             setTimeout(() => {
                 initializeAgentToolsCounts();
             }, 200);
+
+            // Setup custom tool category dropdown handler
+            const categorySelect = document.getElementById('customToolCategory');
+            if (categorySelect) {
+                categorySelect.addEventListener('change', function() {
+                    const customGroup = document.getElementById('customCategoryGroup');
+                    if (this.value === 'custom') {
+                        customGroup.style.display = 'block';
+                    } else {
+                        customGroup.style.display = 'none';
+                    }
+                });
+            }
+
+            // Listen for messages from the extension
+            window.addEventListener('message', event => {
+                const message = event.data;
+                if (message.command === 'aiResponse') {
+                    handleAIResponse(message);
+                } else if (message.command === 'codeContextReceived') {
+                    handleCodeContextReceived(message.data);
+                } else if (message.command === 'aiChatResponse') {
+                    handleAIChatResponse(message.data);
+                }
+            });
         });
 
         // Sidebar functions
@@ -2762,11 +3406,18 @@
                                             <p class="tool-description">${tool.description}</p>
                                         </div>
                                     </div>
-                                    <div class="tool-toggle">
-                                        <div class="toggle-switch ${tool.enabled ? 'active' : ''}" onclick="toggleAgentTool('${tool.id}', this)">
-                                            <div class="toggle-slider"></div>
+                                    <div class="tool-actions">
+                                        <div class="tool-toggle">
+                                            <div class="toggle-switch ${tool.enabled ? 'active' : ''}" onclick="toggleAgentTool('${tool.id}', this)">
+                                                <div class="toggle-slider"></div>
+                                            </div>
+                                            <span class="toggle-label">${tool.enabled ? 'Enabled' : 'Disabled'}</span>
                                         </div>
-                                        <span class="toggle-label">${tool.enabled ? 'Enabled' : 'Disabled'}</span>
+                                        ${tool.id.startsWith('custom_') ? `
+                                            <button class="delete-tool-btn" onclick="deleteCustomTool('${tool.id}')" title="Delete Tool">
+                                                <span>🗑️</span>
+                                            </button>
+                                        ` : ''}
                                     </div>
                                 </div>
                             `).join('')}
@@ -3435,6 +4086,700 @@
 
             // Show success message
             addMessage('agent', 'System', `Custom swarm "${name}" has been created successfully! 🚀`, '✨', 'var(--gradient-secondary)');
+        }
+
+        function addCustomTool() {
+            const name = document.getElementById('customToolName').value.trim();
+            const description = document.getElementById('customToolDescription').value.trim();
+            const category = document.getElementById('customToolCategory').value;
+            const customCategoryName = document.getElementById('customCategoryName').value.trim();
+            const enabled = document.getElementById('customToolStatus').value === 'true';
+
+            if (!name) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Please enter a tool name'
+                });
+                return;
+            }
+
+            if (!description) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Please enter a tool description'
+                });
+                return;
+            }
+
+            // Determine final category
+            let finalCategory = category;
+            let categoryTitle = category.charAt(0).toUpperCase() + category.slice(1);
+            let categoryIcon = '🔧'; // Default icon
+
+            if (category === 'custom') {
+                if (!customCategoryName) {
+                    vscode.postMessage({
+                        command: 'error',
+                        text: 'Please enter a custom category name'
+                    });
+                    return;
+                }
+                finalCategory = customCategoryName.toLowerCase().replace(/\s+/g, '-');
+                categoryTitle = customCategoryName;
+                categoryIcon = '⚡'; // Custom category icon
+            } else {
+                // Set icons for predefined categories
+                const categoryIcons = {
+                    'development': '💻',
+                    'testing': '🧪',
+                    'management': '⚙️',
+                    'deployment': '🚀'
+                };
+                categoryIcon = categoryIcons[category] || '🔧';
+            }
+
+            // Get the current agent
+            const agent = agents[currentAgent];
+            if (!agent) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'No agent selected'
+                });
+                return;
+            }
+
+            // Initialize toolSections if it doesn't exist
+            if (!agent.toolSections) {
+                agent.toolSections = {};
+            }
+
+            // Create category if it doesn't exist
+            if (!agent.toolSections[finalCategory]) {
+                agent.toolSections[finalCategory] = {
+                    title: categoryTitle,
+                    subtitle: `Custom ${categoryTitle.toLowerCase()} tools and utilities`,
+                    icon: categoryIcon,
+                    tools: []
+                };
+            }
+
+            // Create the new tool
+            const toolId = 'custom_' + Date.now();
+            const newTool = {
+                id: toolId,
+                name: name,
+                description: description,
+                enabled: enabled
+            };
+
+            // Add the tool to the category
+            agent.toolSections[finalCategory].tools.push(newTool);
+
+            // Update enabled tools count
+            const enabledCount = Object.values(agent.toolSections)
+                .flatMap(section => section.tools)
+                .filter(tool => tool.enabled).length;
+            
+            agent.tools = enabledCount;
+
+            // Update the sidebar display
+            updateSidebarToolsCount();
+
+            // Refresh the tools modal content if it's open
+            const toolsContent = document.getElementById('agentToolsContent');
+            if (toolsContent && document.getElementById('agentToolsModal').classList.contains('active')) {
+                toolsContent.innerHTML = generateToolsHTML(agent);
+            }
+
+            // Clear form and close modal
+            document.getElementById('customToolName').value = '';
+            document.getElementById('customToolDescription').value = '';
+            document.getElementById('customToolCategory').value = 'development';
+            document.getElementById('customCategoryName').value = '';
+            document.getElementById('customToolStatus').value = 'false';
+            document.getElementById('customCategoryGroup').style.display = 'none';
+            closeModal('addToolModal');
+
+            // Send to extension
+            vscode.postMessage({
+                command: 'addCustomTool',
+                data: { 
+                    agentId: currentAgent,
+                    toolId: toolId,
+                    name: name, 
+                    description: description, 
+                    category: finalCategory,
+                    categoryTitle: categoryTitle,
+                    enabled: enabled
+                }
+            });
+
+            // Show success message
+            addMessage('agent', 'System', `Custom tool "${name}" has been added to ${agent.name}! 🛠️`, '✨', 'var(--gradient-secondary)');
+        }
+
+        function deleteCustomTool(toolId) {
+            // Get the current agent
+            const agent = agents[currentAgent];
+            if (!agent || !agent.toolSections) {
+                return;
+            }
+
+            // Find and remove the tool
+            let toolName = '';
+            let categoryKey = '';
+            let removed = false;
+
+            Object.keys(agent.toolSections).forEach(sectionKey => {
+                const section = agent.toolSections[sectionKey];
+                const toolIndex = section.tools.findIndex(tool => tool.id === toolId);
+                
+                if (toolIndex !== -1) {
+                    toolName = section.tools[toolIndex].name;
+                    categoryKey = sectionKey;
+                    section.tools.splice(toolIndex, 1);
+                    removed = true;
+
+                    // If this was the last tool in a custom category, remove the category
+                    if (section.tools.length === 0 && sectionKey.startsWith('custom_')) {
+                        delete agent.toolSections[sectionKey];
+                    }
+                }
+            });
+
+            if (!removed) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Tool not found'
+                });
+                return;
+            }
+
+            // Update enabled tools count
+            const enabledCount = Object.values(agent.toolSections)
+                .flatMap(section => section.tools)
+                .filter(tool => tool.enabled).length;
+            
+            agent.tools = enabledCount;
+
+            // Update the sidebar display
+            updateSidebarToolsCount();
+
+            // Refresh the tools modal content if it's open
+            const toolsContent = document.getElementById('agentToolsContent');
+            if (toolsContent && document.getElementById('agentToolsModal').classList.contains('active')) {
+                toolsContent.innerHTML = generateToolsHTML(agent);
+            }
+
+            // Send to extension
+            vscode.postMessage({
+                command: 'deleteCustomTool',
+                data: { 
+                    agentId: currentAgent,
+                    toolId: toolId,
+                    toolName: toolName
+                }
+            });
+
+            // Show success message
+            addMessage('agent', 'System', `Custom tool "${toolName}" has been removed from ${agent.name}! 🗑️`, '✨', 'var(--gradient-secondary)');
+        }
+
+        // AI Integration Functions
+        function generateSwarmWithAI() {
+            const projectType = document.getElementById('aiProjectType').value;
+            const description = document.getElementById('aiProjectDescription').value.trim();
+            const focusAreas = Array.from(document.querySelectorAll('#aiGenerateSwarmModal input[type="checkbox"]:checked'))
+                .map(cb => cb.id.replace('focus-', ''));
+
+            // Show loading state
+            const statusDiv = document.getElementById('aiGenerationStatus');
+            const generateBtn = document.getElementById('generateSwarmBtn');
+            
+            statusDiv.style.display = 'flex';
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<span class="ai-status-icon">🔄</span>Generating...';
+
+            // Prepare AI prompt
+            const prompt = `Create a specialized development swarm for a ${projectType} project. 
+            ${description ? `Project description: ${description}` : ''}
+            Focus areas: ${focusAreas.join(', ')}
+            
+            Generate:
+            1. Swarm name (specific to project type)
+            2. 3-5 specialized agents with roles relevant to ${projectType}
+            3. For each agent, provide 2-4 tools specific to their role
+            4. Brief description of the swarm's purpose
+            
+            Return as JSON with structure:
+            {
+                "name": "string",
+                "description": "string", 
+                "agents": [
+                    {
+                        "name": "string",
+                        "role": "string",
+                        "prompt": "string",
+                        "tools": [{"name": "string", "description": "string", "category": "string"}]
+                    }
+                ]
+            }`;
+
+            // Send to AI API
+            vscode.postMessage({
+                command: 'generateSwarmWithAI',
+                data: { 
+                    prompt: prompt,
+                    projectType: projectType,
+                    description: description,
+                    focusAreas: focusAreas
+                }
+            });
+        }
+
+        function generateToolWithAI() {
+            const request = document.getElementById('aiToolRequest').value.trim();
+            
+            if (!request) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Please describe what the tool should do'
+                });
+                return;
+            }
+
+            // Show loading state
+            const statusDiv = document.getElementById('aiToolGenerationStatus');
+            statusDiv.style.display = 'flex';
+
+            const prompt = `Create a custom tool based on this request: "${request}"
+            
+            Generate:
+            1. Tool name (concise, descriptive)
+            2. Detailed description (what it does, how it helps)
+            3. Most appropriate category (development, testing, management, deployment, or suggest custom)
+            4. Implementation outline (key features/functions)
+            
+            Return as JSON:
+            {
+                "name": "string",
+                "description": "string",
+                "category": "string",
+                "implementation": "string"
+            }`;
+
+            vscode.postMessage({
+                command: 'generateToolWithAI',
+                data: { 
+                    prompt: prompt,
+                    request: request,
+                    agentId: currentAgent
+                }
+            });
+        }
+
+        function generateAgentWithAI() {
+            const request = document.getElementById('aiAgentRequest').value.trim();
+            
+            if (!request) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Please describe what the agent should specialize in'
+                });
+                return;
+            }
+
+            // Show loading state
+            const statusDiv = document.getElementById('aiAgentGenerationStatus');
+            statusDiv.style.display = 'flex';
+
+            const prompt = `Create a specialized agent based on this request: "${request}"
+            
+            Generate:
+            1. Agent name (role-specific, professional)
+            2. Agent role category (development, testing, deployment, etc.)
+            3. Detailed system prompt (capabilities, responsibilities, collaboration style)
+            4. 3-5 relevant tools with descriptions
+            
+            Return as JSON:
+            {
+                "name": "string",
+                "role": "string", 
+                "systemPrompt": "string",
+                "tools": [
+                    {"name": "string", "description": "string", "category": "string"}
+                ]
+            }`;
+
+            vscode.postMessage({
+                command: 'generateAgentWithAI',
+                data: { 
+                    prompt: prompt,
+                    request: request
+                }
+            });
+        }
+
+        function generateAISuggestions() {
+            const refreshBtn = document.querySelector('.refresh-suggestions-btn');
+            refreshBtn.style.transform = 'rotate(180deg)';
+            
+            setTimeout(() => {
+                refreshBtn.style.transform = 'rotate(0deg)';
+            }, 500);
+
+            // Get current project context
+            vscode.postMessage({
+                command: 'generateAISuggestions',
+                data: { 
+                    context: 'current_workspace',
+                    currentSwarm: document.getElementById('selectedSwarm').textContent
+                }
+            });
+        }
+
+        function applySuggestion(chip) {
+            const suggestion = chip.textContent;
+            const chatInput = document.getElementById('chatInput');
+            chatInput.value = suggestion;
+            chatInput.focus();
+            
+            // Add some visual feedback
+            chip.style.background = 'var(--accent-green)';
+            chip.style.color = 'white';
+            setTimeout(() => {
+                chip.style.background = '';
+                chip.style.color = '';
+            }, 300);
+        }
+
+        function toggleAIAssist() {
+            const panel = document.getElementById('aiAssistPanel');
+            const btn = document.getElementById('aiAssistBtn');
+            
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                btn.classList.add('active');
+            } else {
+                panel.style.display = 'none';
+                btn.classList.remove('active');
+            }
+        }
+
+        function toggleAgentAIAssist() {
+            const panel = document.getElementById('agentAiAssistPanel');
+            const btn = document.getElementById('agentAiAssistBtn');
+            
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                btn.classList.add('active');
+            } else {
+                panel.style.display = 'none';
+                btn.classList.remove('active');
+            }
+        }
+
+        // Handle AI responses from extension
+        function handleAIResponse(response) {
+            switch(response.type) {
+                case 'swarmGenerated':
+                    handleSwarmGenerated(response.data);
+                    break;
+                case 'toolGenerated':
+                    handleToolGenerated(response.data);
+                    break;
+                case 'agentGenerated':
+                    handleAgentGenerated(response.data);
+                    break;
+                case 'suggestionsGenerated':
+                    handleSuggestionsGenerated(response.data);
+                    break;
+            }
+        }
+
+        function handleSwarmGenerated(data) {
+            // Hide loading state
+            document.getElementById('aiGenerationStatus').style.display = 'none';
+            const generateBtn = document.getElementById('generateSwarmBtn');
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '<span class="ai-button-icon">🤖</span>Generate Swarm with AI';
+
+            if (data.error) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Failed to generate swarm: ' + data.error
+                });
+                return;
+            }
+
+            // Create the swarm
+            const swarmData = data.swarm;
+            createGeneratedSwarm(swarmData);
+            
+            // Close modal
+            closeModal('aiGenerateSwarmModal');
+            
+            // Show success message
+            addMessage('agent', 'AI Assistant', `🎉 Generated "${swarmData.name}" swarm with ${swarmData.agents.length} specialized agents!`, '🤖', 'var(--gradient-secondary)');
+        }
+
+        function handleToolGenerated(data) {
+            // Hide loading state
+            document.getElementById('aiToolGenerationStatus').style.display = 'none';
+
+            if (data.error) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Failed to generate tool: ' + data.error
+                });
+                return;
+            }
+
+            // Fill in the form with generated data
+            const tool = data.tool;
+            document.getElementById('customToolName').value = tool.name;
+            document.getElementById('customToolDescription').value = tool.description;
+            
+            if (tool.category && tool.category !== 'custom') {
+                document.getElementById('customToolCategory').value = tool.category;
+            }
+
+            // Hide AI assist panel
+            toggleAIAssist();
+            
+            addMessage('agent', 'AI Assistant', `✨ Generated tool details for "${tool.name}"! Review and customize as needed.`, '🤖', 'var(--gradient-secondary)');
+        }
+
+        function handleAgentGenerated(data) {
+            // Hide loading state
+            document.getElementById('aiAgentGenerationStatus').style.display = 'none';
+
+            if (data.error) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Failed to generate agent: ' + data.error
+                });
+                return;
+            }
+
+            // Fill in the form with generated data
+            const agent = data.agent;
+            document.getElementById('newAgentName').value = agent.name;
+            document.getElementById('newAgentRole').value = agent.role || 'general';
+            document.getElementById('newAgentPrompt').value = agent.systemPrompt;
+
+            // Hide AI assist panel
+            toggleAgentAIAssist();
+            
+            addMessage('agent', 'AI Assistant', `✨ Generated agent configuration for "${agent.name}"! Review and create when ready.`, '🤖', 'var(--gradient-secondary)');
+        }
+
+        function handleSuggestionsGenerated(data) {
+            if (data.error) {
+                console.error('Failed to generate suggestions:', data.error);
+                return;
+            }
+
+            const container = document.getElementById('suggestionsContainer');
+            container.innerHTML = '';
+            
+            data.suggestions.forEach(suggestion => {
+                const chip = document.createElement('div');
+                chip.className = 'suggestion-chip';
+                chip.textContent = suggestion;
+                chip.onclick = () => applySuggestion(chip);
+                container.appendChild(chip);
+            });
+        }
+
+        function createGeneratedSwarm(swarmData) {
+            // Add swarm to dropdown
+            const swarmIcon = swarmData.name.charAt(0).toUpperCase();
+            const dropdownMenu = document.getElementById('swarmDropdownMenu');
+            const separator = dropdownMenu.querySelector('.swarm-dropdown-separator');
+            
+            const newSwarmOption = document.createElement('div');
+            newSwarmOption.className = 'swarm-dropdown-option';
+            newSwarmOption.setAttribute('onclick', `selectSwarm('${swarmData.name}')`);
+            newSwarmOption.innerHTML = `
+                <span class="swarm-icon custom-icon">${swarmIcon}</span>
+                <span class="swarm-name">${swarmData.name}</span>
+            `;
+
+            dropdownMenu.insertBefore(newSwarmOption, separator);
+            selectSwarm(swarmData.name);
+
+            // Create agents for this swarm
+            swarmData.agents.forEach((agentData, index) => {
+                setTimeout(() => {
+                    createAIGeneratedAgent(agentData);
+                }, index * 500); // Stagger creation for visual effect
+            });
+        }
+
+        function createAIGeneratedAgent(agentData) {
+            const agentId = 'ai_agent_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            const avatar = agentData.name.charAt(0).toUpperCase();
+            const gradients = [
+                'var(--gradient-primary)',
+                'var(--gradient-secondary)', 
+                'linear-gradient(135deg, var(--accent-purple), var(--accent-red))',
+                'linear-gradient(135deg, var(--accent-orange), var(--accent-red))',
+                'linear-gradient(135deg, var(--accent-green), var(--accent-blue))'
+            ];
+            const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
+
+            // Create tools structure
+            const toolSections = {};
+            agentData.tools.forEach(tool => {
+                const category = tool.category || 'development';
+                if (!toolSections[category]) {
+                    const categoryIcons = {
+                        'development': '💻',
+                        'testing': '🧪', 
+                        'management': '⚙️',
+                        'deployment': '🚀',
+                        'security': '🔒',
+                        'monitoring': '📊'
+                    };
+                    
+                    toolSections[category] = {
+                        title: category.charAt(0).toUpperCase() + category.slice(1),
+                        subtitle: `${category.charAt(0).toUpperCase() + category.slice(1)} tools and utilities`,
+                        icon: categoryIcons[category] || '🔧',
+                        tools: []
+                    };
+                }
+                
+                toolSections[category].tools.push({
+                    id: 'ai_tool_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    name: tool.name,
+                    description: tool.description,
+                    enabled: true
+                });
+            });
+
+            // Create agent object
+            agents[agentId] = {
+                name: agentData.name,
+                avatar: avatar,
+                gradient: randomGradient,
+                tools: agentData.tools.length,
+                enabledTools: agentData.tools.map(t => t.name.toLowerCase().replace(/\s+/g, '-')),
+                toolSections: toolSections,
+                config: {
+                    systemPrompt: agentData.prompt || agentData.systemPrompt,
+                    llmProvider: 'openai-gpt4',
+                    responseTimeout: 5000,
+                    maxConcurrentTasks: 3,
+                    memoryManagement: 'auto',
+                    collaborationRules: `${agentData.name} handles ${agentData.role || 'specialized'} tasks → Coordinates with other agents as needed → Reports results to Orchestrator`
+                }
+            };
+
+            // Add to sidebar
+            const agentsList = document.getElementById('agentsList');
+            const newAgentCard = document.createElement('div');
+            newAgentCard.className = 'agent-card';
+            newAgentCard.setAttribute('data-agent', agentId);
+            newAgentCard.innerHTML = `
+                <div class="agent-header" onclick="selectAgent(this.parentElement, '${agentId}')">
+                    <div class="agent-name">
+                        <div class="agent-avatar" style="background: ${randomGradient};">${avatar}</div>
+                        <span>${agentData.name}</span>
+                    </div>
+                    <div class="agent-status active"></div>
+                </div>
+                <div class="agent-tools">${agentData.tools.length} tools enabled</div>
+                <div class="agent-actions">
+                    <button class="agent-action-btn" onclick="openAgentConfig('${agentId}')" title="Configuration">
+                        <span>⚙️</span>
+                        <span>Config</span>
+                    </button>
+                    <button class="agent-action-btn" onclick="openAgentTools('${agentId}')" title="Tools">
+                        <span>🛠️</span>
+                        <span>Tools</span>
+                    </button>
+                </div>
+            `;
+
+            agentsList.appendChild(newAgentCard);
+            updateChatHeader();
+        }
+
+        // Code Context Functions
+        let hasCodeContext = false;
+
+        function addCodeContext() {
+            const btn = document.getElementById('aiContextBtn');
+            const indicator = document.getElementById('chatContextIndicator');
+            
+            if (!hasCodeContext) {
+                // Request current file context from extension
+                vscode.postMessage({
+                    command: 'getCodeContext',
+                    data: {}
+                });
+                
+                btn.classList.add('active');
+                indicator.style.display = 'flex';
+                hasCodeContext = true;
+            }
+        }
+
+        function removeCodeContext() {
+            const btn = document.getElementById('aiContextBtn');
+            const indicator = document.getElementById('chatContextIndicator');
+            
+            btn.classList.remove('active');
+            indicator.style.display = 'none';
+            hasCodeContext = false;
+        }
+
+        function enhancedSendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Include code context if enabled
+            const messageData = {
+                message: message,
+                includeContext: hasCodeContext,
+                timestamp: new Date().toISOString()
+            };
+
+            // Send enhanced message
+            vscode.postMessage({
+                command: 'sendEnhancedMessage',
+                data: messageData
+            });
+
+            // Add message to chat
+            addMessage('user', 'You', message, '🧑‍💻', 'var(--user-message-gradient)');
+            
+            input.value = '';
+            autoResizeTextarea(input);
+        }
+
+        // Update the original sendMessage to use enhanced version
+        function sendMessage() {
+            enhancedSendMessage();
+        }
+
+        function handleCodeContextReceived(data) {
+            if (data.context) {
+                console.log('Code context received:', data.context);
+                // Context is now available for enhanced messaging
+            } else {
+                console.log('No code context available:', data.message);
+                removeCodeContext();
+            }
+        }
+
+        function handleAIChatResponse(data) {
+            // Add AI response to chat
+            addMessage('agent', 'AI Assistant', data.response, '🤖', 'var(--gradient-secondary)');
         }
 
         // Swarm dropdown functionality

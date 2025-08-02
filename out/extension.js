@@ -4,6 +4,7 @@ exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const path = require("path");
 const fs = require("fs");
+const llmApi_1 = require("./llmApi");
 let panel;
 let isVisible = false;
 function activate(context) {
@@ -82,6 +83,33 @@ function createOrShowPanel(context) {
             case "toggleTool":
                 console.log("Tool toggled:", message.data);
                 return;
+            case "generateSwarmWithAI":
+                handleGenerateSwarmWithAI(panel, message.data);
+                return;
+            case "generateToolWithAI":
+                handleGenerateToolWithAI(panel, message.data);
+                return;
+            case "generateAgentWithAI":
+                handleGenerateAgentWithAI(panel, message.data);
+                return;
+            case "generateAISuggestions":
+                handleGenerateAISuggestions(panel, message.data);
+                return;
+            case "addCustomTool":
+                vscode.window.showInformationMessage(`Custom tool "${message.data.name}" added to ${message.data.agentId}`);
+                return;
+            case "deleteCustomTool":
+                vscode.window.showInformationMessage(`Custom tool "${message.data.toolName}" removed`);
+                return;
+            case "createCustomSwarm":
+                vscode.window.showInformationMessage(`Custom swarm "${message.data.name}" created successfully!`);
+                return;
+            case "getCodeContext":
+                handleGetCodeContext(panel);
+                return;
+            case "sendEnhancedMessage":
+                handleEnhancedMessage(panel, message.data);
+                return;
         }
     }, undefined, context.subscriptions);
     isVisible = true;
@@ -116,6 +144,163 @@ function getWebviewContent(webview, extensionUri) {
     // Replace placeholder with actual icon URI
     html = html.replace("{{ICON_URI}}", iconUri.toString());
     return html;
+}
+// AI Handler Functions
+async function handleGenerateSwarmWithAI(panel, data) {
+    if (!panel)
+        return;
+    try {
+        vscode.window.showInformationMessage('🤖 Generating swarm with AI...');
+        const swarmData = await (0, llmApi_1.generateSwarmWithAI)(data.prompt);
+        panel.webview.postMessage({
+            command: 'aiResponse',
+            type: 'swarmGenerated',
+            data: { swarm: swarmData }
+        });
+    }
+    catch (error) {
+        console.error('Error generating swarm:', error);
+        panel.webview.postMessage({
+            command: 'aiResponse',
+            type: 'swarmGenerated',
+            data: { error: error instanceof Error ? error.message : 'Unknown error' }
+        });
+    }
+}
+async function handleGenerateToolWithAI(panel, data) {
+    if (!panel)
+        return;
+    try {
+        vscode.window.showInformationMessage('🤖 Generating tool with AI...');
+        const toolData = await (0, llmApi_1.generateToolWithAI)(data.prompt);
+        panel.webview.postMessage({
+            command: 'aiResponse',
+            type: 'toolGenerated',
+            data: { tool: toolData }
+        });
+    }
+    catch (error) {
+        console.error('Error generating tool:', error);
+        panel.webview.postMessage({
+            command: 'aiResponse',
+            type: 'toolGenerated',
+            data: { error: error instanceof Error ? error.message : 'Unknown error' }
+        });
+    }
+}
+async function handleGenerateAgentWithAI(panel, data) {
+    if (!panel)
+        return;
+    try {
+        vscode.window.showInformationMessage('🤖 Generating agent with AI...');
+        const agentData = await (0, llmApi_1.generateAgentWithAI)(data.prompt);
+        panel.webview.postMessage({
+            command: 'aiResponse',
+            type: 'agentGenerated',
+            data: { agent: agentData }
+        });
+    }
+    catch (error) {
+        console.error('Error generating agent:', error);
+        panel.webview.postMessage({
+            command: 'aiResponse',
+            type: 'agentGenerated',
+            data: { error: error instanceof Error ? error.message : 'Unknown error' }
+        });
+    }
+}
+async function handleGenerateAISuggestions(panel, data) {
+    if (!panel)
+        return;
+    try {
+        const suggestions = await (0, llmApi_1.generateSuggestions)(data.context, data.currentSwarm);
+        panel.webview.postMessage({
+            command: 'aiResponse',
+            type: 'suggestionsGenerated',
+            data: { suggestions }
+        });
+    }
+    catch (error) {
+        console.error('Error generating suggestions:', error);
+        panel.webview.postMessage({
+            command: 'aiResponse',
+            type: 'suggestionsGenerated',
+            data: { error: error instanceof Error ? error.message : 'Unknown error' }
+        });
+    }
+}
+async function handleGetCodeContext(panel) {
+    if (!panel)
+        return;
+    try {
+        const activeEditor = vscode.window.activeTextEditor;
+        if (activeEditor) {
+            const document = activeEditor.document;
+            const codeContext = {
+                fileName: path.basename(document.fileName),
+                language: document.languageId,
+                content: document.getText(),
+                lineCount: document.lineCount,
+                selection: activeEditor.selection.isEmpty ? null : {
+                    start: activeEditor.selection.start.line,
+                    end: activeEditor.selection.end.line,
+                    text: document.getText(activeEditor.selection)
+                }
+            };
+            panel.webview.postMessage({
+                command: 'codeContextReceived',
+                data: { context: codeContext }
+            });
+        }
+        else {
+            panel.webview.postMessage({
+                command: 'codeContextReceived',
+                data: { context: null, message: 'No active file found' }
+            });
+        }
+    }
+    catch (error) {
+        console.error('Error getting code context:', error);
+    }
+}
+async function handleEnhancedMessage(panel, data) {
+    if (!panel)
+        return;
+    try {
+        let prompt = data.message;
+        if (data.includeContext) {
+            const activeEditor = vscode.window.activeTextEditor;
+            if (activeEditor) {
+                const document = activeEditor.document;
+                const fileName = path.basename(document.fileName);
+                const language = document.languageId;
+                const code = document.getText();
+                prompt = `Context: Working on file "${fileName}" (${language})\n\nCode:\n${code}\n\nUser question: ${data.message}`;
+            }
+        }
+        // Use existing AI response function or create a mock response
+        const response = await generateAIResponseForChat(prompt);
+        panel.webview.postMessage({
+            command: 'aiChatResponse',
+            data: {
+                response: response,
+                timestamp: new Date().toISOString()
+            }
+        });
+    }
+    catch (error) {
+        console.error('Error handling enhanced message:', error);
+    }
+}
+async function generateAIResponseForChat(prompt) {
+    try {
+        const { getAIResponse } = await Promise.resolve().then(() => require('./llmApi'));
+        return await getAIResponse(prompt);
+    }
+    catch (error) {
+        console.error('Error generating AI chat response:', error);
+        return 'I apologize, but I encountered an error processing your request. Please make sure your OpenAI API key is configured correctly.';
+    }
 }
 function deactivate() { }
 exports.deactivate = deactivate;

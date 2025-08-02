@@ -460,6 +460,14 @@
             background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
         }
 
+        .swarm-icon.custom-icon {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .swarm-icon.create-icon {
+            background: var(--accent-blue);
+        }
+
         .swarm-name {
             flex: 1;
             font-weight: 500;
@@ -517,6 +525,34 @@
         .swarm-dropdown-option:last-child {
             margin-bottom: 0;
             border-bottom: none;
+        }
+
+        .swarm-dropdown-separator {
+            height: 1px;
+            background: var(--vscode-border);
+            margin: 8px 0;
+            opacity: 0.5;
+        }
+
+        .swarm-dropdown-option.create-swarm {
+            color: var(--accent-blue);
+            font-weight: 500;
+        }
+
+        .swarm-dropdown-option.create-swarm:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.05) 100%);
+            color: var(--accent-blue);
+        }
+
+        .swarm-dropdown-option.create-swarm .swarm-icon {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .swarm-dropdown-option.create-swarm:hover .swarm-icon {
+            background: var(--accent-blue);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         /* Theme Toggle */
@@ -1967,6 +2003,11 @@
                                 <span class="swarm-icon data-icon">D</span>
                                 <span class="swarm-name">DataSwarm</span>
                             </div>
+                            <div class="swarm-dropdown-separator"></div>
+                            <div class="swarm-dropdown-option create-swarm" onclick="closeSwarmDropdown(); openModal('createSwarmModal')" data-icon="➕">
+                                <span class="swarm-icon create-icon">+</span>
+                                <span class="swarm-name">Create Custom Swarm</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2239,6 +2280,40 @@
             <div class="tools-container" id="agentToolsContent">
                 <!-- Tools content will be dynamically populated -->
             </div>
+        </div>
+    </div>
+
+    <!-- Create Custom Swarm Modal -->
+    <div class="modal" id="createSwarmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create Custom Swarm</h3>
+                <button class="close-button" onclick="closeModal('createSwarmModal')">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Swarm Name</label>
+                <input type="text" class="form-input" id="customSwarmName" placeholder="e.g., E-commerce Swarm">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" id="customSwarmDescription" placeholder="Describe the purpose of this swarm..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Template</label>
+                <select class="form-input" id="customSwarmTemplate">
+                    <option value="scratch">Start from Scratch</option>
+                    <option value="web">Web Development Template</option>
+                    <option value="mobile">Mobile Development Template</option>
+                    <option value="data">Data Science Template</option>
+                    <option value="ai">AI/ML Template</option>
+                    <option value="api">API Development Template</option>
+                </select>
+            </div>
+
+            <button class="primary-button" onclick="createCustomSwarm()">Create Swarm</button>
         </div>
     </div>
 
@@ -3305,6 +3380,63 @@
             addMessage('agent', 'System', 'New agent "' + name + '" has been created successfully!', '🎉', 'var(--gradient-secondary)');
         }
 
+        function createCustomSwarm() {
+            const name = document.getElementById('customSwarmName').value.trim();
+            const description = document.getElementById('customSwarmDescription').value.trim();
+            const template = document.getElementById('customSwarmTemplate').value;
+
+            if (!name) {
+                vscode.postMessage({
+                    command: 'error',
+                    text: 'Please enter a swarm name'
+                });
+                return;
+            }
+
+            // Generate swarm icon based on first letter
+            const swarmIcon = name.charAt(0).toUpperCase();
+            const swarmId = 'swarm_' + Date.now();
+
+            // Add new swarm option to dropdown (before the separator)
+            const dropdownMenu = document.getElementById('swarmDropdownMenu');
+            const separator = dropdownMenu.querySelector('.swarm-dropdown-separator');
+            
+            const newSwarmOption = document.createElement('div');
+            newSwarmOption.className = 'swarm-dropdown-option';
+            newSwarmOption.setAttribute('onclick', `selectSwarm('${name}')`);
+            newSwarmOption.setAttribute('data-icon', swarmIcon);
+            newSwarmOption.innerHTML = `
+                <span class="swarm-icon custom-icon">${swarmIcon}</span>
+                <span class="swarm-name">${name}</span>
+            `;
+
+            // Insert before the separator
+            dropdownMenu.insertBefore(newSwarmOption, separator);
+
+            // Select the new swarm
+            selectSwarm(name);
+
+            // Clear form and close modal
+            document.getElementById('customSwarmName').value = '';
+            document.getElementById('customSwarmDescription').value = '';
+            document.getElementById('customSwarmTemplate').value = 'scratch';
+            closeModal('createSwarmModal');
+
+            // Send to extension
+            vscode.postMessage({
+                command: 'createCustomSwarm',
+                data: { 
+                    id: swarmId, 
+                    name: name, 
+                    description: description, 
+                    template: template 
+                }
+            });
+
+            // Show success message
+            addMessage('agent', 'System', `Custom swarm "${name}" has been created successfully! 🚀`, '✨', 'var(--gradient-secondary)');
+        }
+
         // Swarm dropdown functionality
         function toggleSwarmDropdown() {
             // Don't open dropdown if sidebar is collapsed
@@ -3342,6 +3474,14 @@
             }
         }
 
+        function closeSwarmDropdown() {
+            const menu = document.getElementById('swarmDropdownMenu');
+            const arrow = document.querySelector('.dropdown-arrow');
+            
+            menu.classList.remove('show');
+            arrow.style.transform = 'rotate(0deg)';
+        }
+
         function selectSwarm(swarmName) {
             const selectedElement = document.getElementById('selectedSwarm');
             
@@ -3354,7 +3494,10 @@
                 'DataSwarm': { icon: 'D', class: 'data-icon' }
             };
             
-            const config = swarmConfig[swarmName] || { icon: '?', class: 'web-icon' };
+            const config = swarmConfig[swarmName] || { 
+                icon: swarmName.charAt(0).toUpperCase(), 
+                class: 'custom-icon' 
+            };
             selectedElement.innerHTML = `<span class="swarm-icon ${config.class}" style="margin-right: 8px; width: 20px; height: 20px; font-size: 12px;">${config.icon}</span>${swarmName}`;
             
             // Update selected option

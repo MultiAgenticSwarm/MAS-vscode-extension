@@ -91,6 +91,14 @@ function createOrShowPanel(context) {
                 console.log('DEBUG: pythonTodoDemo command received:', message.data);
                 handlePythonTodoDemoCreation(panel, message.data);
                 return;
+            case "saveGlobalCollaboration":
+                console.log('DEBUG: Global collaboration rules saved:', message.data);
+                vscode.window.showInformationMessage('✅ Global collaboration rules saved successfully!');
+                return;
+            case "saveSwarmCollaboration":
+                console.log('DEBUG: Swarm collaboration rules saved for', message.data.swarm, ':', message.data.rules);
+                vscode.window.showInformationMessage(`✅ ${message.data.swarm} collaboration rules saved successfully!`);
+                return;
             case "updateAgent":
                 console.log("Agent updated:", message.data);
                 return;

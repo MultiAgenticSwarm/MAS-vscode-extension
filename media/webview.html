@@ -100,7 +100,7 @@
             position: relative;
         }
 
-        /* Floating Sidebar */
+        /* Floating Sidebar - Proper width */
         .floating-sidebar {
             position: fixed;
             left: 20px;
@@ -111,11 +111,12 @@
             border: 1px solid var(--vscode-border);
             border-radius: 12px;
             box-shadow: 0 4px 24px var(--shadow);
-            z-index: 100;
+            z-index: 50;
             display: flex;
             flex-direction: column;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateX(0);
+            overflow: hidden;
         }
 
         .floating-sidebar.collapsed {
@@ -125,8 +126,34 @@
             pointer-events: none;
         }
 
+        /* Sidebar content with proper scrolling and bottom padding */
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: calc(100vh - 160px);
+            padding-bottom: 12px;
+        }
+
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: var(--vscode-scrollbarSlider-background);
+            border-radius: 3px;
+        }
+
+        .sidebar-content::-webkit-scrollbar-thumb:hover {
+            background: var(--vscode-scrollbarSlider-hoverBackground);
+        }
+
         .sidebar-header {
-            padding: 16px 20px;
+            padding: 12px 16px;
             border-bottom: 1px solid var(--vscode-border);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 12px 12px 0 0;
@@ -587,6 +614,528 @@
             background: var(--card-bg);
             border-radius: 0 0 12px 12px;
             transition: all 0.3s ease;
+        }
+
+        /* Collaboration Section - Properly spaced */
+        .collaboration-section {
+            margin: 10px 16px 14px 16px;
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--vscode-border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .collaboration-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 8px 8px 0 0;
+        }
+
+        .collaboration-section:hover {
+            box-shadow: 0 2px 8px var(--shadow-hover);
+            border-color: var(--accent-blue);
+        }
+
+        .collaboration-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--vscode-fg);
+            cursor: pointer;
+            padding: 2px 0;
+        }
+
+        .collaboration-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 6px;
+            font-size: 11px;
+        }
+
+        .collapse-toggle-btn {
+            margin-left: auto;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 11px;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .collapse-toggle-btn:hover {
+            background: var(--button-hover-bg);
+            border-color: var(--accent-blue);
+            color: var(--vscode-fg);
+        }
+
+        .collaboration-content {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .collaboration-content.collapsed {
+            max-height: 0;
+            margin-top: 0;
+            opacity: 0;
+        }
+
+        .swarm-collaboration-info {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: linear-gradient(135deg, var(--input-bg), rgba(99, 102, 241, 0.05));
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .current-swarm-indicator {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .current-swarm-indicator strong {
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        .collaboration-textarea {
+            width: 100%;
+            min-height: 80px;
+            max-height: 120px;
+            padding: 12px;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 6px;
+            color: var(--vscode-fg);
+            font-family: var(--vscode-font-family);
+            font-size: 12px;
+            line-height: 1.4;
+            resize: vertical;
+            transition: all 0.2s ease;
+        }
+
+        .collaboration-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+            background: var(--vscode-bg);
+        }
+
+        .collaboration-textarea::placeholder {
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        .collaboration-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            justify-content: flex-end;
+        }
+
+        .collaboration-btn {
+            padding: 6px 12px;
+            background: var(--button-bg);
+            border: 1px solid var(--button-border);
+            border-radius: 6px;
+            color: var(--vscode-fg);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .collaboration-btn:hover {
+            background: var(--button-hover-bg);
+            border-color: var(--accent-blue);
+        }
+
+        .collaboration-btn.primary {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        .collaboration-btn.primary:hover {
+            background: #5a67d8;
+            border-color: #5a67d8;
+        }
+
+        /* Agents Section - Improved spacing after collaboration */
+        /* Agents Section - Properly spaced */
+        .agents-section {
+            margin: 8px 16px 14px 16px;
+            padding: 0;
+        }
+
+        .agents-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            padding: 0 2px;
+        }
+
+        .agents-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--vscode-fg);
+            margin: 0;
+        }
+
+        .agents-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent-purple), #9f7aea);
+            border-radius: 6px;
+            font-size: 11px;
+            color: white;
+        }
+
+        .add-agent-btn {
+            margin-left: auto;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 11px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-agent-btn:hover {
+            background: var(--button-hover-bg);
+            border-color: var(--accent-purple);
+            color: var(--vscode-fg);
+        }
+
+        .agent-card {
+            margin-bottom: 8px;
+            padding: 10px 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            border-left: 3px solid var(--vscode-border);
+        }
+
+        .agent-card:last-child {
+            margin-bottom: 4px;
+        }
+
+        .agent-card.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.05));
+            border-left-color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .agent-card:hover {
+            background: var(--card-bg);
+            border-color: var(--accent-purple);
+            border-left-color: var(--accent-purple);
+            transform: translateX(2px);
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .agent-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--vscode-fg);
+            margin: 0;
+            flex: 1;
+        }
+
+        .agent-status {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            margin-left: auto;
+            box-shadow: 0 0 0 2px rgba(72, 187, 120, 0.2);
+        }
+
+        .agent-status.offline {
+            background: var(--text-muted);
+            box-shadow: 0 0 0 2px rgba(128, 128, 128, 0.2);
+        }
+
+        .agent-description {
+            color: var(--text-muted);
+            font-size: 12px;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .agent-tools {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .agent-tool {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-muted);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .agent-avatar {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Input section enhanced spacing */
+        .input-section {
+            margin: 24px 20px 20px 20px;
+            padding: 0;
+        }
+
+        .input-section textarea {
+            margin-bottom: 16px;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .send-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--accent-blue), #5a67d8);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 12px rgba(99, 102, 241, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .send-btn:hover::before {
+            left: 100%;
+        }
+
+        .send-btn:hover {
+            background: linear-gradient(135deg, #5a67d8, #4c51bf);
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Section spacing improvements */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        /* Activity Logs Section - Properly spaced */
+        .activity-section {
+            margin: 14px 16px 10px 16px;
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--vscode-border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .activity-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-green), #48bb78);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .activity-section:hover {
+            border-color: var(--accent-green);
+        }
+
+        .activity-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--vscode-fg);
+            cursor: pointer;
+            padding: 2px 0;
+        }
+
+        .activity-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--accent-green), #48bb78);
+            border-radius: 6px;
+            font-size: 11px;
+            color: white;
+        }
+
+        .activity-logs {
+            margin-top: 12px;
+            max-height: 150px;
+            min-height: 80px;
+            overflow-y: auto;
+            padding: 10px;
+            background: var(--input-bg);
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .activity-logs.collapsed {
+            max-height: 0;
+            margin-top: 0;
+            padding: 0 10px;
+            opacity: 0;
+            border-width: 0;
+        }
+
+        .activity-logs::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .activity-logs::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .activity-logs::-webkit-scrollbar-thumb {
+            background: var(--accent-green);
+            border-radius: 3px;
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            background: var(--vscode-bg);
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-green);
+            transition: all 0.2s ease;
+        }
+
+        .log-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .log-entry:hover {
+            background: var(--card-bg);
+            transform: translateX(1px);
+        }
+
+        .log-timestamp {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .log-message {
+            font-size: 12px;
+            color: var(--vscode-fg);
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        /* Empty state for activity logs */
+        .empty-logs {
+            text-align: center;
+            padding: 20px 12px;
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        .empty-logs::before {
+            content: '📝';
+            display: block;
+            font-size: 20px;
+            margin-bottom: 6px;
+            opacity: 0.6;
+        }
+
+        /* Enhanced visual hierarchy */
+        .floating-sidebar.collapsed .collaboration-section {
+            display: none;
         }
 
         .floating-sidebar.collapsed .sidebar-footer {
@@ -1060,10 +1609,11 @@
             color: var(--accent-blue);
         }
 
-        /* Main Content Area */
+        /* Main Content Area - Proper spacing */
         .main-content {
             flex: 1;
             margin-left: 420px;
+            margin-right: 20px;
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -1137,21 +1687,22 @@
             flex-direction: column;
         }
 
-        /* Chat Interface - Primary Focus */
+        /* Chat Interface - Better space utilization */
         .chat-container {
             background: var(--card-bg);
             border: 1px solid var(--vscode-border);
             border-radius: 16px;
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 200px);
+            height: calc(100vh - 160px);
             overflow: hidden;
             position: relative;
             box-shadow: 0 4px 16px var(--shadow);
+            width: 100%;
         }
 
         .chat-header {
-            padding: 20px 24px;
+            padding: 16px 20px;
             border-bottom: 1px solid var(--vscode-border);
             display: flex;
             justify-content: space-between;
@@ -1357,7 +1908,7 @@
         }
 
         .chat-input-container {
-            padding: 20px 24px;
+            padding: 16px 20px;
             border-top: 1px solid var(--vscode-border);
             background: var(--card-bg);
             border-radius: 0 0 16px 16px;
@@ -2426,73 +2977,95 @@
                 </div>
             </div>
 
+            <!-- Scrollable Content Container -->
+            <div class="sidebar-content">
+                <!-- Enhanced Collaboration Section - Positioned for optimal UX flow -->
+            <div class="collaboration-section">
+                <div class="collaboration-title" onclick="toggleCollaborationSection()">
+                    <div class="collaboration-icon">🤝</div>
+                    <span>Swarm Collaboration</span>
+                    <button class="collapse-toggle-btn" id="collaborationToggle">−</button>
+                </div>
+                <div class="collaboration-content" id="collaborationContent">
+                    <div class="swarm-collaboration-info">
+                        <span class="current-swarm-indicator">Current: <strong id="currentSwarmCollabName">PythonSwarm</strong></span>
+                    </div>
+                    <textarea 
+                        class="collaboration-textarea" 
+                        id="globalCollaborationRules"
+                        placeholder="Define how agents in this swarm should collaborate together. For example:&#10;&#10;• Orchestrator receives requests and delegates to specialists&#10;• Python Developer handles backend implementation&#10;• Frontend Developer creates user interfaces&#10;• QA Tester validates all implementations&#10;• All agents provide status updates and coordinate handoffs"
+                        onchange="updateSwarmCollaboration(this.value)"
+                    >Orchestrator Agent: Coordinates all project activities, delegates tasks to specialized agents, monitors progress, and consolidates final results.
+
+Python Developer: Implements backend logic, database models, APIs, and server-side functionality. Reports progress to Orchestrator.
+
+Frontend Developer: Creates user interfaces, implements responsive design, and integrates with backend APIs. Coordinates with Python Developer for seamless integration.
+
+QA Tester: Validates all implementations, runs comprehensive test suites, identifies issues, and ensures quality standards. Reports findings to development team and Orchestrator.</textarea>
+                    <div class="collaboration-actions">
+                        <button class="collaboration-btn primary" onclick="saveSwarmCollaborationRules()">Save Rules</button>
+                        <button class="collaboration-btn" onclick="resetSwarmCollaborationRules()">Reset to Default</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="agents-section">
-                <div class="section-title">
-                    <span>AGENTS</span>
+                <div class="agents-header">
+                    <div class="agents-icon">🤖</div>
+                    <h3 class="agents-title">Active Agents</h3>
                     <button class="add-agent-btn" onclick="openModal('newAgentModal')" title="Add New Agent">+</button>
                 </div>
 
                 <div id="agentsList">
                     <div class="agent-card active" data-agent="orchestrator">
                         <div class="agent-header" onclick="selectAgent(this.parentElement, 'orchestrator')">
-                            <div class="agent-name">
-                                <div class="agent-avatar" style="background: var(--gradient-primary);">O</div>
-                                <span>Orchestrator</span>
-                            </div>
-                            <div class="agent-status active"></div>
+                            <div class="agent-avatar" style="background: var(--gradient-primary);">O</div>
+                            <div class="agent-name">Orchestrator Agent</div>
+                            <div class="agent-status"></div>
                         </div>
-                        <div class="agent-tools">5 tools enabled</div>
-                        <div class="agent-actions">
-                            <button class="agent-action-btn" onclick="openAgentConfig('orchestrator')" title="Configuration">
-                                <span>⚙️</span>
-                                <span>Config</span>
-                            </button>
-                            <button class="agent-action-btn" onclick="openAgentTools('orchestrator')" title="Tools">
-                                <span>🛠️</span>
-                                <span>Tools</span>
-                            </button>
+                        <div class="agent-description">Coordinates project activities and delegates tasks</div>
+                        <div class="agent-tools">
+                            <div class="agent-tool">Config</div>
+                            <div class="agent-tool">Tools</div>
                         </div>
                     </div>
 
-                    <div class="agent-card" data-agent="cicd">
-                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'cicd')">
-                            <div class="agent-name">
-                                <div class="agent-avatar" style="background: var(--gradient-secondary);">C</div>
-                                <span>CI/CD Agent</span>
-                            </div>
-                            <div class="agent-status active"></div>
+                    <div class="agent-card" data-agent="python">
+                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'python')">
+                            <div class="agent-avatar" style="background: var(--gradient-secondary);">P</div>
+                            <div class="agent-name">Python Developer</div>
+                            <div class="agent-status"></div>
                         </div>
-                        <div class="agent-tools">4 tools enabled</div>
-                        <div class="agent-actions">
-                            <button class="agent-action-btn" onclick="openAgentConfig('cicd')" title="Configuration">
-                                <span>⚙️</span>
-                                <span>Config</span>
-                            </button>
-                            <button class="agent-action-btn" onclick="openAgentTools('cicd')" title="Tools">
-                                <span>🛠️</span>
-                                <span>Tools</span>
-                            </button>
+                        <div class="agent-description">Backend logic, APIs, and server-side functionality</div>
+                        <div class="agent-tools">
+                            <div class="agent-tool">Config</div>
+                            <div class="agent-tool">Tools</div>
                         </div>
                     </div>
 
-                    <div class="agent-card" data-agent="tests">
-                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'tests')">
-                            <div class="agent-name">
-                                <div class="agent-avatar" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-red));">T</div>
-                                <span>Tests Agent</span>
-                            </div>
-                            <div class="agent-status active"></div>
+                    <div class="agent-card" data-agent="frontend">
+                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'frontend')">
+                            <div class="agent-avatar" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-red));">F</div>
+                            <div class="agent-name">Frontend Developer</div>
+                            <div class="agent-status"></div>
                         </div>
-                        <div class="agent-tools">3 tools enabled</div>
-                        <div class="agent-actions">
-                            <button class="agent-action-btn" onclick="openAgentConfig('tests')" title="Configuration">
-                                <span>⚙️</span>
-                                <span>Config</span>
-                            </button>
-                            <button class="agent-action-btn" onclick="openAgentTools('tests')" title="Tools">
-                                <span>🛠️</span>
-                                <span>Tools</span>
-                            </button>
+                        <div class="agent-description">User interfaces and responsive design</div>
+                        <div class="agent-tools">
+                            <div class="agent-tool">Config</div>
+                            <div class="agent-tool">Tools</div>
+                        </div>
+                    </div>
+
+                    <div class="agent-card" data-agent="qa">
+                        <div class="agent-header" onclick="selectAgent(this.parentElement, 'qa')">
+                            <div class="agent-avatar" style="background: linear-gradient(135deg, var(--accent-green), #48bb78);">Q</div>
+                            <div class="agent-name">QA Tester</div>
+                            <div class="agent-status"></div>
+                        </div>
+                        <div class="agent-description">Validates implementations and ensures quality</div>
+                        <div class="agent-tools">
+                            <div class="agent-tool">Config</div>
+                            <div class="agent-tool">Tools</div>
                         </div>
                     </div>
 
@@ -2519,44 +3092,20 @@
                 </div>
             </div>
 
-            <!-- Agent Activity Logs Section -->
-            <div class="agents-section">
-                <div class="section-title">
-                    <span>ACTIVITY LOGS</span>
+            <!-- Enhanced Activity Logs Section -->
+            <div class="activity-section">
+                <div class="activity-title" onclick="toggleActivityLogsSection()">
+                    <div class="activity-icon">📊</div>
+                    <span>Activity Logs</span>
                     <button class="add-agent-btn" onclick="clearLogs()" title="Clear Logs">🗑️</button>
+                    <button class="collapse-toggle-btn" id="activityToggle">−</button>
                 </div>
 
                 <div class="activity-logs" id="activityLogs">
-                    <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No recent activity</div>
+                    <div class="empty-logs">No recent activity</div>
                 </div>
             </div>
-
-            <!-- Theme Controls at bottom -->
-            <div class="sidebar-footer">
-                <div class="theme-toggle-container" id="themeToggleContainer">
-                    <button class="theme-toggle-btn" onclick="toggleThemeDropdown()" title="Theme">
-                        <span class="theme-icon" id="currentThemeIcon">☀️</span>
-                        <span class="theme-label">Theme</span>
-                    </button>
-                    <div class="theme-dropdown-menu" id="themeDropdownMenu">
-                        <div class="theme-option" onclick="setTheme('light')" data-theme="light">
-                            <span class="theme-option-icon">☀️</span>
-                            <span class="theme-option-text">Light</span>
-                            <span class="theme-option-check" id="lightCheck">✓</span>
-                        </div>
-                        <div class="theme-option" onclick="setTheme('dark')" data-theme="dark">
-                            <span class="theme-option-icon">🌙</span>
-                            <span class="theme-option-text">Dark</span>
-                            <span class="theme-option-check" id="darkCheck"></span>
-                        </div>
-                        <div class="theme-option" onclick="setTheme('system')" data-theme="system">
-                            <span class="theme-option-icon">🖥️</span>
-                            <span class="theme-option-text">System</span>
-                            <span class="theme-option-check" id="systemCheck"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </div> <!-- End scrollable content container -->
         </div>
 
         <!-- Main Content -->
@@ -3011,8 +3560,7 @@
                     llmProvider: 'openai-gpt4',
                     responseTimeout: 5000,
                     maxConcurrentTasks: 5,
-                    memoryManagement: 'auto',
-                    collaborationRules: 'Orchestrator receives all initial requests → Delegates tasks to specialized agents → Monitors progress → Consolidates results'
+                    memoryManagement: 'auto'
                 }
             },
             cicd: {
@@ -3066,8 +3614,7 @@
                     llmProvider: 'openai-gpt4',
                     responseTimeout: 8000,
                     maxConcurrentTasks: 3,
-                    memoryManagement: 'conservative',
-                    collaborationRules: 'CI/CD Agent handles all deployment tasks → Coordinates with Tests Agent for validation → Reports status to Orchestrator'
+                    memoryManagement: 'conservative'
                 }
             },
             tests: {
@@ -3121,8 +3668,7 @@
                     llmProvider: 'claude',
                     responseTimeout: 6000,
                     maxConcurrentTasks: 4,
-                    memoryManagement: 'aggressive',
-                    collaborationRules: 'Tests Agent validates all code changes → Runs comprehensive test suites → Reports results to Orchestrator and CI/CD Agent'
+                    memoryManagement: 'aggressive'
                 }
             },
             writer: {
@@ -3177,8 +3723,7 @@
                     llmProvider: 'openai-gpt4',
                     responseTimeout: 4000,
                     maxConcurrentTasks: 3,
-                    memoryManagement: 'auto',
-                    collaborationRules: 'Writer Agent creates content based on requirements → Reviews and refines based on feedback → Collaborates with other agents for technical accuracy'
+                    memoryManagement: 'auto'
                 }
             },
             python_dev: {
@@ -3226,8 +3771,7 @@
                     llmProvider: 'openai-gpt4',
                     responseTimeout: 5000,
                     maxConcurrentTasks: 4,
-                    memoryManagement: 'auto',
-                    collaborationRules: 'Python Developer creates backend logic → Implements database models → Collaborates with Frontend Agent for UI integration'
+                    memoryManagement: 'auto'
                 }
             },
             frontend_dev: {
@@ -3273,8 +3817,7 @@
                     llmProvider: 'claude',
                     responseTimeout: 4500,
                     maxConcurrentTasks: 3,
-                    memoryManagement: 'auto',
-                    collaborationRules: 'Frontend Developer creates UI components → Implements responsive design → Integrates with Python Developer\'s backend APIs'
+                    memoryManagement: 'auto'
                 }
             },
             qa_tester: {
@@ -3319,8 +3862,7 @@
                     llmProvider: 'claude',
                     responseTimeout: 4000,
                     maxConcurrentTasks: 3,
-                    memoryManagement: 'auto',
-                    collaborationRules: 'QA Tester validates all code changes → Runs test suites → Reports issues to development team → Ensures quality before deployment'
+                    memoryManagement: 'auto'
                 }
             }
         };
@@ -3410,6 +3952,9 @@
             
             updateMainTitle();
             autoResizeAllTextareas();
+            
+            // Initialize collaboration for PythonSwarm
+            switchSwarmCollaboration('PythonSwarm');
             
             // Initialize with PythonSwarm agents
             console.log('DEBUG: Rendering agents for PythonSwarm');
@@ -3558,24 +4103,6 @@
                                 <option value="claude" ${agent.config.llmProvider === 'claude' ? 'selected' : ''}>Claude 3</option>
                                 <option value="local" ${agent.config.llmProvider === 'local' ? 'selected' : ''}>Local LLM</option>
                             </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Collaboration Settings Section -->
-                <div class="config-section collapsed">
-                    <div class="config-section-header" onclick="toggleConfigSection(this)">
-                        <div class="config-section-icon collaboration">🤝</div>
-                        <div class="config-section-details">
-                            <h3 class="config-section-title">Collaboration Settings</h3>
-                            <p class="config-section-subtitle">Agent coordination rules and workflow management</p>
-                        </div>
-                        <div class="config-section-toggle">▶</div>
-                    </div>
-                    <div class="config-section-content">
-                        <div class="form-group">
-                            <label class="form-label">Collaboration Rules</label>
-                            <textarea class="form-textarea" onchange="updateAgentConfig('collaborationRules', this.value)">${agent.config.collaborationRules}</textarea>
                         </div>
                     </div>
                 </div>
@@ -3738,31 +4265,42 @@
             // Start the demo sequence
             console.log('DEBUG: Starting demo sequence');
             
+            // Get current global collaboration rules
+            const collaborationRules = getGlobalCollaborationRules();
+            console.log('DEBUG: Using collaboration rules:', collaborationRules);
+            
             // Orchestrator response
             setTimeout(() => {
-                const orchestratorResponse = `🎯 <strong>Python Todo App Project Analysis:</strong><br>Coordinating development of your todo application using Python stack.<br><br>` +
+                const orchestratorResponse = `🎯 <strong>Python Todo App Project Analysis:</strong><br>Coordinating development using our team collaboration framework.<br><br>` +
                     `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
-                    `<strong>🐍 Python Development Plan:</strong><br>` +
+                    `<strong>🤝 Collaboration Protocol Active:</strong><br>` +
+                    `� Project delegated to specialized agents<br>` +
+                    `🔄 Progress monitoring initiated<br>` +
+                    `⚡ Real-time coordination enabled<br><br>` +
+                    `<strong>�🐍 Python Development Plan:</strong><br>` +
                     `• Backend: Flask web framework ✓<br>` +
                     `• Database: SQLite with persistence ✓<br>` +
                     `• Frontend: HTML/CSS/JavaScript UI ✓<br>` +
                     `• Testing: Comprehensive QA testing ✓<br><br>` +
-                    `Delegating to Python development specialists...</div>`;
+                    `Following team collaboration rules for seamless development...</div>`;
                 
                 addMessage('agent', 'Orchestrator Agent', orchestratorResponse, '🎯', 'linear-gradient(135deg, #667eea, #764ba2)');
-                addLogEntry('orchestrator', 'Python Todo App coordination: Flask + SQLite stack', '🔄 Coordinating', 'coordinating');
+                addLogEntry('orchestrator', 'Python Todo App coordination using global collaboration rules', '🔄 Coordinating', 'coordinating');
                 
                 // Trigger file creation in extension - IMPORTANT: This creates the files
                 console.log('DEBUG: Sending file creation message to extension');
                 vscode.postMessage({
                     command: 'pythonTodoDemo',
-                    data: { message: originalMessage || 'Create a Python todo app with Flask and SQLite' }
+                    data: { 
+                        message: originalMessage || 'Create a Python todo app',
+                        collaborationRules: collaborationRules
+                    }
                 });
             }, 1000);
             
             // Python Developer response
             setTimeout(() => {
-                const pythonDevResponse = `🐍 <strong>Flask Backend Development:</strong><br>Creating the todo app backend with Flask and SQLite...<br><br>` +
+                const pythonDevResponse = `🐍 <strong>Flask Backend Development:</strong><br>Following team coordination protocol - implementing backend logic as delegated...<br><br>` +
                     `<div style="background: #1a1a1a; color: #00ff00; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 11px; margin-top: 8px;">` +
                     `<span style="color: #888;">$</span> pip install Flask<br>` +
                     `<span style="color: #4fc3f7;">✓</span> Flask installed successfully<br>` +
@@ -3772,15 +4310,15 @@
                     `<span style="color: #4fc3f7;">✓</span> PUT /api/todos/:id - Update todo<br>` +
                     `<span style="color: #4fc3f7;">✓</span> DELETE /api/todos/:id - Delete todo<br>` +
                     `<span style="color: #888;">$</span> SQLite database initialized</div><br>` +
-                    `<strong>Features implemented:</strong> CRUD operations, data persistence, RESTful API`;
+                    `<strong>Status:</strong> Backend ready for frontend integration. Reporting to Orchestrator...`;
                 
                 addMessage('agent', 'Python Developer', pythonDevResponse, '🐍', 'linear-gradient(135deg, #3b82f6, #1d4ed8)');
-                addLogEntry('python_dev', 'Flask API: CRUD routes created, SQLite database setup', '✓ Backend Ready', 'success');
+                addLogEntry('python_dev', 'Flask API: Backend complete, ready for frontend integration', '✓ Backend Ready', 'success');
             }, 3000);
             
             // Frontend Developer response  
             setTimeout(() => {
-                const frontendResponse = `🎨 <strong>Todo App UI Development:</strong><br>Building responsive frontend interface...<br><br>` +
+                const frontendResponse = `🎨 <strong>Todo App UI Development:</strong><br>Coordinating with Python Developer - building responsive interface for backend integration...<br><br>` +
                     `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
                     `<strong>🎨 Frontend Components Created:</strong><br>` +
                     `✅ Todo input form with validation<br>` +
@@ -3789,15 +4327,15 @@
                     `✅ Filter controls (all/active/completed)<br>` +
                     `✅ Responsive CSS with mobile support<br>` +
                     `✅ JavaScript for API integration<br><br>` +
-                    `<strong>Design:</strong> Clean, modern, user-friendly interface</div>`;
+                    `<strong>Integration:</strong> Frontend seamlessly connected to Python backend APIs</div>`;
                 
                 addMessage('agent', 'Frontend Developer', frontendResponse, '🎨', 'linear-gradient(135deg, #61dafb, #21759b)');
-                addLogEntry('frontend_dev', 'UI Components: Forms, lists, filters with responsive design', '✓ Frontend Ready', 'success');
+                addLogEntry('frontend_dev', 'UI complete: Responsive design integrated with Python backend', '🎨 Frontend Ready', 'success');
             }, 6000);
             
             // QA Tester response
             setTimeout(() => {
-                const qaResponse = `🧪 <strong>Quality Assurance Complete:</strong><br>Comprehensive testing of Python todo application...<br><br>` +
+                const qaResponse = `🧪 <strong>Quality Assurance Complete:</strong><br>Following team protocols - validating all implementations and reporting findings...<br><br>` +
                     `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
                     `<strong>🧪 Testing Results:</strong><br>` +
                     `✅ Unit Tests (6/6 passed, 100% coverage)<br>` +
@@ -3805,15 +4343,15 @@
                     `✅ Frontend Tests (UI interactions verified)<br>` +
                     `✅ Manual Testing (User workflow validated)<br>` +
                     `✅ Cross-browser Testing (Chrome, Firefox, Safari)<br><br>` +
-                    `<strong>Status:</strong> Production ready! 🚀</div>`;
+                    `<strong>Quality Report:</strong> All standards met. Reporting to development team and Orchestrator.</div>`;
                 
                 addMessage('agent', 'QA Tester', qaResponse, '🧪', 'linear-gradient(135deg, #10b981, #059669)');
-                addLogEntry('qa_tester', 'Testing complete: 100% test coverage, all validations passed', '✅ QA Approved', 'success');
+                addLogEntry('qa_tester', 'Testing complete: Quality assured, reporting to team', '✅ QA Approved', 'success');
             }, 9000);
             
             // Final summary
             setTimeout(() => {
-                const finalResponse = `🎉 <strong>Python Todo App Complete!</strong><br>Your Flask-based todo application is ready!<br><br>` +
+                const finalResponse = `🎉 <strong>Python Todo App Complete!</strong><br>Team collaboration successful! Flask-based todo application ready following our coordination protocol.<br><br>` +
                     `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
                     `<strong>📁 Project Structure:</strong><br>` +
                     `├── app.py (Flask backend)<br>` +
@@ -3822,10 +4360,11 @@
                     `├── static/script.js (JavaScript)<br>` +
                     `└── requirements.txt (Dependencies)<br><br>` +
                     `<strong>🔧 Tech Stack:</strong> Python Flask, SQLite, HTML/CSS/JS<br>` +
+                    `<strong>🤝 Collaboration:</strong> All agents coordinated successfully<br>` +
                     `<strong>🚀 Ready to run:</strong> cd python-todo-demo && python app.py</div>`;
                 
                 addMessage('agent', 'Orchestrator Agent', finalResponse, '🎯', 'linear-gradient(135deg, #667eea, #764ba2)');
-                addLogEntry('orchestrator', 'Python Todo App: Complete Flask application ready', '🎉 Deployed', 'success');
+                addLogEntry('orchestrator', 'Project complete: Successful team collaboration', '🎉 Deployed', 'success');
             }, 12000);
         }
 
@@ -4465,8 +5004,7 @@
                     llmProvider: 'openai-gpt4',
                     responseTimeout: 5000,
                     maxConcurrentTasks: 3,
-                    memoryManagement: 'auto',
-                    collaborationRules: `${name} agent handles ${role} tasks → Coordinates with other agents as needed → Reports results to Orchestrator`
+                    memoryManagement: 'auto'
                 }
             };
 
@@ -5157,8 +5695,7 @@
                     llmProvider: 'openai-gpt4',
                     responseTimeout: 5000,
                     maxConcurrentTasks: 3,
-                    memoryManagement: 'auto',
-                    collaborationRules: `${agentData.name} handles ${agentData.role || 'specialized'} tasks → Coordinates with other agents as needed → Reports results to Orchestrator`
+                    memoryManagement: 'auto'
                 }
             };
 
@@ -5350,6 +5887,9 @@
             currentSwarm = swarmName;
             renderAgentsForSwarm(swarmName);
             
+            // Switch collaboration settings to this swarm
+            switchSwarmCollaboration(swarmName);
+            
             console.log('Selected swarm:', swarmName);
         }
 
@@ -5392,81 +5932,19 @@
         // Theme Toggle Functions
         let currentTheme = 'light';
 
-        function toggleThemeDropdown() {
-            const dropdown = document.getElementById('themeDropdownMenu');
-            dropdown.classList.toggle('show');
-        }
-
-        function setTheme(theme) {
-            currentTheme = theme;
+        // Set theme to system default automatically
+        function initializeTheme() {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.body.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
             
-            // Update theme icon
-            const themeIcon = document.getElementById('currentThemeIcon');
-            const themeIcons = {
-                'light': '☀️',
-                'dark': '🌙', 
-                'system': '🖥️'
-            };
-            themeIcon.textContent = themeIcons[theme];
-            
-            // Update selected state
-            document.querySelectorAll('.theme-option').forEach(option => {
-                option.classList.remove('selected');
-                const check = option.querySelector('.theme-option-check');
-                check.textContent = '';
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                document.body.setAttribute('data-theme', e.matches ? 'dark' : 'light');
             });
-            
-            const selectedOption = document.querySelector(`[data-theme="${theme}"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-                selectedOption.querySelector('.theme-option-check').textContent = '✓';
-            }
-            
-            // Apply theme
-            applyTheme(theme);
-            
-            // Close dropdown
-            document.getElementById('themeDropdownMenu').classList.remove('show');
         }
 
-        function applyTheme(theme) {
-            const root = document.documentElement;
-            const body = document.body;
-            
-            // Remove existing theme classes
-            body.removeAttribute('data-theme');
-            
-            if (theme === 'dark') {
-                // Apply dark theme by setting data attribute
-                body.setAttribute('data-theme', 'dark');
-            } else if (theme === 'system') {
-                // Use system preference
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                applyTheme(prefersDark ? 'dark' : 'light');
-                return;
-            } else {
-                // Light theme (default) - no data attribute needed
-                body.removeAttribute('data-theme');
-            }
-            
-            // Force a repaint to ensure all elements update
-            body.style.display = 'none';
-            body.offsetHeight; // Trigger reflow
-            body.style.display = '';
-        }
-
-        // Close theme dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const themeContainer = document.getElementById('themeToggleContainer');
-            const themeDropdown = document.getElementById('themeDropdownMenu');
-            
-            if (!themeContainer.contains(event.target)) {
-                themeDropdown.classList.remove('show');
-            }
-        });
-
-        // Initialize with light theme
-        setTheme('light');
+        // Initialize with system theme
+        initializeTheme();
 
         // Clear activity logs function
         function clearLogs() {
@@ -5512,6 +5990,195 @@
             while (activityLogs.children.length > 10) {
                 activityLogs.removeChild(activityLogs.lastChild);
             }
+        }
+
+        // Global Collaboration Functions - Now Swarm-Specific
+        let swarmCollaborationRules = {
+            'PythonSwarm': `Orchestrator Agent: Coordinates all project activities, delegates tasks to specialized agents, monitors progress, and consolidates final results.
+
+Python Developer: Implements backend logic, database models, APIs, and server-side functionality. Reports progress to Orchestrator.
+
+Frontend Developer: Creates user interfaces, implements responsive design, and integrates with backend APIs. Coordinates with Python Developer for seamless integration.
+
+QA Tester: Validates all implementations, runs comprehensive test suites, identifies issues, and ensures quality standards. Reports findings to development team and Orchestrator.`,
+            
+            'WebDevSwarm': `Orchestrator Agent: Manages web development projects, coordinates between frontend/backend teams, and oversees deployment processes.
+
+CI/CD Agent: Handles automated builds, testing pipelines, and deployment strategies. Coordinates with Tests Agent for quality assurance.
+
+Tests Agent: Performs comprehensive testing including unit tests, integration tests, and automated browser testing.
+
+Writer Agent: Creates technical documentation, user guides, and content for web applications.`,
+
+            'FlutterSwarm': `Orchestrator Agent: Coordinates mobile app development lifecycle from planning to deployment.
+
+CI/CD Agent: Manages Flutter build processes, handles app store deployments, and maintains CI/CD pipelines.
+
+Tests Agent: Performs mobile testing including widget tests, integration tests, and device compatibility testing.`,
+
+            'MobileSwarm': `Orchestrator Agent: Oversees mobile development across platforms, manages project timelines and resource allocation.
+
+CI/CD Agent: Handles mobile CI/CD pipelines, manages app store submissions, and coordinates releases.
+
+Tests Agent: Conducts mobile-specific testing including performance testing, battery optimization, and cross-device compatibility.`,
+
+            'AISwarm': `Orchestrator Agent: Coordinates AI/ML project development, manages model training workflows, and oversees deployment.
+
+CI/CD Agent: Handles MLOps pipelines, model versioning, and automated deployment of AI services.
+
+Tests Agent: Performs model validation, A/B testing, and quality assurance for AI systems.`,
+
+            'DataSwarm': `Orchestrator Agent: Manages data engineering projects, coordinates ETL pipelines, and oversees data quality initiatives.
+
+CI/CD Agent: Handles data pipeline deployments, manages infrastructure, and coordinates data releases.
+
+Tests Agent: Performs data validation, quality checks, and testing of data processing workflows.`
+        };
+
+        let currentSwarmForCollab = 'PythonSwarm';
+        let collaborationSectionCollapsed = false;
+        let activityLogsSectionCollapsed = false;
+
+        function updateSwarmCollaboration(value) {
+            swarmCollaborationRules[currentSwarmForCollab] = value;
+            console.log(`Swarm collaboration rules updated for ${currentSwarmForCollab}:`, value);
+        }
+
+        function saveSwarmCollaborationRules() {
+            const textarea = document.getElementById('globalCollaborationRules');
+            swarmCollaborationRules[currentSwarmForCollab] = textarea.value;
+            
+            // Show success message
+            vscode.postMessage({
+                command: 'saveSwarmCollaboration',
+                data: { 
+                    swarm: currentSwarmForCollab,
+                    rules: swarmCollaborationRules[currentSwarmForCollab] 
+                }
+            });
+            
+            // Visual feedback
+            const saveBtn = event.target;
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Saved!';
+            saveBtn.style.background = 'var(--accent-green)';
+            
+            setTimeout(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.style.background = 'var(--accent-blue)';
+            }, 2000);
+            
+            console.log(`Collaboration rules saved for ${currentSwarmForCollab}:`, swarmCollaborationRules[currentSwarmForCollab]);
+        }
+
+        function resetSwarmCollaborationRules() {
+            // Get default rules for current swarm
+            const defaultRules = getDefaultCollaborationRules(currentSwarmForCollab);
+            
+            document.getElementById('globalCollaborationRules').value = defaultRules;
+            swarmCollaborationRules[currentSwarmForCollab] = defaultRules;
+            
+            console.log(`Collaboration rules reset to default for ${currentSwarmForCollab}`);
+        }
+
+        function getDefaultCollaborationRules(swarmName) {
+            const defaults = {
+                'PythonSwarm': `Orchestrator Agent: Coordinates all project activities, delegates tasks to specialized agents, monitors progress, and consolidates final results.
+
+Python Developer: Implements backend logic, database models, APIs, and server-side functionality. Reports progress to Orchestrator.
+
+Frontend Developer: Creates user interfaces, implements responsive design, and integrates with backend APIs. Coordinates with Python Developer for seamless integration.
+
+QA Tester: Validates all implementations, runs comprehensive test suites, identifies issues, and ensures quality standards. Reports findings to development team and Orchestrator.`,
+                
+                'WebDevSwarm': `Orchestrator Agent: Manages web development projects, coordinates between frontend/backend teams, and oversees deployment processes.
+
+CI/CD Agent: Handles automated builds, testing pipelines, and deployment strategies. Coordinates with Tests Agent for quality assurance.
+
+Tests Agent: Performs comprehensive testing including unit tests, integration tests, and automated browser testing.
+
+Writer Agent: Creates technical documentation, user guides, and content for web applications.`,
+
+                'FlutterSwarm': `Orchestrator Agent: Coordinates mobile app development lifecycle from planning to deployment.
+
+CI/CD Agent: Manages Flutter build processes, handles app store deployments, and maintains CI/CD pipelines.
+
+Tests Agent: Performs mobile testing including widget tests, integration tests, and device compatibility testing.`,
+
+                'MobileSwarm': `Orchestrator Agent: Oversees mobile development across platforms, manages project timelines and resource allocation.
+
+CI/CD Agent: Handles mobile CI/CD pipelines, manages app store submissions, and coordinates releases.
+
+Tests Agent: Conducts mobile-specific testing including performance testing, battery optimization, and cross-device compatibility.`,
+
+                'AISwarm': `Orchestrator Agent: Coordinates AI/ML project development, manages model training workflows, and oversees deployment.
+
+CI/CD Agent: Handles MLOps pipelines, model versioning, and automated deployment of AI services.
+
+Tests Agent: Performs model validation, A/B testing, and quality assurance for AI systems.`,
+
+                'DataSwarm': `Orchestrator Agent: Manages data engineering projects, coordinates ETL pipelines, and oversees data quality initiatives.
+
+CI/CD Agent: Handles data pipeline deployments, manages infrastructure, and coordinates data releases.
+
+Tests Agent: Performs data validation, quality checks, and testing of data processing workflows.`
+            };
+            
+            return defaults[swarmName] || defaults['PythonSwarm'];
+        }
+
+        function switchSwarmCollaboration(swarmName) {
+            // Save current swarm's rules
+            const textarea = document.getElementById('globalCollaborationRules');
+            if (textarea.value) {
+                swarmCollaborationRules[currentSwarmForCollab] = textarea.value;
+            }
+            
+            // Switch to new swarm
+            currentSwarmForCollab = swarmName;
+            
+            // Update UI
+            document.getElementById('currentSwarmCollabName').textContent = swarmName;
+            
+            // Load rules for new swarm
+            const rules = swarmCollaborationRules[swarmName] || getDefaultCollaborationRules(swarmName);
+            textarea.value = rules;
+            
+            console.log(`Switched collaboration to ${swarmName}`);
+        }
+
+        function toggleCollaborationSection() {
+            const content = document.getElementById('collaborationContent');
+            const icon = document.getElementById('collabToggleIcon');
+            
+            collaborationSectionCollapsed = !collaborationSectionCollapsed;
+            
+            if (collaborationSectionCollapsed) {
+                content.classList.add('collapsed');
+                icon.textContent = '▶';
+            } else {
+                content.classList.remove('collapsed');
+                icon.textContent = '▼';
+            }
+        }
+
+        function toggleActivityLogsSection() {
+            const activityLogs = document.getElementById('activityLogs');
+            const icon = document.getElementById('activityToggleIcon');
+            
+            activityLogsSectionCollapsed = !activityLogsSectionCollapsed;
+            
+            if (activityLogsSectionCollapsed) {
+                activityLogs.classList.add('collapsed');
+                icon.textContent = '▶';
+            } else {
+                activityLogs.classList.remove('collapsed');
+                icon.textContent = '▼';
+            }
+        }
+
+        function getGlobalCollaborationRules() {
+            return swarmCollaborationRules[currentSwarmForCollab] || getDefaultCollaborationRules(currentSwarmForCollab);
         }
     </script>
 </body>

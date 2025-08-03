@@ -1,51 +1,89 @@
 {
-  "name": "ai-chat-vscode-extension",
-  "displayName": "AI Code Assistant",
-  "description": "A beautiful chat-based AI assistant in VS Code.",
-  "version": "0.0.1",
+  "name": "multiagent-swarm",
+  "displayName": "MultiAgent Swarm",
+  "description": "AI-powered multi-agent development assistant",
+  "version": "1.0.0",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onView:aiChatView"
+    "onStartupFinished"
   ],
-  "main": "./dist/extension.js",
+  "main": "./out/extension.js",
   "contributes": {
-    "viewsContainers": {
-      "activitybar": [
+    "commands": [
+      {
+        "command": "multiagentSwarm.openPanel",
+        "title": "Open MultiAgent Swarm",
+        "icon": "$(robot)"
+      },
+      {
+        "command": "multiagentSwarm.togglePanel",
+        "title": "Toggle MultiAgent Swarm Panel",
+        "icon": "$(robot)"
+      }
+    ],
+    "views": {
+      "multiagentSwarm": [
         {
-          "id": "aiChat",
-          "title": "AI Chat"
+          "id": "multiagentSwarm.mainView",
+          "name": "Multi-Agent Collaboration Hub",
+          "when": "multiagentSwarm:panelVisible"
         }
       ]
     },
-    "views": {
-      "aiChat": [
+    "viewsContainers": {
+      "activitybar": [
         {
-          "id": "aiChatView",
-          "name": "Chat"
+          "id": "multiagentSwarm",
+          "title": "MultiAgent Swarm",
+          "icon": "media/icon.svg"
         }
       ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "multiagentSwarm.togglePanel",
+          "when": "view == multiagentSwarm.mainView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "multiagentSwarm.togglePanel",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m"
+      }
+    ]
+  },
+  "configuration": {
+    "title": "MultiAgent Swarm",
+    "properties": {
+      "multiagentSwarm.openaiApiKey": {
+        "type": "string",
+        "default": "",
+        "description": "OpenAI API Key for AI-powered features"
+      },
+      "multiagentSwarm.enableAIFeatures": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable AI-powered swarm generation and tool creation"
+      }
     }
   },
   "scripts": {
-    "build": "pnpm run build:ext && pnpm run build:web",
-   "build:ext": "esbuild src/extension.ts --bundle --platform=node --outfile=dist/extension.js --external:vscode",
-    "build:web": "esbuild src/webview/webview.ts --bundle --outfile=media/chat.js"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@types/node": "^24.0.4",
-    "@types/vscode": "^1.85.0",
-    "dotenv": "^16.5.0",
-    "esbuild": "^0.20.0",
-    "glob": "^11.0.3",
-    "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "node-fetch": "^3.3.2"
+    "@types/node": "16.x",
+    "@types/vscode": "^1.74.0",
+    "typescript": "^4.9.5"
   }
 }

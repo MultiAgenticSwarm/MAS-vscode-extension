@@ -1,0 +1,2191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MultiAgenticSwarm - Configuration Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-hover: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --text-muted: #656d76;
+            --accent-blue: #58a6ff;
+            --accent-purple: #bc8cff;
+            --accent-green: #56d364;
+            --accent-orange: #ffa657;
+            --accent-red: #f85149;
+            --border-color: #30363d;
+            --border-muted: #21262d;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-lg: rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            --gradient-secondary: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            --glass-bg: rgba(22, 27, 34, 0.8);
+            --glass-border: rgba(240, 246, 252, 0.1);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --bg-tertiary: #f1f3f4;
+            --bg-hover: #e7e9eb;
+            --text-primary: #24292f;
+            --text-secondary: #656d76;
+            --text-muted: #8b949e;
+            --border-color: #d0d7de;
+            --border-muted: #e1e4e8;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.2);
+            --glass-bg: rgba(246, 248, 250, 0.8);
+            --glass-border: rgba(36, 41, 47, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(88, 166, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(188, 140, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(86, 211, 100, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .main-container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Floating Sidebar */
+        .floating-sidebar {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            bottom: 20px;
+            width: 320px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px var(--shadow-lg);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateX(0);
+            overflow: hidden;
+        }
+
+        .floating-sidebar.collapsed {
+            width: 80px;
+            transform: translateX(0);
+        }
+
+        .floating-sidebar.collapsed .sidebar-header-content {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .floating-sidebar:not(.collapsed) .sidebar-header-content {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s;
+        }
+
+        .floating-sidebar.collapsed .agents-section {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .floating-sidebar:not(.collapsed) .agents-section {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s;
+        }
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-muted);
+            background: var(--gradient-primary);
+            border-radius: 16px 16px 0 0;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .floating-sidebar.collapsed .sidebar-header {
+            padding: 24px 12px;
+            border-bottom: none;
+        }
+
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-header-content {
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .swarm-selector {
+            position: relative;
+        }
+
+        .swarm-dropdown {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .swarm-dropdown:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .collapse-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+
+        .collapse-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .collapse-btn:active {
+            transform: scale(0.95);
+        }
+
+        .floating-sidebar.collapsed .collapse-btn {
+            right: 24px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .agents-section {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .floating-sidebar.collapsed .agents-section {
+            padding: 24px 8px;
+        }
+
+        .floating-sidebar.collapsed .section-title {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .floating-sidebar:not(.collapsed) .section-title {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.1s;
+        }
+
+        .floating-sidebar.collapsed .agent-card {
+            margin-bottom: 8px;
+            padding: 12px 8px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-sidebar.collapsed .agent-card .agent-header {
+            margin-bottom: 0;
+            justify-content: center;
+        }
+
+        .floating-sidebar.collapsed .agent-card .agent-name span,
+        .floating-sidebar.collapsed .agent-card .agent-tools,
+        .floating-sidebar.collapsed .agent-card .agent-status {
+            display: none;
+        }
+
+        .floating-sidebar.collapsed .agent-card .agent-avatar {
+            margin: 0;
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+        }
+
+        .floating-sidebar.collapsed .agent-card:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .floating-sidebar.collapsed:hover {
+            box-shadow: 0 24px 48px var(--shadow-lg);
+        }
+
+        /* Smooth transitions for all interactive elements */
+        .floating-sidebar * {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Add subtle animation when expanding */
+        .floating-sidebar:not(.collapsed) .agent-card {
+            animation: slideInFromLeft 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Stagger animation for agent cards */
+        .floating-sidebar:not(.collapsed) .agent-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .floating-sidebar:not(.collapsed) .agent-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .floating-sidebar:not(.collapsed) .agent-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .add-agent-btn {
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-secondary);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .add-agent-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(86, 211, 100, 0.3);
+        }
+
+        .agent-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-blue);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .agent-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .agent-card.active {
+            border-color: var(--accent-blue);
+            background: var(--bg-tertiary);
+        }
+
+        .agent-card.active::before {
+            opacity: 1;
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .agent-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .agent-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .agent-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            position: relative;
+        }
+
+        .agent-status.active::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border: 2px solid var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .agent-tools {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            margin-left: 360px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 120px;
+        }
+
+        .main-header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .main-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .main-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .content-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .tab-button.active {
+            background: var(--gradient-primary);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+        }
+
+        .tab-button:hover:not(.active) {
+            background: var(--bg-hover);
+            border-color: var(--accent-blue);
+        }
+
+        .tab-content {
+            display: none;
+            flex: 1;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Chat Interface - Primary Focus */
+        .chat-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 200px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 16px 16px 0 0;
+        }
+
+        .chat-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            animation: messageSlideIn 0.3s ease-out;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-bubble {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px 20px;
+            position: relative;
+            max-width: 80%;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .message.agent .message-bubble {
+            margin-left: 0;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .message.user .message-bubble {
+            margin-left: auto;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .message-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+        }
+
+        .message-content {
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            max-width: 200px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            animation: typingPulse 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingPulse {
+            0%, 80%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .chat-input-container {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-muted);
+            background: var(--bg-secondary);
+            border-radius: 0 0 16px 16px;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 14px;
+            resize: none;
+            min-height: 44px;
+            max-height: 120px;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+
+        .send-button {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(88, 166, 255, 0.3);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Configuration Tab */
+        .config-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .config-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px var(--shadow);
+            overflow: hidden;
+        }
+
+        .config-section-header {
+            padding: 20px 24px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-muted);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .config-section-header:hover {
+            background: var(--bg-hover);
+        }
+
+        .config-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .config-section-content {
+            padding: 24px;
+            max-height: 400px;
+            opacity: 1;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .config-section-content.collapsed {
+            max-height: 0;
+            padding: 0 24px;
+            opacity: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Tools Tab */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .tool-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px var(--shadow);
+            transition: all 0.2s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .tool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tool-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+        }
+
+        .tool-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-hover);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: var(--gradient-secondary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        .primary-button {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .primary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(88, 166, 255, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .floating-sidebar {
+                width: 280px;
+            }
+            
+            .main-content {
+                margin-left: 320px;
+            }
+            
+            .main-content.sidebar-collapsed {
+                margin-left: 120px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .floating-sidebar {
+                left: 10px;
+                top: 10px;
+                bottom: 10px;
+                width: 260px;
+            }
+            
+            .main-content {
+                margin-left: 280px;
+                padding: 10px;
+            }
+            
+            .main-content.sidebar-collapsed {
+                margin-left: 90px;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+
+        /* Notification System */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .notification {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            box-shadow: 0 8px 32px var(--shadow);
+            transform: translateX(100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: all;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 350px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--accent-orange);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--accent-red);
+        }
+
+        .notification-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notification-message {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .notification-close:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
+    <div class="main-container">
+        <!-- Floating Sidebar -->
+        <div class="floating-sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-header-content">
+                    <div class="logo">
+                        <div class="logo-icon">🤖</div>
+                        <span id="logoText">MultiAgenticSwarm</span>
+                    </div>
+                    <div class="swarm-selector" id="swarmSelector">
+                        <div class="swarm-dropdown" onclick="toggleSwarmDropdown()">
+                            <span id="selectedSwarm">FlutterSwarm</span>
+                            <span>▼</span>
+                            <span class="swarm-dropdown-arrow" id="swarmArrow">▼</span>
+                        </div>
+                        <div class="swarm-dropdown-menu" id="swarmDropdownMenu">
+                            <div class="swarm-dropdown-item active" onclick="selectSwarm('FlutterSwarm')">
+                                <span>🦋</span>
+                                <span>FlutterSwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-item" onclick="selectSwarm('ReactSwarm')">
+                                <span>⚛️</span>
+                                <span>ReactSwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-item" onclick="selectSwarm('NodeSwarm')">
+                                <span>🟢</span>
+                                <span>NodeSwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-item" onclick="selectSwarm('PythonSwarm')">
+                                <span>🐍</span>
+                                <span>PythonSwarm</span>
+                            </div>
+                            <div class="swarm-dropdown-item" onclick="selectSwarm('GeneralSwarm')">
+                                <span>🔧</span>
+                                <span>GeneralSwarm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="collapse-btn" onclick="toggleSidebar()" title="Collapse Sidebar">
+                    <span id="collapseIcon">◀</span>
+                </button>
+            </div>
+
+            <div class="agents-section">
+                <div class="section-title">
+                    <span>AGENTS</span>
+                    <button class="add-agent-btn" onclick="openModal('newAgentModal')" title="Add New Agent">+</button>
+                </div>
+
+                <div id="agentsList">
+                    <div class="agent-card active" onclick="selectAgent(this, 'orchestrator')">
+                        <div class="agent-header">
+                            <div class="agent-name">
+                                <div class="agent-avatar" style="background: var(--gradient-primary);">O</div>
+                                <span>Orchestrator</span>
+                            </div>
+                            <div class="agent-status active"></div>
+                        </div>
+                        <div class="agent-tools">4 tools enabled</div>
+                    </div>
+
+                    <div class="agent-card" onclick="selectAgent(this, 'cicd')">
+                        <div class="agent-header">
+                            <div class="agent-name">
+                                <div class="agent-avatar" style="background: var(--gradient-secondary);">C</div>
+                                <span>CI/CD Agent</span>
+                            </div>
+                            <div class="agent-status active"></div>
+                        </div>
+                        <div class="agent-tools">3 tools enabled</div>
+                    </div>
+
+                    <div class="agent-card" onclick="selectAgent(this, 'tests')">
+                        <div class="agent-header">
+                            <div class="agent-name">
+                                <div class="agent-avatar" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-red));">T</div>
+                                <span>Tests Agent</span>
+                            </div>
+                            <div class="agent-status active"></div>
+                        </div>
+                        <div class="agent-tools">5 tools enabled</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="main-header">
+                <h1 class="main-title" id="mainTitle">Agent Response Center</h1>
+                <p class="main-subtitle">Interact with your AI agents in real-time</p>
+            </div>
+
+            <div class="content-tabs">
+                <button class="tab-button active" onclick="switchTab('chat')">💬 Chat</button>
+                <button class="tab-button" onclick="switchTab('config')">⚙️ Configuration</button>
+                <button class="tab-button" onclick="switchTab('tools')">🛠️ Tools</button>
+            </div>
+
+            <!-- Chat Tab (Primary Focus) -->
+            <div class="tab-content active" id="chatTab">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-title">
+                            <span>💬</span>
+                            <span id="chatAgentName">Orchestrator Agent</span>
+                        </div>
+                        <div class="chat-status">
+                            <div class="status-indicator"></div>
+                            <span>Online</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message agent">
+                            <div class="message-bubble">
+                                <div class="message-header">
+                                    <div class="message-avatar" style="background: var(--gradient-primary);">O</div>
+                                    <span>Orchestrator Agent</span>
+                                    <span>•</span>
+                                    <span>2:34 PM</span>
+                                </div>
+                                <div class="message-content">
+                                    Hello! I'm your Orchestrator Agent. I coordinate tasks between different agents in your Flutter development workflow. How can I help you today?
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="message agent">
+                            <div class="message-bubble">
+                                <div class="message-header">
+                                    <div class="message-avatar" style="background: var(--gradient-secondary);">C</div>
+                                    <span>CI/CD Agent</span>
+                                    <span>•</span>
+                                    <span>2:35 PM</span>
+                                </div>
+                                <div class="message-content">
+                                    I'm ready to handle deployment pipelines and continuous integration tasks. Just let me know what you need!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="chat-input-wrapper">
+                            <textarea 
+                                class="chat-input" 
+                                id="chatInput" 
+                                placeholder="Ask your agents anything..."
+                                rows="1"
+                                onkeydown="handleChatKeydown(event)"
+                                oninput="autoResizeTextarea(this)"
+                            ></textarea>
+                            <button class="send-button" onclick="sendMessage()" id="sendButton">
+                                <span>Send</span>
+                                <span>↗</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Tab -->
+            <div class="tab-content" id="configTab">
+                <div class="config-container">
+                    <div class="config-section">
+                        <div class="config-section-header" onclick="toggleConfigSection(this)">
+                            <h3 class="config-section-title">Basic Configuration</h3>
+                            <span>▼</span>
+                        </div>
+                        <div class="config-section-content">
+                            <div class="form-group">
+                                <label class="form-label">Agent Name</label>
+                                <input type="text" class="form-input" defaultValue="Orchestrator Agent" onchange="updateAgentName(this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">System Prompt</label>
+                                <textarea class="form-textarea" defaultValue="You are an orchestrator agent responsible for coordinating tasks between different agents in the Flutter development workflow."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">LLM Provider</label>
+                                <select class="form-input" defaultValue="openai-gpt4">
+                                    <option value="openai-gpt4">OpenAI GPT-4</option>
+                                <input type="text" class="form-input" id="agentNameInput" value="Orchestrator Agent" onchange="updateAgentName(this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">System Prompt</label>
+                                <textarea class="form-textarea" id="systemPromptInput" onchange="updateSystemPrompt(this.value)">You are an orchestrator agent responsible for coordinating tasks between different agents in the Flutter development workflow.</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">LLM Provider</label>
+                                <select class="form-input" id="llmProviderSelect" onchange="updateLLMProvider(this.value)">
+                                    <option value="openai-gpt4" selected>OpenAI GPT-4</option>
+                                    <option value="openai-gpt3.5">OpenAI GPT-3.5</option>
+                                    <option value="claude">Claude 3</option>
+                                    <option value="local">Local LLM</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <div class="config-section-header" onclick="toggleConfigSection(this)">
+                            <h3 class="config-section-title">Collaboration Settings</h3>
+                            <span>▼</span>
+                        </div>
+                        <div class="config-section-content">
+                            <div class="form-group">
+                                <label class="form-label">Collaboration Rules</label>
+                                <textarea class="form-textarea" defaultValue="Orchestrator receives all initial requests → CI/CD Agent handles deployment tasks → Tests Agent validates all code changes → All agents report back to Orchestrator"></textarea>
+                                <textarea class="form-textarea" id="collaborationRulesInput" onchange="updateCollaborationRules(this.value)">Orchestrator receives all initial requests → CI/CD Agent handles deployment tasks → Tests Agent validates all code changes → All agents report back to Orchestrator</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools Tab -->
+            <div class="tab-content" id="toolsTab">
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3 class="tool-name">Code Analysis</h3>
+                            <label class="tool-toggle">
+                                <input type="checkbox" defaultChecked onchange="toggleTool('code-analysis', this.checked)">
+                                <input type="checkbox" checked onchange="toggleTool('code-analysis', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p class="tool-description">Analyzes Flutter code for best practices, performance issues, and potential bugs.</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3 class="tool-name">Task Delegation</h3>
+                            <label class="tool-toggle">
+                                <input type="checkbox" defaultChecked onchange="toggleTool('task-delegation', this.checked)">
+                                <input type="checkbox" checked onchange="toggleTool('task-delegation', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p class="tool-description">Intelligently delegates tasks to appropriate specialized agents based on context.</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3 class="tool-name">Progress Tracking</h3>
+                            <label class="tool-toggle">
+                                <input type="checkbox" defaultChecked onchange="toggleTool('progress-tracking', this.checked)">
+                                <input type="checkbox" checked onchange="toggleTool('progress-tracking', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p class="tool-description">Monitors and reports on task completion status across all agents.</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3 class="tool-name">Dependency Resolution</h3>
+                            <label class="tool-toggle">
+                                <input type="checkbox" defaultChecked onchange="toggleTool('dependency-resolution', this.checked)">
+                                <input type="checkbox" checked onchange="toggleTool('dependency-resolution', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p class="tool-description">Manages package dependencies and resolves version conflicts automatically.</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3 class="tool-name">Testing Automation</h3>
+                            <label class="tool-toggle">
+                                <input type="checkbox" defaultChecked onchange="toggleTool('testing-automation', this.checked)">
+                                <input type="checkbox" checked onchange="toggleTool('testing-automation', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p class="tool-description">Automatically generates and runs unit tests, integration tests, and widget tests.</p>
+                    </div>
+
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <h3 class="tool-name">CI/CD Pipeline</h3>
+                            <label class="tool-toggle">
+                                <input type="checkbox" defaultChecked onchange="toggleTool('cicd-pipeline', this.checked)">
+                                <input type="checkbox" checked onchange="toggleTool('cicd-pipeline', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <p class="tool-description">Sets up and manages continuous integration and deployment pipelines.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Agent Modal -->
+    <div class="modal" id="newAgentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Agent</h3>
+                <button class="close-button" onclick="closeModal('newAgentModal')">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Agent Name</label>
+                <input type="text" class="form-input" id="newAgentName" placeholder="e.g., Database Agent">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Agent Role</label>
+                <select class="form-input" id="newAgentRole">
+                    <option value="general">General Purpose</option>
+                    <option value="database">Database Management</option>
+                    <option value="api">API Development</option>
+                    <option value="ui">UI/UX Design</option>
+                    <option value="security">Security</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">System Prompt</label>
+                <textarea class="form-textarea" id="newAgentPrompt" placeholder="Describe the agent's role and capabilities..."></textarea>
+            </div>
+
+            <button class="primary-button" onclick="createNewAgent()">Create Agent</button>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentAgent = 'orchestrator';
+        let sidebarCollapsed = false;
+        let currentTab = 'chat';
+        let isTyping = false;
+        let swarmDropdownOpen = false;
+        let currentSwarm = 'FlutterSwarm';
+
+        // Configuration state
+        let agentConfig = {
+            orchestrator: {
+                name: 'Orchestrator Agent',
+                systemPrompt: 'You are an orchestrator agent responsible for coordinating tasks between different agents in the Flutter development workflow.',
+                llmProvider: 'openai-gpt4'
+            },
+            cicd: {
+                name: 'CI/CD Agent',
+                systemPrompt: 'You are a CI/CD agent responsible for managing deployment pipelines and continuous integration tasks.',
+                llmProvider: 'openai-gpt4'
+            },
+            tests: {
+                name: 'Tests Agent',
+                systemPrompt: 'You are a testing agent responsible for creating and running automated tests.',
+                llmProvider: 'openai-gpt4'
+            }
+        };
+
+        // Tool state
+        let enabledTools = {
+            'code-analysis': true,
+            'task-delegation': true,
+            'progress-tracking': true,
+            'dependency-resolution': true,
+            'testing-automation': true,
+            'cicd-pipeline': true
+        };
+
+        // Available swarms
+        const availableSwarms = {
+            'FlutterSwarm': { icon: '🦋', name: 'FlutterSwarm' },
+            'ReactSwarm': { icon: '⚛️', name: 'ReactSwarm' },
+            'NodeSwarm': { icon: '🟢', name: 'NodeSwarm' },
+            'PythonSwarm': { icon: '🐍', name: 'PythonSwarm' },
+            'GeneralSwarm': { icon: '🔧', name: 'GeneralSwarm' }
+        };
+
+        // Agent data
+        const agents = {
+            orchestrator: {
+                name: 'Orchestrator Agent',
+                avatar: 'O',
+                gradient: 'var(--gradient-primary)',
+                tools: 4
+            },
+            cicd: {
+                name: 'CI/CD Agent',
+                avatar: 'C',
+                gradient: 'var(--gradient-secondary)',
+                tools: 3
+            },
+            tests: {
+                name: 'Tests Agent',
+                avatar: 'T',
+                gradient: 'linear-gradient(135deg, var(--accent-purple), var(--accent-red))',
+                tools: 5
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMainTitle();
+            autoResizeAllTextareas();
+            loadAgentConfig();
+            setupEventListeners();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.swarm-selector')) {
+                    closeSwarmDropdown();
+                }
+            });
+
+            // Close modals when clicking outside
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.classList.remove('active');
+                }
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(event) {
+                // Escape to close modals and dropdowns
+                if (event.key === 'Escape') {
+                    document.querySelectorAll('.modal.active').forEach(modal => {
+                        modal.classList.remove('active');
+                    });
+                    closeSwarmDropdown();
+                }
+                
+                // Ctrl/Cmd + / to focus chat input
+                if ((event.ctrlKey || event.metaKey) && event.key === '/') {
+                    event.preventDefault();
+                    if (currentTab === 'chat') {
+                        document.getElementById('chatInput').focus();
+                    }
+                }
+            });
+        }
+
+        // Load agent configuration
+        function loadAgentConfig() {
+            const config = agentConfig[currentAgent];
+            if (config) {
+                document.getElementById('agentNameInput').value = config.name;
+                document.getElementById('systemPromptInput').value = config.systemPrompt;
+                document.getElementById('llmProviderSelect').value = config.llmProvider;
+            }
+        }
+        // Sidebar functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const collapseIcon = document.getElementById('collapseIcon');
+            const logoText = document.getElementById('logoText');
+            const swarmSelector = document.getElementById('swarmSelector');
+
+            sidebarCollapsed = !sidebarCollapsed;
+
+            if (sidebarCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('sidebar-collapsed');
+                collapseIcon.textContent = '▶';
+                
+                // Hide elements with smooth transition
+                setTimeout(() => {
+                    if (logoText) logoText.style.display = 'none';
+                    if (swarmSelector) swarmSelector.style.display = 'none';
+                }, 150);
+                
+                // Close dropdown if open
+                closeSwarmDropdown();
+            } else {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('sidebar-collapsed');
+                collapseIcon.textContent = '◀';
+                
+                // Show elements with smooth transition
+                setTimeout(() => {
+                    if (logoText) logoText.style.display = 'block';
+                    if (swarmSelector) swarmSelector.style.display = 'block';
+                }, 200);
+            }
+            
+            // Add haptic feedback simulation
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // Agent selection
+        function selectAgent(element, agentId) {
+            // Update active state
+            document.querySelectorAll('.agent-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            element.classList.add('active');
+
+            currentAgent = agentId;
+            updateMainTitle();
+            updateChatHeader();
+            loadAgentConfig();
+            
+            // Show visual feedback
+            showNotification(`Switched to ${agents[agentId].name}`, 'success');
+        }
+
+        function updateMainTitle() {
+            const agent = agents[currentAgent];
+            const mainTitle = document.getElementById('mainTitle');
+            const chatAgentName = document.getElementById('chatAgentName');
+
+            if (agent) {
+                mainTitle.textContent = `${agent.name} Response Center`;
+                chatAgentName.textContent = agent.name;
+            }
+        }
+
+        function updateChatHeader() {
+            const agent = agents[currentAgent];
+            const chatAgentName = document.getElementById('chatAgentName');
+            
+            if (agent) {
+                chatAgentName.textContent = agent.name;
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            currentTab = tabName;
+            
+            // Load appropriate data for the tab
+            if (tabName === 'config') {
+                loadAgentConfig();
+            }
+            
+            showNotification(`Switched to ${tabName} tab`, 'success');
+        }
+
+        // Notification system
+        function showNotification(message, type = 'success', duration = 3000) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icons = {
+                success: '✓',
+                warning: '⚠',
+                error: '✗',
+                info: 'ℹ'
+            };
+            
+            notification.innerHTML = `
+                <div class="notification-icon">${icons[type] || icons.info}</div>
+                <div class="notification-message">${message}</div>
+                <button class="notification-close" onclick="closeNotification(this)">×</button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Trigger animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Auto-remove after duration
+            setTimeout(() => {
+                closeNotification(notification.querySelector('.notification-close'));
+            }, duration);
+        }
+
+        function closeNotification(button) {
+            const notification = button.closest('.notification');
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }
+
+        // Chat functions
+        function handleChatKeydown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        function autoResizeAllTextareas() {
+            document.querySelectorAll('textarea').forEach(textarea => {
+                autoResizeTextarea(textarea);
+            });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            const sendButton = document.getElementById('sendButton');
+
+            if (!message) return;
+
+            // Disable send button temporarily
+            sendButton.disabled = true;
+            sendButton.innerHTML = '<span>Sending...</span><span>⌛</span>';
+
+            // Add user message
+            addMessage('user', 'You', message);
+            input.value = '';
+            autoResizeTextarea(input);
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate agent response
+            setTimeout(() => {
+                hideTypingIndicator();
+                const agent = agents[currentAgent];
+                const responses = [
+                    `I understand you want to ${message.toLowerCase()}. Let me coordinate with the team to handle this request.`,
+                    `Processing your request: "${message}". I'll delegate this to the appropriate agents and get back to you.`,
+                    `Great question! Let me analyze this and provide you with a comprehensive solution.`,
+                    `I'm working on "${message}" right now. I'll coordinate with other agents to ensure we deliver the best result.`
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage('agent', agent.name, randomResponse, agent.avatar, agent.gradient);
+            }, 1500);
+            // Simulate agent response with more realistic timing
+            const responseTime = Math.random() * 2000 + 1000; // 1-3 seconds
+            setTimeout(() => {
+                hideTypingIndicator();
+                const agent = agents[currentAgent];
+                const responses = getContextualResponse(message, currentAgent);
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage('agent', agent.name, randomResponse, agent.avatar, agent.gradient);
+                
+                // Re-enable send button
+                sendButton.disabled = false;
+                sendButton.innerHTML = '<span>Send</span><span>↗</span>';
+            }, responseTime);
+        }
+
+        function getContextualResponse(message, agentType) {
+            const responses = {
+                orchestrator: [
+                    `I understand you want to ${message.toLowerCase()}. Let me coordinate with the team to handle this request.`,
+                    `Processing your request: "${message}". I'll delegate this to the appropriate agents and get back to you.`,
+                    `Great question! Let me analyze this and coordinate with other agents to provide a comprehensive solution.`,
+                    `I'm working on "${message}" right now. I'll ensure all agents collaborate to deliver the best result.`
+                ],
+                cicd: [
+                    `I'll handle the CI/CD aspects of "${message}". Let me set up the deployment pipeline for this.`,
+                    `Processing deployment request for: "${message}". I'll ensure smooth integration and testing.`,
+                    `I can help automate "${message}" through our CI/CD pipeline. Let me configure that for you.`,
+                    `Working on the deployment strategy for "${message}". I'll coordinate with the testing agent to ensure quality.`
+                ],
+                tests: [
+                    `I'll create comprehensive tests for "${message}". Let me generate unit and integration tests.`,
+                    `Testing request received: "${message}". I'll ensure full coverage and quality assurance.`,
+                    `I can help validate "${message}" through automated testing. Let me set up the test suite.`,
+                    `Working on test automation for "${message}". I'll ensure all edge cases are covered.`
+                ]
+            };
+            
+            return responses[agentType] || responses.orchestrator;
+        }
+
+        function addMessage(type, sender, content, avatar = null, gradient = null) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+
+            const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.innerHTML = `
+                <div class="message-bubble">
+                    ${type === 'agent' ? `
+                        <div class="message-header">
+                            <div class="message-avatar" style="background: ${gradient}">${avatar}</div>
+                            <span>${sender}</span>
+                            <span>•</span>
+                            <span>${currentTime}</span>
+                        </div>
+                    ` : ''}
+                    <div class="message-content">${content}</div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const messagesContainer = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.className = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <span style="font-size: 12px; color: var(--text-secondary);">Agent is typing</span>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            isTyping = true;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+            isTyping = false;
+        }
+
+        // Configuration functions
+        function toggleConfigSection(header) {
+            const content = header.nextElementSibling;
+            const arrow = header.querySelector('span:last-child');
+
+            content.classList.toggle('collapsed');
+            arrow.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
+        }
+
+        function updateAgentName(newName) {
+            if (agents[currentAgent]) {
+            if (agentConfig[currentAgent]) {
+                agentConfig[currentAgent].name = newName;
+                agents[currentAgent].name = newName;
+                updateMainTitle();
+                updateChatHeader();
+                
+                // Update sidebar
+                const activeCard = document.querySelector('.agent-card.active');
+                if (activeCard) {
+                    const nameSpan = activeCard.querySelector('.agent-name span');
+                    if (nameSpan) {
+                        nameSpan.textContent = newName;
+                    }
+                }
+            }
+        }
+
+        // Tool functions
+        function toggleTool(toolId, enabled) {
+            console.log(`Tool ${toolId} ${enabled ? 'enabled' : 'disabled'}`);
+            // Here you would typically update the agent's tool configuration
+                
+                showNotification('Agent name updated', 'success');
+            }
+        }
+
+        function updateSystemPrompt(newPrompt) {
+            if (agentConfig[currentAgent]) {
+                agentConfig[currentAgent].systemPrompt = newPrompt;
+                showNotification('System prompt updated', 'success');
+            }
+        }
+
+        function updateLLMProvider(newProvider) {
+            if (agentConfig[currentAgent]) {
+                agentConfig[currentAgent].llmProvider = newProvider;
+                showNotification('LLM provider updated', 'success');
+            }
+        }
+
+        function updateCollaborationRules(newRules) {
+            // Store collaboration rules (could be expanded for multi-agent coordination)
+            console.log('Collaboration rules updated:', newRules);
+            showNotification('Collaboration rules updated', 'success');
+        }
+
+        // Tool functions
+        function toggleTool(toolId, enabled) {
+            enabledTools[toolId] = enabled;
+            
+            // Update tool count for current agent
+            const enabledCount = Object.values(enabledTools).filter(enabled => enabled).length;
+            const activeCard = document.querySelector('.agent-card.active');
+            if (activeCard) {
+                const toolsSpan = activeCard.querySelector('.agent-tools');
+                if (toolsSpan) {
+                    toolsSpan.textContent = `${enabledCount} tools enabled`;
+                }
+            }
+            
+            // Update agents object
+            if (agents[currentAgent]) {
+                agents[currentAgent].tools = enabledCount;
+            }
+            
+            const status = enabled ? 'enabled' : 'disabled';
+            showNotification(`${toolId.replace('-', ' ')} ${status}`, enabled ? 'success' : 'warning');
+            
+            console.log(`Tool ${toolId} ${status}`);
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function createNewAgent() {
+            const name = document.getElementById('newAgentName').value.trim();
+            const role = document.getElementById('newAgentRole').value;
+            const prompt = document.getElementById('newAgentPrompt').value.trim();
+
+            if (!name) {
+                alert('Please enter an agent name');
+            // Validation
+            if (!name) {
+                showNotification('Please enter an agent name', 'error');
+                return;
+            }
+
+            if (!prompt) {
+                showNotification('Please enter a system prompt', 'error');
+                return;
+            }
+
+            // Check if agent name already exists
+            const existingAgent = Object.values(agents).find(agent => agent.name.toLowerCase() === name.toLowerCase());
+            if (existingAgent) {
+                showNotification('Agent with this name already exists', 'error');
+                return;
+            }
+
+            // Create new agent
+            const agentId = `agent_${Date.now()}`;
+            const avatar = name.charAt(0).toUpperCase();
+            const gradients = [
+                'var(--gradient-primary)',
+                'var(--gradient-secondary)',
+                'linear-gradient(135deg, var(--accent-purple), var(--accent-red))',
+                'linear-gradient(135deg, var(--accent-orange), var(--accent-red))',
+                'linear-gradient(135deg, var(--accent-green), var(--accent-blue))'
+            ];
+            const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
+
+            agents[agentId] = {
+                name: name,
+                avatar: avatar,
+                gradient: randomGradient,
+                tools: 0
+            };
+
+            // Add to configuration
+            agentConfig[agentId] = {
+                name: name,
+                systemPrompt: prompt,
+                llmProvider: 'openai-gpt4'
+            };
+
+            // Add to sidebar
+            const agentsList = document.getElementById('agentsList');
+            const newAgentCard = document.createElement('div');
+            newAgentCard.className = 'agent-card';
+            newAgentCard.onclick = () => selectAgent(newAgentCard, agentId);
+            newAgentCard.innerHTML = `
+                <div class="agent-header">
+                    <div class="agent-name">
+                        <div class="agent-avatar" style="background: ${randomGradient};">${avatar}</div>
+                        <span>${name}</span>
+                    </div>
+                    <div class="agent-status active"></div>
+                </div>
+                <div class="agent-tools">0 tools enabled</div>
+            `;
+
+            agentsList.appendChild(newAgentCard);
+
+            // Clear form and close modal
+            document.getElementById('newAgentName').value = '';
+            document.getElementById('newAgentRole').value = 'general';
+            document.getElementById('newAgentPrompt').value = '';
+            closeModal('newAgentModal');
+
+            // Show success message
+            addMessage('agent', 'System', `New agent "${name}" has been created successfully!`, '🎉', 'var(--gradient-secondary)');
+        }
+
+        // Swarm dropdown (placeholder)
+        function toggleSwarmDropdown() {
+            // Placeholder for swarm selection functionality
+            console.log('Swarm dropdown toggled');
+        }
+
+            showNotification(`Agent "${name}" created successfully!`, 'success');
+            addMessage('agent', 'System', `New agent "${name}" has been created and is ready to assist!`, '🎉', 'var(--gradient-secondary)');
+        }
+
+        // Swarm dropdown functions
+        function toggleSwarmDropdown() {
+            const dropdown = document.getElementById('swarmDropdownMenu');
+            const arrow = document.getElementById('swarmArrow');
+            
+            if (swarmDropdownOpen) {
+                closeSwarmDropdown();
+            } else {
+                dropdown.classList.add('show');
+                arrow.classList.add('rotated');
+                swarmDropdownOpen = true;
+            }
+        }
+
+        function closeSwarmDropdown() {
+            const dropdown = document.getElementById('swarmDropdownMenu');
+            const arrow = document.getElementById('swarmArrow');
+            
+            dropdown.classList.remove('show');
+            arrow.classList.remove('rotated');
+            swarmDropdownOpen = false;
+        }
+
+        function selectSwarm(swarmName) {
+            currentSwarm = swarmName;
+            document.getElementById('selectedSwarm').textContent = swarmName;
+            
+            // Update active state in dropdown
+            document.querySelectorAll('.swarm-dropdown-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            closeSwarmDropdown();
+            showNotification(`Switched to ${swarmName}`, 'success');
+            
+            // Here you could trigger swarm-specific logic
+            console.log(`Switched to swarm: ${swarmName}`);
+        }
+
+        // Enhanced modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            // Focus on first input when modal opens
+            setTimeout(() => {
+                const firstInput = document.querySelector(`#${modalId} input, #${modalId} textarea`);
+                if (firstInput) firstInput.focus();
+            }, 100);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Enhanced utility functions
+        function updateChatPlaceholder() {
+            const input = document.getElementById('chatInput');
+            const agent = agents[currentAgent];
+            if (agent) {
+                input.placeholder = `Ask ${agent.name} anything...`;
+            }
+        }
+
+        function scrollToBottom() {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Add some helper functions for better UX
+        function handleFormSubmit(event, formId) {
+            event.preventDefault();
+            if (formId === 'newAgentModal') {
+                createNewAgent();
+            }
+        }
+
+        // Enhanced initialization
+        function enhancedInit() {
+            updateChatPlaceholder();
+            
+            // Add enter key support for modal
+            document.getElementById('newAgentModal').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' && event.ctrlKey) {
+                    createNewAgent();
+                }
+            });
+        }
+
+        // Call enhanced initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            enhancedInit();
+        });
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // Escape to close modals
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                closeSwarmDropdown();
+            }
+            
+            // Ctrl/Cmd + / to focus chat input
+            if ((event.ctrlKey || event.metaKey) && event.key === '/') {
+                event.preventDefault();
+                document.getElementById('chatInput').focus();
+                if (currentTab === 'chat') {
+                    document.getElementById('chatInput').focus();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

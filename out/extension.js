@@ -18,9 +18,14 @@ function activate(context) {
     const togglePanelCommand = vscode.commands.registerCommand("multiagentSwarm.togglePanel", () => {
         if (panel && panel.visible) {
             panel.dispose();
+            panel = undefined;
+            isVisible = false;
+            vscode.commands.executeCommand("setContext", "multiagentSwarm:panelVisible", false);
         }
         else {
             createOrShowPanel(context);
+            isVisible = true;
+            vscode.commands.executeCommand("setContext", "multiagentSwarm:panelVisible", true);
         }
     });
     // Register view provider for the activity bar
@@ -33,6 +38,8 @@ function createOrShowPanel(context) {
     const columnToShowIn = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
     if (panel) {
         panel.reveal(columnToShowIn);
+        isVisible = true;
+        vscode.commands.executeCommand("setContext", "multiagentSwarm:panelVisible", true);
         return;
     }
     // Create the webview panel
@@ -46,6 +53,9 @@ function createOrShowPanel(context) {
         light: vscode.Uri.joinPath(context.extensionUri, "media", "icon.svg"),
         dark: vscode.Uri.joinPath(context.extensionUri, "media", "icon.svg"),
     };
+    // Set visibility context
+    isVisible = true;
+    vscode.commands.executeCommand("setContext", "multiagentSwarm:panelVisible", true);
     // Set the HTML content
     panel.webview.html = getWebviewContent(panel.webview, context.extensionUri);
     // Handle panel disposal
@@ -146,10 +156,74 @@ class MultiAgentSwarmViewProvider {
             enableScripts: true,
             localResourceRoots: [vscode.Uri.joinPath(this.context.extensionUri, "media")],
         };
-        webviewView.webview.html = getWebviewContent(webviewView.webview, this.context.extensionUri);
+        // Simple HTML for the activity bar view with toggle button
+        webviewView.webview.html = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>MultiAgent Swarm</title>
+          <style>
+              body {
+                  font-family: var(--vscode-font-family);
+                  color: var(--vscode-foreground);
+                  background: var(--vscode-sideBar-background);
+                  margin: 0;
+                  padding: 16px;
+              }
+              .toggle-button {
+                  width: 100%;
+                  padding: 12px;
+                  background: var(--vscode-button-background);
+                  border: none;
+                  border-radius: 6px;
+                  color: var(--vscode-button-foreground);
+                  cursor: pointer;
+                  font-size: 14px;
+                  font-weight: 600;
+                  margin-bottom: 12px;
+              }
+              .toggle-button:hover {
+                  background: var(--vscode-button-hoverBackground);
+              }
+              .description {
+                  font-size: 12px;
+                  color: var(--vscode-descriptionForeground);
+                  line-height: 1.4;
+              }
+              .icon {
+                  font-size: 24px;
+                  text-align: center;
+                  margin-bottom: 12px;
+              }
+          </style>
+      </head>
+      <body>
+          <div class="icon">🤖</div>
+          <button class="toggle-button" onclick="togglePanel()">Open MultiAgent Swarm</button>
+          <div class="description">
+              Click to open the Multi-Agent Collaboration Hub and start working with your AI agents.
+          </div>
+          
+          <script>
+              const vscode = acquireVsCodeApi();
+              
+              function togglePanel() {
+                  vscode.postMessage({
+                      command: 'togglePanel'
+                  });
+              }
+          </script>
+      </body>
+      </html>
+    `;
         // Handle messages from the webview
         webviewView.webview.onDidReceiveMessage((message) => {
             switch (message.command) {
+                case "togglePanel":
+                    vscode.commands.executeCommand("multiagentSwarm.togglePanel");
+                    return;
                 case "openFullPanel":
                     createOrShowPanel(this.context);
                     return;

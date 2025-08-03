@@ -22,14 +22,15 @@
       },
       {
         "command": "multiagentSwarm.togglePanel",
-        "title": "Toggle MultiAgent Swarm Panel"
+        "title": "Toggle MultiAgent Swarm Panel",
+        "icon": "$(robot)"
       }
     ],
     "views": {
       "multiagentSwarm": [
         {
           "id": "multiagentSwarm.mainView",
-          "name": "Agent Response Center",
+          "name": "Multi-Agent Collaboration Hub",
           "when": "multiagentSwarm:panelVisible"
         }
       ]
@@ -39,7 +40,7 @@
         {
           "id": "multiagentSwarm",
           "title": "MultiAgent Swarm",
-          "icon": "media/icon.png"
+          "icon": "media/icon.svg"
         }
       ]
     },
@@ -51,7 +52,14 @@
           "group": "navigation"
         }
       ]
-    }
+    },
+    "keybindings": [
+      {
+        "command": "multiagentSwarm.togglePanel",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m"
+      }
+    ]
   },
   "configuration": {
     "title": "MultiAgent Swarm",

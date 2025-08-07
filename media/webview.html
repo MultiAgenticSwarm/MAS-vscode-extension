@@ -897,108 +897,6 @@
             font-weight: 500;
         }
 
-        /* Activity Logs */
-        .activity-logs {
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        .activity-logs::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .activity-logs::-webkit-scrollbar-track {
-            background: var(--vscode-border);
-            border-radius: 2px;
-        }
-
-        .activity-logs::-webkit-scrollbar-thumb {
-            background: var(--text-muted);
-            border-radius: 2px;
-        }
-
-        .log-entry {
-            background: var(--card-bg);
-            border: 1px solid var(--vscode-border);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .log-entry:hover {
-            border-color: var(--accent-blue);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--shadow-hover);
-        }
-
-        .log-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-        }
-
-        .log-avatar {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            color: white;
-        }
-
-        .log-info {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .log-agent {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--vscode-fg);
-        }
-
-        .log-time {
-            font-size: 9px;
-            color: var(--text-muted);
-        }
-
-        .log-content {
-            font-size: 11px;
-            color: var(--text-muted);
-            line-height: 1.4;
-            margin-bottom: 6px;
-        }
-
-        .log-status {
-            font-size: 9px;
-            font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-
-        .log-status.success {
-            background: rgba(56, 161, 105, 0.2);
-            color: var(--accent-green);
-        }
-
-        .log-status.modified {
-            background: rgba(128, 90, 213, 0.2);
-            color: var(--accent-purple);
-        }
-
-        .log-status.coordinating {
-            background: rgba(49, 130, 206, 0.2);
-            color: var(--accent-blue);
-        }
-
         /* Main Content Area */
         .main-content {
             flex: 1;
@@ -2044,18 +1942,6 @@
                 </div>
             </div>
 
-            <!-- Agent Activity Logs Section -->
-            <div class="agents-section">
-                <div class="section-title">
-                    <span>ACTIVITY LOGS</span>
-                    <button class="add-agent-btn" onclick="clearLogs()" title="Clear Logs">🗑️</button>
-                </div>
-
-                <div class="activity-logs" id="activityLogs">
-                    <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No recent activity</div>
-                </div>
-            </div>
-
             <!-- Theme Controls at bottom -->
             <div class="sidebar-footer">
                 <div class="theme-toggle-container" id="themeToggleContainer">
@@ -2675,170 +2561,25 @@
             // Show typing indicator
             showTypingIndicator();
 
-            // Check if this is a project creation request
-            const isProjectRequest = message.toLowerCase().includes('app') || 
-                                   message.toLowerCase().includes('create') || 
-                                   message.toLowerCase().includes('build') ||
-                                   message.toLowerCase().includes('develop');
-
-            if (isProjectRequest) {
-                handleProjectRequest(message);
-            } else {
-                handleGeneralRequest(message);
-            }
+            // Simulate agent response
+            setTimeout(() => {
+                hideTypingIndicator();
+                const agent = agents[currentAgent];
+                const responses = [
+                    'I understand you want to ' + message.toLowerCase() + '. Let me coordinate with the team to handle this request.',
+                    'Processing your request: "' + message + '". I\'ll delegate this to the appropriate agents and get back to you.',
+                    'Great question! Let me analyze this and provide you with a comprehensive solution.',
+                    'I\'m working on "' + message + '" right now. I\'ll coordinate with other agents to ensure we deliver the best result.'
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addMessage('agent', agent.name, randomResponse, agent.avatar, agent.gradient);
+            }, 1500);
 
             // Send message to extension
             vscode.postMessage({
                 command: 'sendMessage',
                 data: { agent: currentAgent, message: message }
             });
-        }
-
-        function handleProjectRequest(message) {
-            // First, Orchestrator responds
-            setTimeout(() => {
-                hideTypingIndicator();
-                const orchestratorResponse = `🎯 <strong>Project Analysis:</strong><br>I'll coordinate the development of your project: "${message}"<br><br>` +
-                    `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
-                    `<strong>Coordination Plan:</strong><br>` +
-                    `• Planning & Architecture ⏳<br>` +
-                    `• Development Setup ⏳<br>` +
-                    `• Testing Strategy ⏳<br>` +
-                    `• Deployment Pipeline ⏳<br><br>` +
-                    `Delegating tasks to specialized agents...</div>`;
-                
-                addMessage('agent', agents.orchestrator.name, orchestratorResponse, 
-                          agents.orchestrator.avatar, agents.orchestrator.gradient);
-                
-                addLogEntry('orchestrator', `Project coordination: "${message.substring(0, 30)}..."`, '🔄 Coordinating', 'coordinating');
-            }, 1500);
-
-            // Then show CI/CD Agent starting work
-            setTimeout(() => {
-                showTypingIndicator();
-                setTimeout(() => {
-                    hideTypingIndicator();
-                    const cicdResponse = `🚀 <strong>Development Environment Setup:</strong><br>Setting up CI/CD pipeline for your project...<br><br>` +
-                        `<div style="background: #1a1a1a; color: #00ff00; padding: 12px; border-radius: 8px; font-family: monospace; font-size: 11px; margin-top: 8px;">` +
-                        `<span style="color: #888;">$</span> mkdir notes-app && cd notes-app<br>` +
-                        `<span style="color: #888;">$</span> npm init -y<br>` +
-                        `<span style="color: #4fc3f7;">✓</span> Package.json created<br>` +
-                        `<span style="color: #888;">$</span> git init<br>` +
-                        `<span style="color: #4fc3f7;">✓</span> Repository initialized<br>` +
-                        `<span style="color: #888;">$</span> Creating GitHub Actions workflow...<br>` +
-                        `<span style="color: #4fc3f7;">✓</span> CI/CD pipeline configured</div>`;
-                    
-                    addMessage('agent', agents.cicd.name, cicdResponse, 
-                              agents.cicd.avatar, agents.cicd.gradient);
-                    
-                    addLogEntry('cicd', 'Repository setup: Git initialized, CI/CD pipeline configured', '✓ Completed', 'success');
-                }, 2000);
-            }, 3000);
-
-            // Tests Agent creates testing strategy
-            setTimeout(() => {
-                showTypingIndicator();
-                setTimeout(() => {
-                    hideTypingIndicator();
-                    const testsResponse = `🧪 <strong>Testing Strategy Development:</strong><br>Creating comprehensive test suite for your notes app...<br><br>` +
-                        `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
-                        `<strong>Test Plan Created:</strong><br>` +
-                        `✅ Unit Tests: Core functionality<br>` +
-                        `✅ Integration Tests: Data persistence<br>` +
-                        `✅ E2E Tests: User workflows<br>` +
-                        `✅ Performance Tests: Load handling<br><br>` +
-                        `📊 Target Coverage: 95%<br>` +
-                        `🔧 Test Framework: Jest + Testing Library</div>`;
-                    
-                    addMessage('agent', agents.tests.name, testsResponse, 
-                              agents.tests.avatar, agents.tests.gradient);
-                    
-                    addLogEntry('tests', 'Test strategy: Framework setup, 95% coverage target set', '✓ Planned', 'success');
-                }, 2500);
-            }, 6000);
-
-            // Final orchestrator summary
-            setTimeout(() => {
-                showTypingIndicator();
-                setTimeout(() => {
-                    hideTypingIndicator();
-                    const finalResponse = `✅ <strong>Project Setup Complete!</strong><br>Your notes app development environment is ready.<br><br>` +
-                        `<div style="background: var(--input-bg); padding: 12px; border-radius: 8px; margin-top: 8px;">` +
-                        `<strong>Next Steps:</strong><br>` +
-                        `1. Start coding the core features<br>` +
-                        `2. Run tests continuously<br>` +
-                        `3. Deploy to staging when ready<br><br>` +
-                        `<strong>Repository:</strong> notes-app/<br>` +
-                        `<strong>Stack:</strong> Node.js, Jest, GitHub Actions<br>` +
-                        `<strong>Status:</strong> Ready for development 🚀</div>`;
-                    
-                    addMessage('agent', agents.orchestrator.name, finalResponse, 
-                              agents.orchestrator.avatar, agents.orchestrator.gradient);
-                    
-                    addLogEntry('orchestrator', 'Project setup completed: Ready for development', '✅ Ready', 'success');
-                }, 1800);
-            }, 9000);
-        }
-
-        function handleGeneralRequest(message) {
-            setTimeout(() => {
-                hideTypingIndicator();
-                const agent = agents[currentAgent];
-                
-                // Enhanced responses without "mock" or "fake" language
-                const responseTemplates = {
-                    orchestrator: [
-                        `🎯 <strong>Task Analysis:</strong><br>I've analyzed your request "${message}" and I'm coordinating the response.<br><br>` +
-                        `<div style="background: var(--input-bg); padding: 8px; border-radius: 6px; margin-top: 8px;">` +
-                        `<em>Step 1:</em> Requirements analysis ✓<br>` +
-                        `<em>Step 2:</em> Resource allocation ⏳<br>` +
-                        `<em>Step 3:</em> Task delegation 📋</div>`,
-                        
-                        `⚙️ <strong>Coordination Active:</strong><br>Processing: "${message}"<br><br>` +
-                        `Working with specialized agents to provide comprehensive solution...`,
-                        
-                        `🤝 <strong>Multi-Agent Response:</strong><br>Your request requires collaboration between multiple agents. ` +
-                        `I'm orchestrating the workflow and will provide updates as tasks complete.`
-                    ],
-                    cicd: [
-                        `🚀 <strong>Pipeline Analysis:</strong><br>Analyzing deployment requirements for your request...<br><br>` +
-                        `<div style="background: #1a1a1a; color: #00ff00; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 11px; margin-top: 8px;">` +
-                        `<span style="color: #4fc3f7;">✓</span> Environment check: PASSED<br>` +
-                        `<span style="color: #4fc3f7;">✓</span> Dependencies: RESOLVED<br>` +
-                        `<span style="color: #ffb74d;">⏳</span> Processing request...</div>`,
-                        
-                        `🔧 <strong>Infrastructure Ready:</strong><br>System resources allocated for "${message}"<br><br>` +
-                        `📊 <strong>Status:</strong><br>• Build capacity: Available<br>• Deploy slots: 3 free<br>• Test runners: Online`,
-                        
-                        `📦 <strong>Pipeline Status:</strong><br>Infrastructure prepared for task execution.<br><br>` +
-                        `Ready to proceed with implementation and deployment phases.`
-                    ],
-                    tests: [
-                        `🧪 <strong>Quality Assurance:</strong><br>Preparing testing strategy for your request...<br><br>` +
-                        `<div style="background: var(--input-bg); padding: 8px; border-radius: 6px; margin-top: 8px;">` +
-                        `✅ Test scenarios identified<br>✅ Quality gates configured<br>✅ Coverage targets set<br>📊 Ready for validation</div>`,
-                        
-                        `🔍 <strong>Testing Framework:</strong><br>Quality analysis prepared for "${message}"<br><br>` +
-                        `📈 <strong>Approach:</strong><br>• Functional testing strategy<br>• Performance benchmarks<br>• Security validation<br>• User acceptance criteria`,
-                        
-                        `⚡ <strong>Quality Pipeline:</strong><br>Testing infrastructure initialized and ready for validation cycles.`
-                    ]
-                };
-
-                // Get agent-specific responses or fallback to general ones
-                const agentResponses = responseTemplates[currentAgent] || [
-                    `🤖 <strong>Processing Request:</strong><br>Working on "${message}" using specialized capabilities.`,
-                    `⚙️ <strong>Analysis Complete:</strong><br>Request processed and solution being prepared.`,
-                    `🎯 <strong>Task Execution:</strong><br>Successfully handling your request with systematic approach.`
-                ];
-
-                const randomResponse = agentResponses[Math.floor(Math.random() * agentResponses.length)];
-                addMessage('agent', agent.name, randomResponse, agent.avatar, agent.gradient);
-                
-                // Add appropriate log entry
-                const logContent = `Processed request: "${message.substring(0, 40)}${message.length > 40 ? '...' : ''}"`;
-                addLogEntry(currentAgent, logContent, '✓ Completed', 'success');
-            }, 1500);
         }
 
         function addMessage(type, sender, content, avatar = null, gradient = null) {
@@ -3342,52 +3083,6 @@
 
         // Initialize with light theme
         setTheme('light');
-
-        // Clear activity logs function
-        function clearLogs() {
-            const activityLogs = document.getElementById('activityLogs');
-            if (activityLogs && confirm('Clear all activity logs?')) {
-                activityLogs.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px;">No recent activity</div>';
-            }
-        }
-
-        // Add new activity log entry
-        function addLogEntry(agent, content, status, statusClass) {
-            const activityLogs = document.getElementById('activityLogs');
-            if (!activityLogs) return;
-
-            // Remove "no activity" message if present
-            if (activityLogs.innerHTML.includes('No recent activity')) {
-                activityLogs.innerHTML = '';
-            }
-
-            const logEntry = document.createElement('div');
-            logEntry.className = 'log-entry';
-            
-            const agentInfo = agents[agent] || { avatar: '🤖', gradient: 'var(--gradient-primary)', name: agent };
-            const currentTime = new Date();
-            const timeStr = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
-            logEntry.innerHTML = `
-                <div class="log-header">
-                    <div class="log-avatar" style="background: ${agentInfo.gradient};">${agentInfo.avatar}</div>
-                    <div class="log-info">
-                        <span class="log-agent">${agentInfo.name}</span>
-                        <span class="log-time">Just now</span>
-                    </div>
-                </div>
-                <div class="log-content">${content}</div>
-                <div class="log-status ${statusClass}">${status}</div>
-            `;
-            
-            // Insert at the top
-            activityLogs.insertBefore(logEntry, activityLogs.firstChild);
-            
-            // Keep only the last 10 entries
-            while (activityLogs.children.length > 10) {
-                activityLogs.removeChild(activityLogs.lastChild);
-            }
-        }
     </script>
 </body>
 </html>

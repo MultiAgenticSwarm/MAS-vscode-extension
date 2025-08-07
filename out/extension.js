@@ -22,9 +22,6 @@ function activate(context) {
             createOrShowPanel(context);
         }
     });
-    // Register view provider for the activity bar
-    const provider = new MultiAgentSwarmViewProvider(context);
-    vscode.window.registerWebviewViewProvider("multiagentSwarm.mainView", provider);
     context.subscriptions.push(openPanelCommand, togglePanelCommand);
 }
 exports.activate = activate;
@@ -86,26 +83,6 @@ function createOrShowPanel(context) {
     }, undefined, context.subscriptions);
     isVisible = true;
     vscode.commands.executeCommand("setContext", "multiagentSwarm:panelVisible", true);
-}
-class MultiAgentSwarmViewProvider {
-    constructor(context) {
-        this.context = context;
-    }
-    resolveWebviewView(webviewView, context, _token) {
-        webviewView.webview.options = {
-            enableScripts: true,
-            localResourceRoots: [vscode.Uri.joinPath(this.context.extensionUri, "media")],
-        };
-        webviewView.webview.html = getWebviewContent(webviewView.webview, this.context.extensionUri);
-        // Handle messages from the webview
-        webviewView.webview.onDidReceiveMessage((message) => {
-            switch (message.command) {
-                case "openFullPanel":
-                    createOrShowPanel(this.context);
-                    return;
-            }
-        });
-    }
 }
 function getWebviewContent(webview, extensionUri) {
     // Read the HTML file

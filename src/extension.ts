@@ -24,10 +24,6 @@ export function activate(context: vscode.ExtensionContext) {
     }
   })
 
-  // Register view provider for the activity bar
-  const provider = new MultiAgentSwarmViewProvider(context)
-  vscode.window.registerWebviewViewProvider("multiagentSwarm.mainView", provider)
-
   context.subscriptions.push(openPanelCommand, togglePanelCommand)
 }
 
@@ -105,32 +101,6 @@ function createOrShowPanel(context: vscode.ExtensionContext) {
 
   isVisible = true
   vscode.commands.executeCommand("setContext", "multiagentSwarm:panelVisible", true)
-}
-
-class MultiAgentSwarmViewProvider implements vscode.WebviewViewProvider {
-  constructor(private readonly context: vscode.ExtensionContext) {}
-
-  public resolveWebviewView(
-    webviewView: vscode.WebviewView,
-    context: vscode.WebviewViewResolveContext,
-    _token: vscode.CancellationToken,
-  ) {
-    webviewView.webview.options = {
-      enableScripts: true,
-      localResourceRoots: [vscode.Uri.joinPath(this.context.extensionUri, "media")],
-    }
-
-    webviewView.webview.html = getWebviewContent(webviewView.webview, this.context.extensionUri)
-
-    // Handle messages from the webview
-    webviewView.webview.onDidReceiveMessage((message) => {
-      switch (message.command) {
-        case "openFullPanel":
-          createOrShowPanel(this.context)
-          return
-      }
-    })
-  }
 }
 
 function getWebviewContent(webview: vscode.Webview, extensionUri: vscode.Uri): string {

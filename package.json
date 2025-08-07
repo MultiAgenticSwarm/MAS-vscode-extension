@@ -1,62 +1,138 @@
 {
   "name": "multiagent-swarm",
   "displayName": "MultiAgent Swarm",
-  "description": "AI-powered multi-agent development assistant",
+  "description": "AI-powered multi-agent development assistant for collaborative coding with specialized AI agents",
   "version": "1.0.0",
+  "publisher": "MultiAgenticSwarm",
+  "author": {
+    "name": "MultiAgenticSwarm"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/MultiAgenticSwarm/MAS-vscode-extension",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MultiAgenticSwarm/MAS-vscode-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MultiAgenticSwarm/MAS-vscode-extension/issues"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "multiagent",
+    "collaboration",
+    "development",
+    "assistant",
+    "productivity",
+    "automation"
+  ],
   "engines": {
     "vscode": "^1.74.0"
   },
-  "categories": ["Other"],
+  "categories": ["AI", "Other"],
   "activationEvents": ["onStartupFinished"],
   "main": "./out/extension.js",
+  "icon": "media/icon.png",
   "contributes": {
     "commands": [
       {
         "command": "multiagentSwarm.openPanel",
         "title": "Open MultiAgent Swarm",
-        "icon": "$(robot)"
+        "icon": "$(robot)",
+        "category": "MultiAgent Swarm"
       },
       {
         "command": "multiagentSwarm.togglePanel",
-        "title": "Toggle MultiAgent Swarm Panel"
+        "title": "Toggle MultiAgent Swarm Panel",
+        "category": "MultiAgent Swarm"
+      },
+      {
+        "command": "multiagentSwarm.selectSwarm",
+        "title": "Select Agent Swarm",
+        "category": "MultiAgent Swarm"
+      },
+      {
+        "command": "multiagentSwarm.createAgent",
+        "title": "Create New Agent",
+        "category": "MultiAgent Swarm"
       }
     ],
-    "views": {
-      "multiagentSwarm": [
-        {
-          "id": "multiagentSwarm.mainView",
-          "name": "Agent Response Center",
-          "when": "multiagentSwarm:panelVisible"
-        }
-      ]
-    },
     "viewsContainers": {
       "activitybar": [
         {
           "id": "multiagentSwarm",
           "title": "MultiAgent Swarm",
-          "icon": "media/icon.png"
+          "icon": "media/icon.svg"
         }
       ]
     },
-    "menus": {
-      "view/title": [
+    "views": {
+      "multiagentSwarm": [
         {
-          "command": "multiagentSwarm.togglePanel",
-          "when": "view == multiagentSwarm.mainView",
-          "group": "navigation"
+          "id": "multiagentSwarm.welcome",
+          "name": "MultiAgent Swarm",
+          "icon": "$(robot)",
+          "when": "true"
         }
       ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "multiagentSwarm.welcome",
+        "contents": "🤖 **MultiAgent Swarm**\n\nClick to open the agent panel:\n\n[Open Agent Panel](command:multiagentSwarm.openPanel)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "multiagentSwarm.openPanel",
+          "when": "true"
+        },
+        {
+          "command": "multiagentSwarm.togglePanel",
+          "when": "true"
+        },
+        {
+          "command": "multiagentSwarm.selectSwarm",
+          "when": "true"
+        },
+        {
+          "command": "multiagentSwarm.createAgent",
+          "when": "true"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "multiagentSwarm.openPanel",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "multiagentSwarm.togglePanel",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
   },
   "devDependencies": {
     "@types/vscode": "^1.74.0",
     "@types/node": "16.x",
-    "typescript": "^4.9.4"
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.4",
+    "vsce": "^2.15.0"
   }
 }

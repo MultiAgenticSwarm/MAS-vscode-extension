@@ -1,10 +1,35 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M4 14.7519C3.37037 13.8768 3 12.8059 3 11.6493C3 9.20008 4.8 6.9375 7.5 6.5C8.34694 4.48637 10.3514 3 12.6893 3C15.684 3 18.1317 5.32251 18.3 8.25C19.8893 8.94488 21 10.6503 21 12.4969C21 13.5693 20.6254 14.5541 20 15.3275M12.5 12.9995L10.5 21.0008M8.5 11.9995L6.5 20.0008M16.5 12L14.5 20.0013" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-=======
-<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M4 14.7519C3.37037 13.8768 3 12.8059 3 11.6493C3 9.20008 4.8 6.9375 7.5 6.5C8.34694 4.48637 10.3514 3 12.6893 3C15.684 3 18.1317 5.32251 18.3 8.25C19.8893 8.94488 21 10.6503 21 12.4969C21 13.5693 20.6254 14.5541 20 15.3275M12.5 12.9995L10.5 21.0008M8.5 11.9995L6.5 20.0008M16.5 12L14.5 20.0013" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
->>>>>>> temp-work
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#gradient1)" stroke="url(#gradient2)" stroke-width="4"/>
+  
+  <!-- Robot Head -->
+  <rect x="40" y="35" width="48" height="40" rx="8" fill="white" opacity="0.9"/>
+  
+  <!-- Eyes -->
+  <circle cx="52" cy="50" r="4" fill="#667eea"/>
+  <circle cx="76" cy="50" r="4" fill="#667eea"/>
+  
+  <!-- Antenna/Signals -->
+  <path d="M50 30 L45 20 M58 28 L58 18 M66 28 L66 18 M74 30 L79 20" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Network connections -->
+  <circle cx="30" cy="85" r="8" fill="rgba(255,255,255,0.8)"/>
+  <circle cx="64" cy="95" r="8" fill="rgba(255,255,255,0.8)"/>
+  <circle cx="98" cy="85" r="8" fill="rgba(255,255,255,0.8)"/>
+  
+  <!-- Connection lines -->
+  <path d="M38 85 L56 95 M72 95 L90 85 M40 75 L64 85 M88 75 L64 85" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
 </svg>

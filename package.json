@@ -1,51 +1,138 @@
 {
-  "name": "ai-chat-vscode-extension",
-  "displayName": "AI Code Assistant",
-  "description": "A beautiful chat-based AI assistant in VS Code.",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.85.0"
+  "name": "multiagent-swarm",
+  "displayName": "MultiAgent Swarm",
+  "description": "AI-powered multi-agent development assistant for collaborative coding with specialized AI agents",
+  "version": "1.0.0",
+  "publisher": "MultiAgenticSwarm",
+  "author": {
+    "name": "MultiAgenticSwarm"
   },
-  "categories": [
-    "Other"
+  "license": "MIT",
+  "homepage": "https://github.com/MultiAgenticSwarm/MAS-vscode-extension",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MultiAgenticSwarm/MAS-vscode-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MultiAgenticSwarm/MAS-vscode-extension/issues"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "multiagent",
+    "collaboration",
+    "development",
+    "assistant",
+    "productivity",
+    "automation"
   ],
-  "activationEvents": [
-    "onView:aiChatView"
-  ],
-  "main": "./dist/extension.js",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": ["AI", "Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "icon": "media/icon.png",
   "contributes": {
+    "commands": [
+      {
+        "command": "multiagentSwarm.openPanel",
+        "title": "Open MultiAgent Swarm",
+        "icon": "$(robot)",
+        "category": "MultiAgent Swarm"
+      },
+      {
+        "command": "multiagentSwarm.togglePanel",
+        "title": "Toggle MultiAgent Swarm Panel",
+        "category": "MultiAgent Swarm"
+      },
+      {
+        "command": "multiagentSwarm.selectSwarm",
+        "title": "Select Agent Swarm",
+        "category": "MultiAgent Swarm"
+      },
+      {
+        "command": "multiagentSwarm.createAgent",
+        "title": "Create New Agent",
+        "category": "MultiAgent Swarm"
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "aiChat",
-          "title": "AI Chat"
+          "id": "multiagentSwarm",
+          "title": "MultiAgent Swarm",
+          "icon": "media/icon.svg"
         }
       ]
     },
     "views": {
-      "aiChat": [
+      "multiagentSwarm": [
         {
-          "id": "aiChatView",
-          "name": "Chat"
+          "id": "multiagentSwarm.welcome",
+          "name": "MultiAgent Swarm",
+          "icon": "$(robot)",
+          "when": "true"
         }
       ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "multiagentSwarm.welcome",
+        "contents": "🤖 **MultiAgent Swarm**\n\nClick to open the agent panel:\n\n[Open Agent Panel](command:multiagentSwarm.openPanel)"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "multiagentSwarm.openPanel",
+          "when": "true"
+        },
+        {
+          "command": "multiagentSwarm.togglePanel",
+          "when": "true"
+        },
+        {
+          "command": "multiagentSwarm.selectSwarm",
+          "when": "true"
+        },
+        {
+          "command": "multiagentSwarm.createAgent",
+          "when": "true"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "multiagentSwarm.openPanel",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "multiagentSwarm.togglePanel",
+        "key": "ctrl+alt+a",
+        "mac": "cmd+alt+a"
+      }
+    ]
   },
   "scripts": {
-    "build": "pnpm run build:ext && pnpm run build:web",
-   "build:ext": "esbuild src/extension.ts --bundle --platform=node --outfile=dist/extension.js --external:vscode",
-    "build:web": "esbuild src/webview/webview.ts --bundle --outfile=media/chat.js"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package",
+    "publish": "vsce publish"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
-    "@types/node": "^24.0.4",
-    "@types/vscode": "^1.85.0",
-    "dotenv": "^16.5.0",
-    "esbuild": "^0.20.0",
-    "glob": "^11.0.3",
-    "typescript": "^5.3.3"
-  },
-  "dependencies": {
-    "node-fetch": "^3.3.2"
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.4",
+    "vsce": "^2.15.0"
   }
 }
